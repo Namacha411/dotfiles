@@ -95,7 +95,7 @@ inoremap <PageDown> <Cmd>call pum#map#insert_relative_page(+1)<CR>
 inoremap <PageUp>   <Cmd>call pum#map#insert_relative_page(-1)<CR>
 
 " Airline
-let g:airline_theme='deus'
+let g:airline_theme='raven'
 
 " Rust
 let g:rustfmt_autosave=1
