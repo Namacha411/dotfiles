@@ -24,6 +24,9 @@ function ll() {
 function touch() {
   New-Item -Type File $args
 }
+function cl($path) {
+    cd $path && exa --icons
+}
 
 Set-Alias sudo gsudo
 Set-Alias ls _ls

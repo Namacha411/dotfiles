@@ -24,12 +24,12 @@ filetype plugin indent on
 
 " terminal settings ========================================
 tnoremap <Esc> <C-\><C-n>
-set sh=pwsh
 
 " vim-plug =================================================
 call plug#begin(stdpath('data') . '/plugged')
     " color scheme
     Plug 'cocopon/iceberg.vim', {'do': 'cp colors/* ./colors/' }
+    Plug 'sickill/vim-monokai', {'do': 'cp colors/* ./colors/' }
     Plug 'guns/xterm-color-table.vim'
 
     " Rust
@@ -108,8 +108,19 @@ nnoremap <C-f> :NERDTreeFind<CR>
 " Start NERDTree and leave the cursor in it.
 autocmd VimEnter * NERDTree
 
+" auto commands
+augroup TransparentBG
+  	autocmd!
+	autocmd Colorscheme * highlight Normal ctermbg=none
+	autocmd Colorscheme * highlight NonText ctermbg=none
+	autocmd Colorscheme * highlight LineNr ctermbg=none
+	autocmd Colorscheme * highlight Folded ctermbg=none
+	autocmd Colorscheme * highlight EndOfBuffer ctermbg=none 
+augroup END
+
 " color scheme
-colorscheme iceberg
+set background=dark
+colorscheme monokai
 
 " Lua script ====================================
 lua << EOF

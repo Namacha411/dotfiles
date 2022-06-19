@@ -1,12 +1,9 @@
 [character]
-success_symbol = "[💪 ❯](bold green)"
-error_symbol =  "[💪 ❯](bold red)"
+success_symbol = "[🎣 ❯](bold green)"
+error_symbol =  "[🎣 ❯](bold red)"
 
 [memory_usage]
 disabled = false
 threshold = -1
 symbol = "🐑"
 format = "$symbol [$ram](bold dimmed green) "
-
-[nodejs]
-symbol = "🤖 "
