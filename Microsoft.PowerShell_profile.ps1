@@ -37,5 +37,3 @@ Set-Alias ps procs
 Set-Alias grep rg
 Set-Alias unzip Expand-Archive
 
-Set-Location ~
-
