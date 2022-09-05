@@ -1,4 +1,32 @@
 -------------------------------------------------
+-- auto command
+-------------------------------------------------
+-- 背景の透明化
+local TransparentBG = vim.api.nvim_create_augroup("TransparentBG", {
+    clear = true
+})
+vim.api.nvim_create_autocmd({"Colorscheme"}, {
+    command = "highlight Normal ctermbg = none",
+    group = TransparentBG
+})
+vim.api.nvim_create_autocmd({"Colorscheme"}, {
+    command = "highlight NonText ctermbg = none",
+    group = TransparentBG
+})
+vim.api.nvim_create_autocmd({"Colorscheme"}, {
+    command = "highlight LineNr ctermbg = none",
+    group = TransparentBG
+})
+vim.api.nvim_create_autocmd({"Colorscheme"}, {
+    command = "highlight Folded ctermbg = none",
+    group = TransparentBG
+})
+vim.api.nvim_create_autocmd({"Colorscheme"}, {
+    command = "highlight EndOfBuffer ctermbg = none",
+    group = TransparentBG
+})
+
+-------------------------------------------------
 -- オプション
 -------------------------------------------------
 -- ファイル読み込み関係
@@ -28,6 +56,7 @@ vim.opt.background = 'dark'
 
 vim.cmd([[syntax enable]])
 vim.cmd([[filetype plugin indent on]])
+vim.cmd([[colorscheme monokai]])
 
 -- 文字コード
 vim.opt.fenc = [[utf8]]
@@ -40,31 +69,3 @@ vim.opt.clipboard:append({
 
 -- マウス操作
 vim.opt.mouse = 'a'
-
--------------------------------------------------
--- auto command
--------------------------------------------------
--- 背景の透明化
-local TransparentBG = vim.api.nvim_create_augroup("TransparentBG", {
-    clear = true
-})
-vim.api.nvim_create_autocmd({"Colorscheme"}, {
-    command = "highlight Normal ctermbg = none",
-    group = TransparentBG
-})
-vim.api.nvim_create_autocmd({"Colorscheme"}, {
-    command = "highlight NonText ctermbg = none",
-    group = TransparentBG
-})
-vim.api.nvim_create_autocmd({"Colorscheme"}, {
-    command = "highlight LineNr ctermbg = none",
-    group = TransparentBG
-})
-vim.api.nvim_create_autocmd({"Colorscheme"}, {
-    command = "highlight Folded ctermbg = none",
-    group = TransparentBG
-})
-vim.api.nvim_create_autocmd({"Colorscheme"}, {
-    command = "highlight EndOfBuffer ctermbg = none",
-    group = TransparentBG
-})
