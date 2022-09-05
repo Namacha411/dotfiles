@@ -16,10 +16,10 @@ Set-PSReadLineKeyHandler -Key "Ctrl+f" -Function ForwardWord
 
 # Alias
 function _ls() {
-  exa --icons
+  exa -a --icons
 }
 function ll() {
-  exa --tree --icons --long
+  exa -a --tree --icons --long
 }
 function touch() {
   New-Item -Type File $args
