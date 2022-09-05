@@ -41,8 +41,8 @@ vim.opt.cursorline = true
 vim.opt.incsearch = true
 vim.opt.list = true
 vim.opt.listchars = {
-    tab = [[»-]],
-    trail = [[-]],
+    tab = [[»·]],
+    trail = [[·]],
     eol = [[↲]],
     extends = [[»]],
     precedes = [[«]],
@@ -52,6 +52,8 @@ vim.opt.listchars = {
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = ture
+vim.opt.autoindent = true
+vim.opt.smartindent = true
 vim.opt.background = 'dark'
 
 vim.cmd([[syntax enable]])
@@ -69,3 +71,13 @@ vim.opt.clipboard:append({
 
 -- マウス操作
 vim.opt.mouse = 'a'
+
+-- terminal
+if vim.fn.has('win32') then
+    vim.opt.shell = 'pwsh'
+end
+vim.cmd([[tnoremap <Esc> <C-\><C-n>]])
+vim.cmd([[command! -nargs=* T split | wincmd j | resize 15 | terminal <args>]])
+vim.api.nvim_create_autocmd({"TermOpen"}, {
+    command = "startinsert"
+})
