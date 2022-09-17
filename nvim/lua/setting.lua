@@ -66,7 +66,8 @@ vim.opt.encoding = [[utf8]]
 
 -- クリップボード
 vim.opt.clipboard:append({
-    unnamed = true
+    unnamed = true,
+	unnamedplus = true,
 })
 
 -- マウス操作
