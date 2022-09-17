@@ -1,17 +1,41 @@
+-------------------------------------------------
+-- 必要のないデフォルトプラグインの無効化
+-------------------------------------------------
+vim.g.did_install_default_menus = 1
+vim.g.did_install_syntax_menus = 1
+
+vim.g.loaded_2html_plugin = 1
+vim.g.loaded_gzip = 1
+vim.g.loaded_remote_plugin = 1
+vim.g.loaded_shada_plugin = 1
+vim.g.loaded_tutor_mode_plugin = 1
+vim.g.loaded_zipPlugin = 1
+vim.g.loaded_tarPlugin = 1
+
+-------------------------------------------------
+-- Packer
+-------------------------------------------------
 -- This file can be loaded by calling `lua require('plugins')` from your init.vim
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
 local packer = require('packer')
 
+packer.init {
+	display = {
+		open_fn = require('packer.util').float,
+	},
+}
+
 return packer.startup(function(use)
 	-- self
-	use {'wbthomason/packer.nvim'}
+	use {'wbthomason/packer.nvim', opt = true}
 
 	-- Colorscheme
 	use {'arcticicestudio/nord-vim', opt = true}
 	use {'sickill/vim-monokai', opt = true}
 	use {'cocopon/iceberg.vim', opt = true}
+	use {'navarasu/onedark.nvim', opt = true}
 
 	-- icons
 	use {'ryanoasis/vim-devicons'}
@@ -62,15 +86,22 @@ return packer.startup(function(use)
 					after_saving = nil -- ran after doing the actual save
 				}
 			})
-		end
+		end,
 	}
 
-	-- airline
+	-- lualine (like airline)
 	use {
-		'vim-airline/vim-airline',
-		requires = {'vim-airline/vim-airline-themes'},
-		setup = function()
-			vim.g.airline_theme = 'raven'
+		'nvim-lualine/lualine.nvim',
+		requires = {
+			'kyazdani42/nvim-web-devicons',
+			opt = true,
+		},
+		config = function()
+			require('lualine').setup({
+				option = {
+					theme = 'iceberg-dark'
+				},
+			})
 		end
 	}
 
@@ -80,12 +111,13 @@ return packer.startup(function(use)
 		'williamboman/mason.nvim',
 		config = function()
 			require('mason').setup()
-		end
+		end,
 	}
 	use {
 		'williamboman/mason-lspconfig.nvim',
 		config = function()
-			require('mason-lspconfig').setup({function(server)
+			local mason_lsp = require('mason-lspconfig')
+			mason_lsp.setup({function(server)
 				local opt = {
 					capabilities = require('cmp_nvim_lsp').update_capabilities(
 						vim.lsp.protocol.make_client_capabilities()
@@ -93,7 +125,12 @@ return packer.startup(function(use)
 				}
 				require('lspconfig')[server].setup(opt)
 			end})
-		end
+			mason_lsp.setup_handlers({
+				['rust_analyzer'] = function()
+					require('rust-tools').setup({})
+				end
+			})
+		end,
 	}
 
 	-- snippet
@@ -122,8 +159,8 @@ return packer.startup(function(use)
 				mapping = cmp.mapping.preset.insert({
 					['<C-j>'] = cmp.mapping(cmp.mapping.select_next_item(), {'i', 'c'}),
 					['<C-k>'] = cmp.mapping(cmp.mapping.select_prev_item(), {'i', 'c'}),
-					['<C-b>'] = cmp.mapping.scroll_docs(-4),
-					['<C-f>'] = cmp.mapping.scroll_docs(4),
+					['<C-b>'] = cmp.mapping.scroll_docs(-1),
+					['<C-f>'] = cmp.mapping.scroll_docs(1),
 					['<C-Space>'] = cmp.mapping.complete(),
 					['<C-e>'] = cmp.mapping.abort(),
 					['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
@@ -132,6 +169,8 @@ return packer.startup(function(use)
 					{ name = 'nvim_lsp' },
 					{ name = 'vsnip' },
 				}, {
+					{ name = 'path' },
+					{ name = 'calc' },
 					{ name = 'buffer' },
 				})
 			})
@@ -148,32 +187,9 @@ return packer.startup(function(use)
 					{{ name = 'cmdline' }}
 				)
 			})
-
-			-- setup lspconfig
-			local capabilities = require('cmp_nvim_lsp').update_capabilities(
-				vim.lsp.protocol.make_client_capabilities()
-			)
-			local lsp = require('lspconfig')
-			lsp.rust_analyzer.setup {
-				capabilities = capabilities
-			}
 		end
 	}
 
-	use {
-		'simrat39/rust-tools.nvim',
-		config = function()
-			require('rust-tools').setup({
-				server = {
-					settings = {
-						['rust-analyzer'] = {
-							checkOnSave = {
-								command = 'clippy'
-							},
-						},
-					}
-				},
-			})
-		end
-	}
+	-- rust
+	use {'simrat39/rust-tools.nvim'}
 end)
