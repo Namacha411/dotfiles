@@ -58,7 +58,7 @@ vim.opt.background = 'dark'
 
 vim.cmd([[syntax enable]])
 vim.cmd([[filetype plugin indent on]])
-vim.cmd([[colorscheme monokai]])
+vim.cmd([[colorscheme iceberg]])
 
 -- 文字コード
 vim.opt.fenc = [[utf8]]
@@ -74,11 +74,12 @@ vim.opt.clipboard:append({
 vim.opt.mouse = 'a'
 
 -- terminal
-if vim.fn.has('win32') then
-    vim.opt.shell = 'pwsh'
-end
-vim.cmd([[tnoremap <Esc> <C-\><C-n>]])
-vim.cmd([[command! -nargs=* T split | wincmd j | resize 15 | terminal <args>]])
-vim.api.nvim_create_autocmd({"TermOpen"}, {
-    command = "startinsert"
-})
+-- if vim.fn.has('win32') then
+--     vim.opt.shell = 'pwsh.exe'
+--     vim.opt.shellcmdflag = '-c'
+-- end
+-- vim.cmd([[tnoremap <Esc> <C-\><C-n>]])
+-- vim.cmd([[command! -nargs=* T split | wincmd j | resize 15 | terminal <args>]])
+-- vim.api.nvim_create_autocmd({"TermOpen"}, {
+--     command = "startinsert"
+-- })

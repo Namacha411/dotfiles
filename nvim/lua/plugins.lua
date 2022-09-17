@@ -76,6 +76,25 @@ return packer.startup(function(use)
 
 	-- lsp
 	use {'neovim/nvim-lspconfig'}
+	use {
+		'williamboman/mason.nvim',
+		config = function()
+			require('mason').setup()
+		end
+	}
+	use {
+		'williamboman/mason-lspconfig.nvim',
+		config = function()
+			require('mason-lspconfig').setup({function(server)
+				local opt = {
+					capabilities = require('cmp_nvim_lsp').update_capabilities(
+						vim.lsp.protocol.make_client_capabilities()
+					)
+				}
+				require('lspconfig')[server].setup(opt)
+			end})
+		end
+	}
 
 	-- snippet
 	use {'hrsh7th/cmp-vsnip'}
@@ -138,6 +157,23 @@ return packer.startup(function(use)
 			lsp.rust_analyzer.setup {
 				capabilities = capabilities
 			}
+		end
+	}
+
+	use {
+		'simrat39/rust-tools.nvim',
+		config = function()
+			require('rust-tools').setup({
+				server = {
+					settings = {
+						['rust-analyzer'] = {
+							checkOnSave = {
+								command = 'clippy'
+							},
+						},
+					}
+				},
+			})
 		end
 	}
 end)
