@@ -1,16 +1,16 @@
 -------------------------------------------------
 -- 必要のないデフォルトプラグインの無効化
 -------------------------------------------------
-vim.g.did_install_default_menus = 1
-vim.g.did_install_syntax_menus = 1
-
-vim.g.loaded_2html_plugin = 1
-vim.g.loaded_gzip = 1
-vim.g.loaded_remote_plugin = 1
-vim.g.loaded_shada_plugin = 1
-vim.g.loaded_tutor_mode_plugin = 1
-vim.g.loaded_zipPlugin = 1
-vim.g.loaded_tarPlugin = 1
+-- vim.g.did_install_default_menus = 1
+-- vim.g.did_install_syntax_menus = 1
+--
+-- vim.g.loaded_2html_plugin = 1
+-- vim.g.loaded_gzip = 1
+-- vim.g.loaded_remote_plugin = 1
+-- vim.g.loaded_shada_plugin = 1
+-- vim.g.loaded_tutor_mode_plugin = 1
+-- vim.g.loaded_zipPlugin = 1
+-- vim.g.loaded_tarPlugin = 1
 
 -------------------------------------------------
 -- Packer
@@ -27,9 +27,9 @@ packer.init {
 	},
 }
 
-return packer.startup(function(use)
+packer.startup(function(use)
 	-- self
-	use {'wbthomason/packer.nvim', opt = true}
+	use {'wbthomason/packer.nvim'}
 
 	-- Colorscheme
 	use {'arcticicestudio/nord-vim', opt = true}
@@ -116,20 +116,16 @@ return packer.startup(function(use)
 	use {
 		'williamboman/mason-lspconfig.nvim',
 		config = function()
-			local mason_lsp = require('mason-lspconfig')
-			mason_lsp.setup({function(server)
+			require('mason-lspconfig').setup()
+			require('mason-lspconfig').setup_handlers({function(server)
 				local opt = {
 					capabilities = require('cmp_nvim_lsp').update_capabilities(
 						vim.lsp.protocol.make_client_capabilities()
-					)
+					),
+					on_attach = on_attach,
 				}
 				require('lspconfig')[server].setup(opt)
 			end})
-			mason_lsp.setup_handlers({
-				['rust_analyzer'] = function()
-					require('rust-tools').setup({})
-				end
-			})
 		end,
 	}
 
@@ -190,6 +186,12 @@ return packer.startup(function(use)
 		end
 	}
 
-	-- rust
-	use {'simrat39/rust-tools.nvim'}
+	-- comment out
+	use {
+		'numToStr/Comment.nvim',
+		config = function()
+			require('Comment').setup()
+		end
+	}
 end)
+
