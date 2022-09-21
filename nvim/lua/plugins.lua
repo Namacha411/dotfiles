@@ -37,6 +37,14 @@ packer.startup(function(use)
 	use {'cocopon/iceberg.vim', opt = true}
 	use {'navarasu/onedark.nvim', opt = true}
 
+	-- filetype
+	use {
+		'nathom/filetype.nvim',
+		config = function()
+			require('filetype').setup({})
+		end
+	}
+
 	-- icons
 	use {'ryanoasis/vim-devicons'}
 
