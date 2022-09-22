@@ -12,7 +12,7 @@ if defined(windows):
         config = &"{home}/.config"
 
     pathTable = toOrderedSet([
-        ("./nvim/",                  &"{localAppData}/nvim/"),
+        ("./nvim/",                 &"{localAppData}/nvim/"),
         ("./wezterm/wezterm.lua",   &"{home}/.wezterm.lua"),
         ("./vim/.vimrc",            &"{home}/.vimrc"),
         ("./starship.toml",         &"{config}/starship.toml"),
