@@ -25,7 +25,7 @@ elif defined(linux):
 
     pathTable = toOrderedSet([
         ("./vim/.vimrc",            &"{home}/.vimrc"),
-        ("./nvim/",                  &"{config}/nvim/"),
+        ("./nvim/",                 &"{config}/nvim/"),
         ("./starship.toml",         &"{config}/starship.toml"),
         ("./wezterm/wezterm.lua",   &"{config}/wezterm/.wezterm.lua"),
     ])
