@@ -65,10 +65,7 @@ vim.opt.fenc = [[utf8]]
 vim.opt.encoding = [[utf8]]
 
 -- クリップボード
-vim.opt.clipboard:append({
-    unnamed = true,
-	unnamedplus = true,
-})
+vim.opt.clipboard = "unnamed,unnamedplus"
 
 -- マウス操作
 vim.opt.mouse = 'a'
