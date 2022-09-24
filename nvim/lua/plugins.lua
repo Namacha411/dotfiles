@@ -1,25 +1,25 @@
 -------------------------------------------------
 -- 必要のないデフォルトプラグインの無効化
 -------------------------------------------------
-vim.g.did_install_default_menus = 1
-vim.g.did_install_syntax_menu   = 1
-vim.g.did_indent_on             = 1
-vim.g.did_load_filetypes        = 1
-vim.g.did_load_ftplugin         = 1
-
-vim.g.loaded_2html_plugin       = 1
-vim.g.loaded_gzip               = 1
-vim.g.loaded_man                = 1
-vim.g.loaded_matchit            = 1
-vim.g.loaded_matchparen         = 1
-vim.g.loaded_netrwPlugin        = 1
-vim.g.loaded_remote_plugins     = 1
-vim.g.loaded_shada_plugin       = 1
-vim.g.loaded_spellfile_plugin   = 1
-vim.g.loaded_tarPlugin          = 1
-vim.g.loaded_tutor_mode_plugin  = 1
-vim.g.loaded_zipPlugin          = 1
-vim.g.skip_loading_mswin        = 1
+-- vim.g.did_install_default_menus = 1
+-- vim.g.did_install_syntax_menu   = 1
+-- vim.g.did_indent_on             = 1
+-- vim.g.did_load_filetypes        = 1
+-- vim.g.did_load_ftplugin         = 1
+--
+-- vim.g.loaded_2html_plugin       = 1
+-- vim.g.loaded_gzip               = 1
+-- vim.g.loaded_man                = 1
+-- vim.g.loaded_matchit            = 1
+-- vim.g.loaded_matchparen         = 1
+-- vim.g.loaded_netrwPlugin        = 1
+-- vim.g.loaded_remote_plugins     = 1
+-- vim.g.loaded_shada_plugin       = 1
+-- vim.g.loaded_spellfile_plugin   = 1
+-- vim.g.loaded_tarPlugin          = 1
+-- vim.g.loaded_tutor_mode_plugin  = 1
+-- vim.g.loaded_zipPlugin          = 1
+-- vim.g.skip_loading_mswin        = 1
 -------------------------------------------------
 -- Packer
 -------------------------------------------------
@@ -113,27 +113,11 @@ packer.startup(function(use)
 	}
 
 	-- lsp
-	use {'neovim/nvim-lspconfig'}
 	use {
-		'williamboman/mason.nvim',
+		'neovim/nvim-lspconfig',
 		config = function()
-			require('mason').setup()
-		end,
-	}
-	use {
-		'williamboman/mason-lspconfig.nvim',
-		config = function()
-			require('mason-lspconfig').setup()
-			require('mason-lspconfig').setup_handlers({function(server)
-				local opt = {
-					capabilities = require('cmp_nvim_lsp').update_capabilities(
-						vim.lsp.protocol.make_client_capabilities()
-					),
-					on_attach = on_attach,
-				}
-				require('lspconfig')[server].setup(opt)
-			end})
-		end,
+			require('lspconfig').rust_analyzer.setup({})
+		end
 	}
 
 	-- snippet
@@ -166,7 +150,7 @@ packer.startup(function(use)
 					['<C-f>'] = cmp.mapping.scroll_docs(1),
 					['<C-Space>'] = cmp.mapping.complete(),
 					['<C-e>'] = cmp.mapping.abort(),
-					['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+					['<CR>'] = cmp.mapping.confirm({ select = true }),
 				}),
 				sources = cmp.config.sources({
 					{ name = 'nvim_lsp' },
@@ -201,8 +185,11 @@ packer.startup(function(use)
 		end
 	}
 
-	-- Is using a standard Neovim install, i.e. built from source or using a
-	-- provided appimage.
-	use {'lewis6991/impatient.nvim'}
+	use {
+		'simrat39/rust-tools.nvim',
+		config = function()
+			require('rust-tools').setup({})
+		end
+	}
 end)
 
