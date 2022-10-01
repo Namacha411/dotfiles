@@ -48,7 +48,9 @@ packer.startup(function(use)
 	use {
 		'neovim/nvim-lspconfig',
 		config = function()
-			require('lspconfig').rust_analyzer.setup({})
+			local lspconfig = require('lspconfig')
+			lspconfig.rust_analyzer.setup({})
+			lspconfig.csharp_ls.setup({})
 		end
 	}
 	use {
@@ -127,8 +129,7 @@ packer.startup(function(use)
 		tag = '*',
 		config = function()
 			require('toggleterm').setup({})
-		end,
-		opt = true,
+		end
 	}
 	use {
 		'Pocco81/auto-save.nvim',
@@ -176,7 +177,6 @@ end)
 
 -- Terminal
 local Terminal = require('toggleterm.terminal').Terminal
-
 
 if vim.fn.has('win32') then
 	local pwsh = Terminal:new({ cmd = "pwsh.exe", direction = "float" })
