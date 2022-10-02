@@ -157,6 +157,10 @@ packer.startup(function(use)
 			})
 		end
 	}
+	use {
+		'skanehira/denops-silicon.vim',
+		requires = { 'vim-denops/denops.vim' },
+	}
 
 	-- Lnagages
 	use {
