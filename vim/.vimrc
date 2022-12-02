@@ -41,7 +41,6 @@ set relativenumber
 set display=lastline
 set sidescroll=1
 
-
 # ステータス
 set showcmd
 set showmode
@@ -76,7 +75,7 @@ def SetStatusLineColor()
     var m = mode()
     if m == "i"
         highlight statusline ctermbg=2
-    elseif m == "v" || m == "V" || m == "CTRL-Vs"
+    elseif m == "v" || m == "V"
         highlight statusline ctermbg=5
     elseif m == "n"
         highlight statusline ctermbg=1
@@ -89,7 +88,7 @@ augroup StatusLineColor
     autocmd ModeChanged * SetStatusLineColor()
 augroup END
 
-#左
+# 左
 set statusline=
 set statusline+=%m
 set statusline+=%f
