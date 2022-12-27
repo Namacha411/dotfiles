@@ -50,7 +50,7 @@ set title
 # 補完
 set wildmenu
 set wildmode=list:longest,full
-set wildoptions=pum,tagfile
+set wildoptions=fuzzy,pum,tagfile
 set history=10000
 
 # 不可視文字の表示
