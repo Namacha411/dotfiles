@@ -1,0 +1,12 @@
+{
+  "Comment.nvim": { "branch": "master", "commit": "45dc21a71ad1450606f5e98261badb28db59d74c" },
+  "iceberg.vim": { "branch": "master", "commit": "e01ac08c2202e7544531f4d806f6893539da6471" },
+  "lazy.nvim": { "branch": "main", "commit": "5a5487b015743c69d6a275156a90af35c2905c47" },
+  "lualine.nvim": { "branch": "master", "commit": "fffbcb829288c3ca366f17cdb8d46aefb5c1d6f3" },
+  "nord-vim": { "branch": "main", "commit": "0748955e9e8d9770b44f2bec8456189430b37d9d" },
+  "nvim-transparent": { "branch": "main", "commit": "1a3d7d3b7670fecbbfddd3fc999ddea5862ac3c2" },
+  "nvim-tree.lua": { "branch": "master", "commit": "9e4c39572f631bb60ee15cb9d46e1daa9927a45e" },
+  "onedark.nvim": { "branch": "master", "commit": "89dde4963ad198c9b6144dee3d5e8bcbb7559ddc" },
+  "tokyonight.nvim": { "branch": "main", "commit": "2c2287db18732c30dba6b28d95c9a62481fdbc41" },
+  "vim-monokai": { "branch": "master", "commit": "6fb52e32863646e38cdebce57ae0d1688f334a79" }
+}
