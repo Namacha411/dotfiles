@@ -10,17 +10,18 @@ vim.opt.cursorline = true
 vim.opt.incsearch = true
 vim.opt.list = true
 vim.opt.listchars = {
-    tab = [[»·]],
-    trail = [[·]],
-    eol = [[↲]],
-    extends = [[»]],
-    precedes = [[«]],
-    nbsp = [[%]],
-    space = [[·]]
+	tab = [[»·]],
+	trail = [[·]],
+	eol = [[↲]],
+	extends = [[»]],
+	precedes = [[«]],
+	nbsp = [[%]],
+	space = [[·]]
 }
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = ture
+vim.opt.smarttab = ture
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.background = 'dark'
@@ -38,3 +39,9 @@ vim.opt.clipboard = "unnamed,unnamedplus"
 
 -- マウス操作
 vim.opt.mouse = 'a'
+
+-- キー設定
+vim.keymap.set('n', 'j', 'gj')
+vim.keymap.set('n', 'k', 'gk')
+vim.keymap.set('n', '<ESC>', ':nohlsearch<CR>')
+
