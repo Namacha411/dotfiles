@@ -176,9 +176,6 @@ require("lazy").setup({
 			})
 		end
 	}, {
-		"folke/which-key.nvim",
-		config = true,
-	}, {
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
@@ -186,5 +183,15 @@ require("lazy").setup({
 			vim.keymap.set('n', '<space>q', "<cmd>TroubleToggle<cr>", opts)
 			require("trouble").setup({})
 		end,
-	},
+	}, {
+		"nanozuki/tabby.nvim",
+		config = function()
+			vim.api.nvim_set_keymap("n", "<space>ta", ":$tabnew<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<space>tc", ":tabclose<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<space>to", ":tabonly<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<space>tn", ":tabn<CR>", { noremap = true })
+			vim.api.nvim_set_keymap("n", "<space>tp", ":tabp<CR>", { noremap = true })
+			require("tabby").setup({})
+		end
+	}
 })

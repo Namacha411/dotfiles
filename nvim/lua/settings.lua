@@ -24,6 +24,7 @@ vim.opt.expandtab = ture
 vim.opt.smarttab = ture
 vim.opt.autoindent = true
 vim.opt.smartindent = true
+vim.opt.showtabline = 2
 
 -- 文字コード
 vim.opt.fenc = [[utf8]]
