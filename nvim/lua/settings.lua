@@ -24,11 +24,6 @@ vim.opt.expandtab = ture
 vim.opt.smarttab = ture
 vim.opt.autoindent = true
 vim.opt.smartindent = true
-vim.opt.background = 'dark'
-
-vim.cmd([[syntax enable]])
-vim.cmd([[filetype plugin indent on]])
-vim.cmd([[colorscheme tokyonight-storm]])
 
 -- 文字コード
 vim.opt.fenc = [[utf8]]
