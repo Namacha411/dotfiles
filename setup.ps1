@@ -18,5 +18,5 @@ function makesymlink() {
   ln ./starship/starship.toml $home/.config/starship.toml
 }
 
-setupscoop()
-makesymlink()
+setupscoop
+makesymlink

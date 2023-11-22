@@ -189,3 +189,292 @@
         }
     ]
 }
+{
+    "apps": [
+        {
+            "Version": "23.01",
+            "Updated": "2023-09-11T18:16:05.226165+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "7zip"
+        },
+        {
+            "Version": "34.0.5",
+            "Updated": "2023-11-22T23:10:29.0022721+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "adb"
+        },
+        {
+            "Version": "4333796",
+            "Updated": "2023-04-24T14:17:13.0127719+09:00",
+            "Source": "extras",
+            "Info": "",
+            "Name": "android-sdk"
+        },
+        {
+            "Version": "0.24.0",
+            "Updated": "2023-10-16T16:07:50.4241806+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "bat"
+        },
+        {
+            "Version": "2111.01",
+            "Updated": "2023-11-23T06:39:30.910889+09:00",
+            "Source": "nerd-fonts",
+            "Info": "",
+            "Name": "Cascadia-Code"
+        },
+        {
+            "Version": "3.11.2",
+            "Updated": "2023-04-08T22:36:30.3097842+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "dark"
+        },
+        {
+            "Version": "3.2.1",
+            "Updated": "2023-11-22T23:13:22.9558445+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "dart"
+        },
+        {
+            "Version": "0.16.5",
+            "Updated": "2023-08-02T01:59:23.4345182+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "delta"
+        },
+        {
+            "Version": "8.7.1",
+            "Updated": "2023-10-29T00:42:32.9084344+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "fd"
+        },
+        {
+            "Version": "1.0-go",
+            "Updated": "2023-09-19T16:02:31.7462387+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "figlet"
+        },
+        {
+            "Version": "3.16.0",
+            "Updated": "2023-11-23T06:10:22.5967884+09:00",
+            "Source": "extras",
+            "Info": "",
+            "Name": "flutter"
+        },
+        {
+            "Version": "0.44.1",
+            "Updated": "2023-11-23T06:10:23.9846128+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "fzf"
+        },
+        {
+            "Version": "2.39.1",
+            "Updated": "2023-11-23T06:10:28.1767822+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "gh"
+        },
+        {
+            "Version": "2.43.0",
+            "Updated": "2023-11-23T06:11:00.9055639+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "git"
+        },
+        {
+            "Version": "1.21.4",
+            "Updated": "2023-11-23T06:12:10.9623882+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "go"
+        },
+        {
+            "Version": "8.4",
+            "Updated": "2023-10-16T16:19:14.8060689+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "gradle"
+        },
+        {
+            "Version": "2.4.0",
+            "Updated": "2023-09-12T19:48:48.0384273+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "gsudo"
+        },
+        {
+            "Version": "23.10",
+            "Updated": "2023-10-29T00:49:12.1471442+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "helix"
+        },
+        {
+            "Version": "0.13.1",
+            "Updated": "2023-09-11T18:19:41.8663007+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "hexyl"
+        },
+        {
+            "Version": "1.9.4",
+            "Updated": "2023-11-23T06:12:55.5935496+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "julia"
+        },
+        {
+            "Version": "1.9.20",
+            "Updated": "2023-11-07T23:26:30.9810443+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "kotlin"
+        },
+        {
+            "Version": "7.1.0",
+            "Updated": "2023-08-16T01:15:23.5232123+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "neofetch"
+        },
+        {
+            "Version": "0.9.4",
+            "Updated": "2023-10-16T16:19:26.3694842+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "neovim"
+        },
+        {
+            "Version": "21.2.0",
+            "Updated": "2023-11-23T06:27:12.6942148+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "nodejs"
+        },
+        {
+            "Version": "21.0.1-12",
+            "Updated": "2023-10-29T00:49:55.0651763+09:00",
+            "Source": "java",
+            "Info": "",
+            "Name": "openjdk"
+        },
+        {
+            "Version": "0.14.3",
+            "Updated": "2023-10-29T00:49:57.1039337+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "procs"
+        },
+        {
+            "Version": "3.12.0",
+            "Updated": "2023-10-16T16:20:20.1418765+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "python"
+        },
+        {
+            "Version": "13.0.0",
+            "Updated": "2023-04-14T14:41:41.4442602+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "ripgrep"
+        },
+        {
+            "Version": "0.15.2",
+            "Updated": "2023-10-06T02:25:37.6537413+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "rye"
+        },
+        {
+            "Version": "1.16.0",
+            "Updated": "2023-09-11T18:21:16.3594306+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "starship"
+        },
+        {
+            "Version": "8.0.392-8",
+            "Updated": "2023-10-29T00:50:44.2249425+09:00",
+            "Source": "java",
+            "Info": "",
+            "Name": "temurin8-jdk"
+        },
+        {
+            "Version": "12.1.2",
+            "Updated": "2023-04-25T12:51:57.7714128+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "tokei"
+        },
+        {
+            "Version": "0.9.0",
+            "Updated": "2023-11-01T10:59:16.7621459+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "typst"
+        },
+        {
+            "Version": "9.0",
+            "Updated": "2023-06-04T01:31:24.3165113+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "vim"
+        },
+        {
+            "Version": "0.2018.07.25",
+            "Updated": "2023-06-04T01:32:20.7935287+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "vimtutor"
+        },
+        {
+            "Version": "20230712-072601-f4abf8fd",
+            "Updated": "2023-11-23T06:27:49.713326+09:00",
+            "Source": "extras",
+            "Info": "",
+            "Name": "wezterm"
+        },
+        {
+            "Version": "0.11.0",
+            "Updated": "2023-09-11T18:22:19.7249118+09:00",
+            "Source": "main",
+            "Info": "",
+            "Name": "zig"
+        }
+    ],
+    "buckets": [
+        {
+            "Name": "extras",
+            "Source": "https://github.com/ScoopInstaller/Extras",
+            "Updated": "2023-11-23T05:24:56+09:00",
+            "Manifests": 1888
+        },
+        {
+            "Name": "java",
+            "Source": "https://github.com/ScoopInstaller/Java",
+            "Updated": "2023-11-23T05:15:06+09:00",
+            "Manifests": 266
+        },
+        {
+            "Name": "main",
+            "Source": "https://github.com/ScoopInstaller/Main.git",
+            "Updated": "2023-11-23T05:25:23+09:00",
+            "Manifests": 1262
+        },
+        {
+            "Name": "nerd-fonts",
+            "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
+            "Updated": "2023-11-22T03:17:55+09:00",
+            "Manifests": 327
+        }
+    ]
+}
