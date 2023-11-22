@@ -1,151 +1,9 @@
 {
-    "apps": [
-        {
-            "Name": "7zip",
-            "Updated": "2023-09-17T22:52:32.3177507+09:00",
-            "Version": "23.01",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "Cascadia-Code",
-            "Updated": "2023-05-16T23:58:03.9496433+09:00",
-            "Version": "2111.01",
-            "Info": "",
-            "Source": "nerd-fonts"
-        },
-        {
-            "Name": "eza",
-            "Updated": "2023-11-22T14:46:15.6369584+09:00",
-            "Version": "0.16.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "ffmpeg",
-            "Updated": "2023-11-22T14:49:18.9534304+09:00",
-            "Version": "6.1",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "git",
-            "Updated": "2023-11-22T14:49:46.3364345+09:00",
-            "Version": "2.43.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "gsudo",
-            "Updated": "2023-09-17T23:03:28.388115+09:00",
-            "Version": "2.4.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "hexyl",
-            "Updated": "2023-09-17T23:03:31.8585086+09:00",
-            "Version": "0.13.1",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "julia",
-            "Updated": "2023-11-22T14:50:27.8276656+09:00",
-            "Version": "1.9.4",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "kotlin",
-            "Updated": "2023-11-22T14:50:55.5537591+09:00",
-            "Version": "1.9.20",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "neovim",
-            "Updated": "2023-10-12T22:01:28.7750852+09:00",
-            "Version": "0.9.4",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "nodejs",
-            "Updated": "2023-11-22T17:50:16.6685329+09:00",
-            "Version": "21.2.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "openjdk",
-            "Updated": "2023-11-22T14:51:38.53024+09:00",
-            "Version": "21.0.1-12",
-            "Info": "",
-            "Source": "java"
-        },
-        {
-            "Name": "python",
-            "Updated": "2023-10-12T22:08:06.2729706+09:00",
-            "Version": "3.12.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "ripgrep",
-            "Updated": "2023-06-03T22:06:17.6868278+09:00",
-            "Version": "13.0.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "starship",
-            "Updated": "2023-11-22T18:05:40.4845324+09:00",
-            "Version": "1.16.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "tokei",
-            "Updated": "2023-10-12T21:49:37.331018+09:00",
-            "Version": "12.1.2",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "vcredist2022",
-            "Updated": "2023-11-22T18:06:15.5656859+09:00",
-            "Version": "14.38.33130.0",
-            "Info": "",
-            "Source": "extras"
-        },
-        {
-            "Name": "vim",
-            "Updated": "2023-06-18T01:24:44.0411666+09:00",
-            "Version": "9.0",
-            "Info": "",
-            "Source": "main"
-        },
-        {
-            "Name": "wezterm",
-            "Updated": "2023-11-22T18:19:08.7852551+09:00",
-            "Version": "20230712-072601-f4abf8fd",
-            "Info": "",
-            "Source": "extras"
-        },
-        {
-            "Name": "zig",
-            "Updated": "2023-09-17T23:35:35.8310601+09:00",
-            "Version": "0.11.0",
-            "Info": "",
-            "Source": "main"
-        }
-    ],
     "buckets": [
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
-            "Updated": "2023-11-22T17:26:54+09:00",
+            "Updated": "2023-11-22T20:32:23+09:00",
             "Manifests": 1888
         },
         {
@@ -165,6 +23,169 @@
             "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
             "Updated": "2023-11-22T03:17:55+09:00",
             "Manifests": 327
+        }
+    ],
+    "apps": [
+        {
+            "Name": "7zip",
+            "Source": "main",
+            "Info": "",
+            "Version": "23.01",
+            "Updated": "2023-09-17T22:52:32.3177507+09:00"
+        },
+        {
+            "Name": "bat",
+            "Source": "main",
+            "Info": "",
+            "Version": "0.24.0",
+            "Updated": "2023-11-22T21:20:13.5748613+09:00"
+        },
+        {
+            "Name": "Cascadia-Code",
+            "Source": "nerd-fonts",
+            "Info": "",
+            "Version": "2111.01",
+            "Updated": "2023-05-16T23:58:03.9496433+09:00"
+        },
+        {
+            "Name": "eza",
+            "Source": "main",
+            "Info": "",
+            "Version": "0.16.0",
+            "Updated": "2023-11-22T14:46:15.6369584+09:00"
+        },
+        {
+            "Name": "ffmpeg",
+            "Source": "main",
+            "Info": "",
+            "Version": "6.1",
+            "Updated": "2023-11-22T14:49:18.9534304+09:00"
+        },
+        {
+            "Name": "git",
+            "Source": "main",
+            "Info": "",
+            "Version": "2.43.0",
+            "Updated": "2023-11-22T14:49:46.3364345+09:00"
+        },
+        {
+            "Name": "gsudo",
+            "Source": "main",
+            "Info": "",
+            "Version": "2.4.0",
+            "Updated": "2023-09-17T23:03:28.388115+09:00"
+        },
+        {
+            "Name": "hexyl",
+            "Source": "main",
+            "Info": "",
+            "Version": "0.13.1",
+            "Updated": "2023-09-17T23:03:31.8585086+09:00"
+        },
+        {
+            "Name": "julia",
+            "Source": "main",
+            "Info": "",
+            "Version": "1.9.4",
+            "Updated": "2023-11-22T14:50:27.8276656+09:00"
+        },
+        {
+            "Name": "kotlin",
+            "Source": "main",
+            "Info": "",
+            "Version": "1.9.20",
+            "Updated": "2023-11-22T14:50:55.5537591+09:00"
+        },
+        {
+            "Name": "less",
+            "Source": "main",
+            "Info": "",
+            "Version": "643",
+            "Updated": "2023-11-22T21:21:55.6991155+09:00"
+        },
+        {
+            "Name": "neovim",
+            "Source": "main",
+            "Info": "",
+            "Version": "0.9.4",
+            "Updated": "2023-10-12T22:01:28.7750852+09:00"
+        },
+        {
+            "Name": "nodejs",
+            "Source": "main",
+            "Info": "",
+            "Version": "21.2.0",
+            "Updated": "2023-11-22T17:50:16.6685329+09:00"
+        },
+        {
+            "Name": "openjdk",
+            "Source": "java",
+            "Info": "",
+            "Version": "21.0.1-12",
+            "Updated": "2023-11-22T14:51:38.53024+09:00"
+        },
+        {
+            "Name": "pwsh",
+            "Source": "main",
+            "Info": "",
+            "Version": "7.4.0",
+            "Updated": "2023-11-22T19:01:07.3358045+09:00"
+        },
+        {
+            "Name": "python",
+            "Source": "main",
+            "Info": "",
+            "Version": "3.12.0",
+            "Updated": "2023-10-12T22:08:06.2729706+09:00"
+        },
+        {
+            "Name": "ripgrep",
+            "Source": "main",
+            "Info": "",
+            "Version": "13.0.0",
+            "Updated": "2023-06-03T22:06:17.6868278+09:00"
+        },
+        {
+            "Name": "starship",
+            "Source": "main",
+            "Info": "",
+            "Version": "1.16.0",
+            "Updated": "2023-11-22T18:05:40.4845324+09:00"
+        },
+        {
+            "Name": "tokei",
+            "Source": "main",
+            "Info": "",
+            "Version": "12.1.2",
+            "Updated": "2023-10-12T21:49:37.331018+09:00"
+        },
+        {
+            "Name": "vcredist2022",
+            "Source": "extras",
+            "Info": "",
+            "Version": "14.38.33130.0",
+            "Updated": "2023-11-22T18:06:15.5656859+09:00"
+        },
+        {
+            "Name": "vim",
+            "Source": "main",
+            "Info": "",
+            "Version": "9.0",
+            "Updated": "2023-06-18T01:24:44.0411666+09:00"
+        },
+        {
+            "Name": "wezterm",
+            "Source": "extras",
+            "Info": "",
+            "Version": "20230712-072601-f4abf8fd",
+            "Updated": "2023-11-22T18:19:08.7852551+09:00"
+        },
+        {
+            "Name": "zig",
+            "Source": "main",
+            "Info": "",
+            "Version": "0.11.0",
+            "Updated": "2023-09-17T23:35:35.8310601+09:00"
         }
     ]
 }
