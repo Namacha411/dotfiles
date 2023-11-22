@@ -4,6 +4,9 @@ function ln($src, $dst) {
   New-Item -ItemType SymbolicLink -Path $dst -Value $value
 }
 
-ln ./powershell/profile.ps1 $profile
-ln ./wezterm/.wezterm.lua $home/.wezterm.lua
-ln ./nvim $env:LOCALAPPDATA/nvim
+function makesymlink() {
+  ln ./powershell/profile.ps1 $profile
+  ln ./wezterm/.wezterm.lua $home/.wezterm.lua
+  ln ./nvim $env:LOCALAPPDATA/nvim
+  ln ./starship/starship.toml $home/.config/starship.toml
+}
