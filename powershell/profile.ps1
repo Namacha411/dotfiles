@@ -2,12 +2,6 @@
 Invoke-Expression (&starship init powershell)
 $OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 
-# Chocolatey profile
-$ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-if (Test-Path($ChocolateyProfile)) {
-  Import-Module "$ChocolateyProfile"
-}
-
 # PSReadLine
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 Set-PSReadlineOption -HistoryNoDuplicates
