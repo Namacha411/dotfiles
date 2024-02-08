@@ -16,8 +16,8 @@ config.window_background_opacity = 0.95
 config.window_padding = {
 	left = 20,
 	right = 20,
-	top = 20,
-	bottom = 20,
+	top = 5,
+	bottom = 5,
 }
 config.max_fps = 240
 config.enable_tab_bar = false
