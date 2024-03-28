@@ -1,3 +1,6 @@
+# PATH
+$Env:GOPATH = "$HOME\go"
+
 # Prompt
 $OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 Invoke-Expression (&starship init powershell)
