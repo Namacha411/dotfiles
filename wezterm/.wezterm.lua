@@ -1,78 +1,63 @@
 local wezterm = require("wezterm")
 
-local act = wezterm.action
+local config = wezterm.config_builder()
 
-local config = {}
-if wezterm.config_builder then
-	config = wezterm.config_builder()
-end
+config.default_prog = { "pwsh.exe", "-NoLogo" }
+config.use_ime = true
+
+-- tab
+config.tab_max_width = 30
+wezterm.on("format-tab-title", function(tab, _, _, _, _, max_width)
+  local bg_color = "#393a3d"
+  local bg_active_color = "#1e2030"
+  local fg_color = "#636da6"
+  local fg_active_color = "#c8d3f5"
+
+  local tab_bg_color = bg_color
+  local tab_fg_color = fg_color
+  if tab.is_active then
+    tab_bg_color = bg_active_color
+    tab_fg_color = fg_active_color
+  end
+
+  local title = wezterm.truncate_right(string.format(" %-99s", tab.active_pane.title), max_width)
+
+  return {
+    { Background = { Color = tab_bg_color } },
+    { Foreground = { Color = tab_fg_color } },
+    { Text = title },
+  }
+end)
 
 -- font
-config.font = wezterm.font("Fira Code")
+config.font = wezterm.font("Cascadia Code NF")
 config.font_size = 13.0
-config.line_height = 1.2
+
 -- window
-config.window_background_opacity = 0.95
+config.window_background_opacity = 0.7
+config.win32_system_backdrop = "Acrylic"
+config.window_decorations = "INTEGRATED_BUTTONS | RESIZE"
+config.window_frame = {
+  inactive_titlebar_bg = "none",
+  active_titlebar_bg = "none",
+}
+config.window_background_gradient = {
+  colors = { "#39384", "#1d2131", "#131313" },
+  blend = "Oklab",
+}
+config.colors = {
+  tab_bar = {
+    inactive_tab_edge = "none",
+  },
+}
 config.window_padding = {
-	left = 20,
-	right = 20,
-	top = 5,
-	bottom = 5,
+  left = 20,
+  right = 20,
+  top = 20,
 }
 config.max_fps = 240
-config.enable_tab_bar = false
-config.enable_scroll_bar = false
--- color scheme
-config.color_scheme = "One Dark (Gogh)"
--- key config
-config.leader = { key = "p", mods = "CTRL", timeout_milliseconds = 1000 }
-config.keys = {
-	{
-		key = "h",
-		mods = "LEADER",
-		action = act.SplitHorizontal({
-			domain = "CurrentPaneDomain",
-		}),
-	},
-	{
-		key = "v",
-		mods = "LEADER",
-		action = act.SplitVertical({
-			domain = "CurrentPaneDomain",
-		}),
-	},
-	{
-		key = "s",
-		mods = "LEADER",
-		action = act.PaneSelect({}),
-	},
-	{
-		key = "h",
-		mods = "LEADER|CTRL",
-		action = act.ActivatePaneDirection("Left"),
-	},
-	{
-		key = "l",
-		mods = "LEADER|CTRL",
-		action = act.ActivatePaneDirection("Right"),
-	},
-	{
-		key = "k",
-		mods = "LEADER|CTRL",
-		action = act.ActivatePaneDirection("Up"),
-	},
-	{
-		key = "j",
-		mods = "LEADER|CTRL",
-		action = act.ActivatePaneDirection("Down"),
-	},
-	{
-		key = "c",
-		mods = "LEADER",
-		action = act.CloseCurrentPane({ confirm = true }),
-	},
-}
 
-config.default_prog = { "pwsh.exe" }
+-- color scheme
+config.color_scheme = 'Tokyo Night (Gogh)'
 
 return config
