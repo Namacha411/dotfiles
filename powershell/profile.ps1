@@ -1,5 +1,6 @@
 # PATH
 $Env:GOPATH = "$HOME\go"
+$Env:PATH = "C:`\Users`\thdyk`\.local`\bin;$Env:PATH"
 
 # Prompt
 $OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
