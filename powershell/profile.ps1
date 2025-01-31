@@ -39,6 +39,15 @@ Remove-Item alias:ps
 function cd($Path="$HOME") {
   z $Path && eza --icons
 }
+function .. {
+  cd ..
+}
+function ... {
+  cd ../..
+}
+function ~ {
+  cd ~
+}
 function ls {
   eza --icons
 }
