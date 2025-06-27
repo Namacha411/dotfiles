@@ -5,8 +5,6 @@ Invoke-Expression (& { (zoxide init powershell | Out-String) })
 $OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 
 # PSReadLine
-Import-Module -Name CompletionPredictor
-
 function __OnViModeChange {
     if ($args[0] -eq 'Command') {
         # Set the cursor to a blinking block.
