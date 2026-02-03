@@ -70,6 +70,7 @@ config.colors = {
 -- ============================================================================
 config.max_fps = 120
 config.front_end = "WebGpu"
+config.webgpu_power_preference = "HighPerformance"
 
 -- ============================================================================
 -- Key Bindings

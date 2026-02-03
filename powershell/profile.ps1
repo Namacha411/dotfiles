@@ -64,6 +64,9 @@ function rmrf {
 function :q() {
   Exit
 }
+function cdg {
+    cd "$(ghq root)\$(ghq list | fzf)"
+}
 
 Set-Alias sudo gsudo
 Set-Alias cat bat
