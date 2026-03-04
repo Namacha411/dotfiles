@@ -1,6 +1,16 @@
 # Prompt
-Invoke-Expression (& { (starship init powershell --print-full-init | Out-String) })
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
+
+function prompt {
+    $path = $PWD.Path -replace [regex]::Escape($HOME), '~'
+    $branch = git branch --show-current 2>$null
+    Write-Host $path -NoNewline -ForegroundColor Cyan
+    if ($branch) {
+        Write-Host " ($branch)" -NoNewline -ForegroundColor Yellow
+    }
+    Write-Host ""
+    "> "
+}
 
 $OutputEncoding = [System.Text.Encoding]::GetEncoding('utf-8')
 
@@ -32,16 +42,17 @@ Set-PSReadLineOption -BellStyle Visual
 Remove-Item alias:cd
 Remove-Item alias:ls
 Remove-Item alias:cat
-Remove-Item alias:ps
 
 function cd($Path="$HOME") {
-  z $Path && eza --icons
+  if ($Path -match '^-(\d+)$') {
+    $upPath = ("../" * [int]$Matches[1]).TrimEnd('/')
+    z $upPath && eza --icons
+  } else {
+    z $Path && eza --icons
+  }
 }
 function .. {
   cd ..
-}
-function ... {
-  cd ../..
 }
 function ~ {
   cd ~
@@ -55,9 +66,6 @@ function ll {
 function touch {
   New-Item $args -Type File 
 }
-function mkcd($Path) {
-  New-Item $Path -ItemType Directory && z $Path
-}
 function rmrf {
   Remove-Item -Recurse -Force $args
 }
@@ -68,11 +76,7 @@ function cdg {
     cd "$(ghq root)\$(ghq list | fzf)"
 }
 
-Set-Alias sudo gsudo
 Set-Alias cat bat
-Set-Alias find fd
-Set-Alias od hexyl
-Set-Alias ps procs
 Set-Alias unzip Expand-Archive
 
 # PATH

@@ -1,97 +1,4 @@
 {
-    "apps": [
-        {
-            "Name": "7zip",
-            "Updated": "2026-03-04T01:28:21.919154+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "26.00"
-        },
-        {
-            "Name": "Cascadia-Code",
-            "Updated": "2026-03-04T01:30:18.1022503+09:00",
-            "Source": "nerd-fonts",
-            "Info": "",
-            "Version": "2407.24"
-        },
-        {
-            "Name": "dark",
-            "Updated": "2026-03-04T02:15:01.3489069+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "3.14.1"
-        },
-        {
-            "Name": "fzf",
-            "Updated": "2026-03-04T03:38:57.4690762+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "0.70.0"
-        },
-        {
-            "Name": "gh",
-            "Updated": "2026-03-04T02:30:14.9678549+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "2.87.3"
-        },
-        {
-            "Name": "ghq",
-            "Updated": "2026-03-04T03:38:52.7048216+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "1.9.4"
-        },
-        {
-            "Name": "git",
-            "Updated": "2026-03-04T01:28:45.0036562+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "2.53.0"
-        },
-        {
-            "Name": "neovim",
-            "Updated": "2026-03-04T02:30:04.7174512+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "0.11.6"
-        },
-        {
-            "Name": "podman",
-            "Updated": "2026-03-04T02:15:09.4606157+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "5.8.0"
-        },
-        {
-            "Name": "podman-desktop",
-            "Updated": "2026-03-04T02:10:37.6989105+09:00",
-            "Source": "extras",
-            "Info": "",
-            "Version": "1.25.1"
-        },
-        {
-            "Name": "powertoys",
-            "Updated": "2026-03-04T03:35:06.707114+09:00",
-            "Source": "extras",
-            "Info": "",
-            "Version": "0.97.2"
-        },
-        {
-            "Name": "pwsh",
-            "Updated": "2026-03-04T02:05:11.3618384+09:00",
-            "Source": "main",
-            "Info": "",
-            "Version": "7.5.4"
-        },
-        {
-            "Name": "zen-browser",
-            "Updated": "2026-03-04T01:33:05.5552072+09:00",
-            "Source": "extras",
-            "Info": "",
-            "Version": "1.19b"
-        }
-    ],
     "buckets": [
         {
             "Name": "main",
@@ -110,6 +17,113 @@
             "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
             "Updated": "2026-03-03T19:49:16+09:00",
             "Manifests": 367
+        }
+    ],
+    "apps": [
+        {
+            "Name": "7zip",
+            "Source": "main",
+            "Version": "26.00",
+            "Info": "",
+            "Updated": "2026-03-04T01:28:21.919154+09:00"
+        },
+        {
+            "Name": "Cascadia-Code",
+            "Source": "nerd-fonts",
+            "Version": "2407.24",
+            "Info": "",
+            "Updated": "2026-03-04T01:30:18.1022503+09:00"
+        },
+        {
+            "Name": "dark",
+            "Source": "main",
+            "Version": "3.14.1",
+            "Info": "",
+            "Updated": "2026-03-04T02:15:01.3489069+09:00"
+        },
+        {
+            "Name": "eza",
+            "Source": "main",
+            "Version": "0.23.4",
+            "Info": "",
+            "Updated": "2026-03-04T18:06:00.3092037+09:00"
+        },
+        {
+            "Name": "fzf",
+            "Source": "main",
+            "Version": "0.70.0",
+            "Info": "",
+            "Updated": "2026-03-04T03:38:57.4690762+09:00"
+        },
+        {
+            "Name": "gh",
+            "Source": "main",
+            "Version": "2.87.3",
+            "Info": "",
+            "Updated": "2026-03-04T02:30:14.9678549+09:00"
+        },
+        {
+            "Name": "ghq",
+            "Source": "main",
+            "Version": "1.9.4",
+            "Info": "",
+            "Updated": "2026-03-04T03:38:52.7048216+09:00"
+        },
+        {
+            "Name": "git",
+            "Source": "main",
+            "Version": "2.53.0",
+            "Info": "",
+            "Updated": "2026-03-04T01:28:45.0036562+09:00"
+        },
+        {
+            "Name": "neovim",
+            "Source": "main",
+            "Version": "0.11.6",
+            "Info": "",
+            "Updated": "2026-03-04T02:30:04.7174512+09:00"
+        },
+        {
+            "Name": "podman",
+            "Source": "main",
+            "Version": "5.8.0",
+            "Info": "",
+            "Updated": "2026-03-04T02:15:09.4606157+09:00"
+        },
+        {
+            "Name": "podman-desktop",
+            "Source": "extras",
+            "Version": "1.25.1",
+            "Info": "",
+            "Updated": "2026-03-04T02:10:37.6989105+09:00"
+        },
+        {
+            "Name": "powertoys",
+            "Source": "extras",
+            "Version": "0.97.2",
+            "Info": "",
+            "Updated": "2026-03-04T03:35:06.707114+09:00"
+        },
+        {
+            "Name": "pwsh",
+            "Source": "main",
+            "Version": "7.5.4",
+            "Info": "",
+            "Updated": "2026-03-04T02:05:11.3618384+09:00"
+        },
+        {
+            "Name": "zen-browser",
+            "Source": "extras",
+            "Version": "1.19b",
+            "Info": "",
+            "Updated": "2026-03-04T01:33:05.5552072+09:00"
+        },
+        {
+            "Name": "zoxide",
+            "Source": "main",
+            "Version": "0.9.9",
+            "Info": "",
+            "Updated": "2026-03-04T18:04:37.1515989+09:00"
         }
     ]
 }
