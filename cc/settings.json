@@ -3,6 +3,7 @@
   "plansDirectory": ".claude/plans",
   "statusLine": {
     "type": "command",
-    "command": "~/.claude/statusline-command.sh"
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
   }
 }
