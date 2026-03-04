@@ -14,13 +14,10 @@ return {
     highlight = { enable = true, },
     indent = { enable = true, },
     ensure_installed = {
-      -- markview.nvim
+      "lua",
       "html",
       "markdown",
       "markdown_inline",
     }
   },
-  config = function(_, opts)
-    require("nvim-treesitter.configs").setup(opts)
-  end
 }
