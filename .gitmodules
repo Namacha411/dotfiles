@@ -1,3 +1,0 @@
-[submodule "nvim"]
-	path = nvim
-	url = https://github.com/Namacha411/lazy-vim-config.git

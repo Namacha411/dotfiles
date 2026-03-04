@@ -1,0 +1,10 @@
+{
+  "name": "personal-snippets",
+  "contributes": {
+    "snippets": [
+      { "language": "rust", "path": "./rust.json" },
+      { "language": "python", "path": "./python.json" },
+      { "language": "all", "path": "./all.json" }
+    ]
+  }
+}

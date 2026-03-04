@@ -1,0 +1,35 @@
+{
+  "AtCoder Main Template": {
+    "prefix": "atcoder",
+    "body": [
+      "#![allow(non_snake_case)]",
+      "",
+      "use proconio::input;",
+      "",
+      "fn main() {",
+      "\tinput! {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "AtCoder main template with proconio"
+  },
+
+  "Debug Print": {
+    "prefix": "dbg",
+    "body": "eprintln!(\"${1:var} = {${1:var}:?}\");",
+    "description": "Debug print to stderr"
+  },
+
+  "Yes/No Output": {
+    "prefix": "yesno",
+    "body": [
+      "if ${1:condition} {",
+      "\tprintln!(\"Yes\");",
+      "} else {",
+      "\tprintln!(\"No\");",
+      "}"
+    ],
+    "description": "Yes/No output"
+  }
+}

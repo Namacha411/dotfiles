@@ -1,0 +1,80 @@
+{
+	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
+	"CreationDate" : "2026-03-04T17:28:38.499-00:00",
+	"Sources" : 
+	[
+		{
+			"Packages" : 
+			[
+				{
+					"PackageIdentifier" : "Microsoft.Edge",
+					"Version" : "145.0.3800.82"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.EdgeWebView2Runtime",
+					"Version" : "145.0.3800.82"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
+					"Version" : "14.50.35719.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2010.x86",
+					"Version" : "10.0.40219"
+				},
+				{
+					"PackageIdentifier" : "Anthropic.ClaudeCode",
+					"Version" : "2.1.63"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.OneDrive",
+					"Version" : "26.022.0203.0006"
+				},
+				{
+					"PackageIdentifier" : "Spotify.Spotify",
+					"Version" : "1.2.84.477.gcfdf84e8"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Teams",
+					"Version" : "26015.1706.4351.4392"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.AppInstaller",
+					"Version" : "1.28.190.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
+					"Version" : "7.2409.9001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.UI.Xaml.2.8",
+					"Version" : "8.2501.31001.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
+					"Version" : "14.0.33728.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsTerminal",
+					"Version" : "1.23.20211.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WSL",
+					"Version" : "2.6.3.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Teams.Free",
+					"Version" : "24295.401.3195.9406"
+				}
+			],
+			"SourceDetails" : 
+			{
+				"Argument" : "https://cdn.winget.microsoft.com/cache",
+				"Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
+				"Name" : "winget",
+				"Type" : "Microsoft.PreIndexed.Package"
+			}
+		}
+	],
+	"WinGetVersion" : "1.28.190"
+}
