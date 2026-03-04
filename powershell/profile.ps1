@@ -72,8 +72,14 @@ function rmrf {
 function :q() {
   Exit
 }
-function cdg {
-    cd "$(ghq root)\$(ghq list | fzf)"
+function fghq {
+    ghq list | fzf
+}
+function fgb {
+    $branch = git branch -a | fzf | ForEach-Object { $_.Trim() -replace '^\* ', '' -replace '^remotes/[^/]+/', '' }
+    if ($branch) {
+        git checkout $branch
+    }
 }
 
 Set-Alias cat bat
