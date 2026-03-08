@@ -1,5 +1,2 @@
 nvim/lazy-lock.json
-
-# Claude Code - plans are local only
-cc/plans/*
-!cc/plans/.gitkeep
+.claude/

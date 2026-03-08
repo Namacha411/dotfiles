@@ -24,19 +24,22 @@ function __OnViModeChange {
         Write-Host -NoNewLine "`e[5 q"
     }
 }
-Set-PSReadLineOption -EditMode Vi
-Set-PSReadLineOption -ViModeIndicator Script -ViModeChangeHandler $Function:__OnViModeChange
-# https://github.com/PowerShell/PSReadLine/issues/906
-Set-PSReadLineKeyHandler -Chord 'Ctrl+Oem4' -ViMode Insert -Function ViCommandMode
 
-Set-PSReadLineOption -HistorySavePath "$HOME\$($Host.Name)_history.txt"
-Set-PSReadlineOption -HistorySearchCursorMovesToEnd
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+if ($Host.Name -eq 'ConsoleHost') {
+    Set-PSReadLineOption -EditMode Vi
+    if ($env:NVIM) {
+        Set-PSReadLineOption -ViModeIndicator None
+    } else {
+        Set-PSReadLineOption -ViModeIndicator Script -ViModeChangeHandler $Function:__OnViModeChange
+    }
 
-Set-PSReadLineOption -PredictionViewStyle ListView
-Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-
-Set-PSReadLineOption -BellStyle Visual
+    Set-PSReadLineOption -HistorySavePath "$HOME\$($Host.Name)_history.txt"
+    Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+    Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+    Set-PSReadLineOption -PredictionViewStyle ListView
+    Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
+    Set-PSReadLineOption -BellStyle Visual
+}
 
 # Alias
 Remove-Item alias:cd
