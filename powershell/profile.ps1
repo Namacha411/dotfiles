@@ -1,5 +1,10 @@
-# Prompt
-Invoke-Expression (& { (zoxide init powershell | Out-String) })
+# Prompt (zoxide init cached to avoid subprocess cost on every startup)
+$_zoxideCache = "$env:TEMP\zoxide_init.ps1"
+if (-not (Test-Path $_zoxideCache)) {
+    zoxide init powershell | Out-File -Encoding UTF8 $_zoxideCache
+}
+. $_zoxideCache
+Remove-Variable _zoxideCache
 
 function prompt {
     $path = $PWD.Path -replace [regex]::Escape($HOME), '~'
@@ -26,19 +31,26 @@ function __OnViModeChange {
 }
 
 if ($Host.Name -eq 'ConsoleHost') {
-    Set-PSReadLineOption -EditMode Vi
-    if ($env:NVIM) {
-        Set-PSReadLineOption -ViModeIndicator None
-    } else {
-        Set-PSReadLineOption -ViModeIndicator Script -ViModeChangeHandler $Function:__OnViModeChange
+    $psrlOpts = @{
+        EditMode                   = 'Vi'
+        HistorySavePath            = "$HOME\$($Host.Name)_history.txt"
+        HistorySearchCursorMovesToEnd = $true
+        PredictionSource           = 'History'
+        PredictionViewStyle        = 'ListView'
+        BellStyle                  = 'Visual'
     }
-
-    Set-PSReadLineOption -HistorySavePath "$HOME\$($Host.Name)_history.txt"
-    Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-    Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-    Set-PSReadLineOption -PredictionViewStyle ListView
+    if ($env:NVIM) {
+        $psrlOpts['ViModeIndicator'] = 'None'
+    } else {
+        $psrlOpts['ViModeIndicator'] = 'Script'
+        $psrlOpts['ViModeChangeHandler'] = $Function:__OnViModeChange
+    }
+    Set-PSReadLineOption @psrlOpts
     Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
-    Set-PSReadLineOption -BellStyle Visual
+    # Ctrl+[ を Vi の Escape 相当にしたいが、Windows Console の制約で実現不可。
+    # Ctrl+[ を押すと .NET の Console.ReadKey() は Ctrl+Oem4 として返すため、
+    # PSReadLine が登録した 'Ctrl+[' ハンドラは永遠に呼ばれない。
+    # PSReadLine issue #906 (未解決) 参照。
 }
 
 # Alias
