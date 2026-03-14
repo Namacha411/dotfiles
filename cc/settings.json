@@ -1,9 +1,13 @@
 {
   "model": "claude-sonnet-4-6",
-  "plansDirectory": ".claude/plans",
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest",
     "padding": 0
+  },
+  "plansDirectory": ".claude/plans",
+  "voiceEnabled": true,
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
   }
 }

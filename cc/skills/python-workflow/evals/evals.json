@@ -1,0 +1,47 @@
+{
+  "skill_name": "python-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "httpx を使って GitHub API からスター数上位10リポジトリを取得して表示するスクリプトを書いて",
+      "expected_output": "PEP 723 ヘッダー、uv run での実行、型ヒント、PEP 8 準拠のスクリプト",
+      "files": [],
+      "assertions": [
+        {"id": "pep723_header", "text": "スクリプトの先頭に '# /// script' ヘッダーブロックがある"},
+        {"id": "httpx_in_deps", "text": "dependencies に 'httpx' が含まれている"},
+        {"id": "requires_python", "text": "'requires-python' が指定されている"},
+        {"id": "type_hints_all_funcs", "text": "全関数の引数と戻り値に型ヒントがある"},
+        {"id": "main_guard", "text": "if __name__ == '__main__': ガードがある"},
+        {"id": "snake_case", "text": "関数名・変数名が snake_case である"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "このスクリプトに rich を使ったきれいな出力を追加して（既存の print を差し替え）",
+      "expected_output": "rich を dependencies に追加、型ヒント維持、PEP 8 準拠",
+      "files": ["input_script.py"],
+      "assertions": [
+        {"id": "rich_in_deps", "text": "dependencies に 'rich' が含まれている"},
+        {"id": "no_bare_print", "text": "print() 呼び出しが残っていない（rich に置換されている）"},
+        {"id": "type_hints_maintained", "text": "既存の型ヒントが維持されている"},
+        {"id": "pep723_header_maintained", "text": "PEP 723 ヘッダーが維持されている"},
+        {"id": "rich_imported", "text": "rich から何らかのクラス/関数がインポートされている"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "下記のスクリプトを PEP 8 と型ヒントに合わせて直して:\n\nimport requests, json\ndef getData(URL, t=30):\n    r = requests.get(URL, timeout=t)\n    return r.json()\ndef main():\n    data = getData(\"https://api.github.com\")\n    print(data)\nmain()",
+      "expected_output": "snake_case への命名修正、型ヒント追加、PEP 723 ヘッダー追加、インポート分離",
+      "files": [],
+      "assertions": [
+        {"id": "snake_case_func", "text": "getData が snake_case（get_data など）に修正されている"},
+        {"id": "snake_case_param_url", "text": "パラメータ URL が url に修正されている"},
+        {"id": "meaningful_param_name", "text": "パラメータ t が timeout など意味のある名前に修正されている"},
+        {"id": "unused_json_removed", "text": "未使用の 'json' インポートが削除されている"},
+        {"id": "type_hints_added", "text": "関数に型ヒントが追加されている"},
+        {"id": "pep723_header_added", "text": "PEP 723 ヘッダーが追加されている"},
+        {"id": "main_guard_added", "text": "if __name__ == '__main__': ガードが追加されている"}
+      ]
+    }
+  ]
+}
