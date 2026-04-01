@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    -- vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc' -- using blink.cmp
 
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -59,7 +59,7 @@ map('n', '<leader>fg', function() require('fzf-lua').live_grep() end, { desc = "
 map('n', '<leader>fb', function() require('fzf-lua').buffers() end, { desc = "バッファ一覧" })
 map('n', '<leader>fh', function() require('fzf-lua').helptags() end, { desc = "ヘルプタグ検索" })
 map('n', '<leader>fo', function() require('fzf-lua').treesitter() end, { desc = "アウトライン表示" })
-map('n', '<leader>fd', function() require('fzf-lua').diagnostics_document() end, { desc = "診断情報の検索" })
+map('n', '<leader>fd', vim.lsp.buf.workspace_diagnostics, { desc = "ワークスペース診断" })
 map('n', '<leader>fm', function() require('fzf-lua').marks() end, { desc = "マークの検索" })
 map('n', '<leader>fc', function() require('fzf-lua').commands() end, { desc = "コマンドの検索" })
 
