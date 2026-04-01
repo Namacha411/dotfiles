@@ -3,14 +3,14 @@
         {
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main",
-            "Updated": "2026-03-04T13:51:55+09:00",
-            "Manifests": 1454
+            "Updated": "2026-03-07T13:46:15+09:00",
+            "Manifests": 1455
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
-            "Updated": "2026-03-04T16:27:57+09:00",
-            "Manifests": 2275
+            "Updated": "2026-03-07T13:46:15+09:00",
+            "Manifests": 2278
         },
         {
             "Name": "nerd-fonts",
@@ -21,109 +21,165 @@
     ],
     "apps": [
         {
-            "Name": "7zip",
+            "Updated": "2026-03-04T01:28:21.919154+09:00",
             "Source": "main",
             "Version": "26.00",
             "Info": "",
-            "Updated": "2026-03-04T01:28:21.919154+09:00"
+            "Name": "7zip"
         },
         {
-            "Name": "Cascadia-Code",
+            "Updated": "2026-03-04T22:30:28.3833908+09:00",
+            "Source": "main",
+            "Version": "0.26.1",
+            "Info": "",
+            "Name": "bat"
+        },
+        {
+            "Updated": "2026-03-04T18:36:57.271153+09:00",
+            "Source": "main",
+            "Version": "1.3.10",
+            "Info": "",
+            "Name": "bun"
+        },
+        {
+            "Updated": "2026-03-04T01:30:18.1022503+09:00",
             "Source": "nerd-fonts",
             "Version": "2407.24",
             "Info": "",
-            "Updated": "2026-03-04T01:30:18.1022503+09:00"
+            "Name": "Cascadia-Code"
         },
         {
-            "Name": "dark",
+            "Updated": "2026-03-04T02:15:01.3489069+09:00",
             "Source": "main",
             "Version": "3.14.1",
             "Info": "",
-            "Updated": "2026-03-04T02:15:01.3489069+09:00"
+            "Name": "dark"
         },
         {
-            "Name": "eza",
+            "Updated": "2026-03-04T21:47:46.8936315+09:00",
+            "Source": "main",
+            "Version": "29.2.1",
+            "Info": "",
+            "Name": "docker"
+        },
+        {
+            "Updated": "2026-03-04T18:06:00.3092037+09:00",
             "Source": "main",
             "Version": "0.23.4",
             "Info": "",
-            "Updated": "2026-03-04T18:06:00.3092037+09:00"
+            "Name": "eza"
         },
         {
-            "Name": "fzf",
+            "Updated": "2026-03-04T03:38:57.4690762+09:00",
             "Source": "main",
             "Version": "0.70.0",
             "Info": "",
-            "Updated": "2026-03-04T03:38:57.4690762+09:00"
+            "Name": "fzf"
         },
         {
-            "Name": "gh",
+            "Updated": "2026-03-04T02:30:14.9678549+09:00",
             "Source": "main",
             "Version": "2.87.3",
             "Info": "",
-            "Updated": "2026-03-04T02:30:14.9678549+09:00"
+            "Name": "gh"
         },
         {
-            "Name": "ghq",
+            "Updated": "2026-03-04T03:38:52.7048216+09:00",
             "Source": "main",
             "Version": "1.9.4",
             "Info": "",
-            "Updated": "2026-03-04T03:38:52.7048216+09:00"
+            "Name": "ghq"
         },
         {
-            "Name": "git",
+            "Updated": "2026-03-04T01:28:45.0036562+09:00",
             "Source": "main",
             "Version": "2.53.0",
             "Info": "",
-            "Updated": "2026-03-04T01:28:45.0036562+09:00"
+            "Name": "git"
         },
         {
-            "Name": "neovim",
+            "Updated": "2026-03-04T02:30:04.7174512+09:00",
             "Source": "main",
             "Version": "0.11.6",
             "Info": "",
-            "Updated": "2026-03-04T02:30:04.7174512+09:00"
+            "Name": "neovim"
         },
         {
-            "Name": "podman",
+            "Updated": "2026-03-04T19:16:42.0895988+09:00",
+            "Source": "main",
+            "Version": "24.14.0",
+            "Info": "",
+            "Name": "nodejs-lts"
+        },
+        {
+            "Updated": "2026-03-04T02:15:09.4606157+09:00",
             "Source": "main",
             "Version": "5.8.0",
             "Info": "",
-            "Updated": "2026-03-04T02:15:09.4606157+09:00"
+            "Name": "podman"
         },
         {
-            "Name": "podman-desktop",
+            "Updated": "2026-03-04T02:10:37.6989105+09:00",
             "Source": "extras",
             "Version": "1.25.1",
             "Info": "",
-            "Updated": "2026-03-04T02:10:37.6989105+09:00"
+            "Name": "podman-desktop"
         },
         {
-            "Name": "powertoys",
+            "Updated": "2026-03-04T03:35:06.707114+09:00",
             "Source": "extras",
             "Version": "0.97.2",
             "Info": "",
-            "Updated": "2026-03-04T03:35:06.707114+09:00"
+            "Name": "powertoys"
         },
         {
-            "Name": "pwsh",
+            "Updated": "2026-03-04T02:05:11.3618384+09:00",
             "Source": "main",
             "Version": "7.5.4",
             "Info": "",
-            "Updated": "2026-03-04T02:05:11.3618384+09:00"
+            "Name": "pwsh"
         },
         {
-            "Name": "zen-browser",
-            "Source": "extras",
+            "Updated": "2026-03-04T21:56:34.0936292+09:00",
+            "Source": "main",
+            "Version": "15.1.0",
+            "Info": "",
+            "Name": "ripgrep"
+        },
+        {
+            "Updated": "2026-03-05T15:05:44.4519034+09:00",
+            "Source": "main",
+            "Version": "12.1.2",
+            "Info": "",
+            "Name": "tokei"
+        },
+        {
+            "Updated": "2026-03-04T19:12:29.1315063+09:00",
+            "Source": "main",
+            "Version": "0.10.8",
+            "Info": "",
+            "Name": "uv"
+        },
+        {
+            "Updated": "2026-03-16T16:35:52.3730816+09:00",
+            "Source": null,
             "Version": "1.19b",
             "Info": "",
-            "Updated": "2026-03-04T01:33:05.5552072+09:00"
+            "Name": "zen-browser"
         },
         {
-            "Name": "zoxide",
+            "Updated": "2026-03-07T14:50:47.3753823+09:00",
+            "Source": "main",
+            "Version": "0.15.2",
+            "Info": "",
+            "Name": "zig"
+        },
+        {
+            "Updated": "2026-03-04T18:04:37.1515989+09:00",
             "Source": "main",
             "Version": "0.9.9",
             "Info": "",
-            "Updated": "2026-03-04T18:04:37.1515989+09:00"
+            "Name": "zoxide"
         }
     ]
 }

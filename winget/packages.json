@@ -1,18 +1,30 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-03-04T18:27:39.777-00:00",
+	"CreationDate" : "2026-03-16T19:00:00.138-00:00",
 	"Sources" : 
 	[
 		{
 			"Packages" : 
 			[
 				{
-					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "145.0.3800.82"
+					"PackageIdentifier" : "Microsoft.Office",
+					"Version" : "16.0.19725.20172"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.EdgeWebView2Runtime",
-					"Version" : "145.0.3800.82"
+					"PackageIdentifier" : "Microsoft.OneDrive",
+					"Version" : "26.026.0209.0004"
+				},
+				{
+					"PackageIdentifier" : "DigitalScholar.Zotero",
+					"Version" : "8.0.4"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Edge",
+					"Version" : "146.0.3856.59"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
+					"Version" : "14.50.35719.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
@@ -23,12 +35,16 @@
 					"Version" : "10.0.40219"
 				},
 				{
-					"PackageIdentifier" : "Anthropic.ClaudeCode",
-					"Version" : "2.1.63"
+					"PackageIdentifier" : "Notion.Notion",
+					"Version" : "7.7.1"
 				},
 				{
-					"PackageIdentifier" : "Microsoft.OneDrive",
-					"Version" : "26.022.0203.0006"
+					"PackageIdentifier" : "Notion.NotionCalendar",
+					"Version" : "1.132.0"
+				},
+				{
+					"PackageIdentifier" : "Anthropic.ClaudeCode",
+					"Version" : "2.1.74"
 				},
 				{
 					"PackageIdentifier" : "Spotify.Spotify",
@@ -36,7 +52,7 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26015.1706.4351.4392"
+					"Version" : "26032.208.4399.5"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
@@ -56,15 +72,11 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WindowsTerminal",
-					"Version" : "1.23.20211.0"
+					"Version" : "1.24.10621.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WSL",
 					"Version" : "2.6.3.0"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.Teams.Free",
-					"Version" : "24295.401.3195.9406"
 				}
 			],
 			"SourceDetails" : 
