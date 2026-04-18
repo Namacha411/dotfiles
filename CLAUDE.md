@@ -37,6 +37,7 @@ Both scripts create symlinks from the repo into the appropriate config locations
 | `cc/settings.json` | `~/.claude/settings.json` |
 | `cc/statusline-command.sh` | `~/.claude/statusline-command.sh` |
 | `cc/skills` | `~/.claude/skills` |
+| `cc/ccstatusline` | `~/.config/ccstatusline` |
 | `vim/.vimrc` | `~/.vimrc` (Linux only) |
 
 The `bash/.bashrc` is not symlinked; instead `setup.sh` appends a `source` line to the user's shell rc file.

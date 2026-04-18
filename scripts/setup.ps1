@@ -38,6 +38,7 @@ function Set-Symlinks {
   New-Symlink cc\settings.json            "$HOME\.claude\settings.json"
   New-Symlink cc\statusline-command.sh    "$HOME\.claude\statusline-command.sh"
   New-Symlink cc\skills                   "$HOME\.claude\skills"
+  New-Symlink cc\ccstatusline             "$HOME\.config\ccstatusline"
 }
 
 Set-Symlinks
