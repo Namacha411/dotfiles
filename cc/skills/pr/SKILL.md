@@ -1,7 +1,12 @@
+---
+name: pr
+description: Create a pull request — commit staged changes, push, and open a PR via gh.
+model: haiku
+---
+
 # Create PR Skill
-1. Run `git status` and show ALL changed files
-2. Ask user to confirm which files to include (default: all)
-3. Run `git branch --show-current` to confirm target branch
-4. Stage confirmed files, commit with conventional commit message
-5. Push to the current branch
-6. Create PR using `gh pr create` with a descriptive title and body
+
+1. Use the **commit skill** to stage files and create a commit (it handles file confirmation, Haiku-generated Conventional Commits message, and Co-Authored-By).
+2. Run `git branch --show-current` to confirm the current branch.
+3. Push to the current branch: `git push -u origin <branch>`.
+4. Create a PR using `gh pr create` with a descriptive title and body summarising the changes.

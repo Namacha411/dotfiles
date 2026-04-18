@@ -1,13 +1,20 @@
 {
-  "model": "claude-sonnet-4-6",
+  "model": "sonnet",
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest",
     "padding": 0
   },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
+  },
   "plansDirectory": ".claude/plans",
   "voiceEnabled": true,
-  "enabledPlugins": {
-    "skill-creator@claude-plugins-official": true
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
+    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
+    "DISABLE_AUTOUPDATER": "1"
   }
 }

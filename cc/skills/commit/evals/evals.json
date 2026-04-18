@@ -1,0 +1,45 @@
+{
+  "skill_name": "commit",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "nvimの設定ファイルを更新したんでコミットして",
+      "expected_output": "Conventional Commits subject line with feat or chore type, nvim scope. Simple change so no body needed.",
+      "files": [],
+      "assertions": [
+        "Subject line follows Conventional Commits format: <type>[optional scope]: <description>",
+        "Subject line is 72 characters or fewer",
+        "Description uses imperative mood (e.g. 'add' not 'added')",
+        "Type is appropriate for a feature addition (feat or chore)",
+        "[with_skill only] Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com> is present in the commit"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "LSP関連の設定のバグを直したのでコミットしたい",
+      "expected_output": "fix type commit with nvim scope, body explaining the deprecated API migration from formatting_sync to format",
+      "files": [],
+      "assertions": [
+        "Subject line follows Conventional Commits format: <type>[optional scope]: <description>",
+        "Subject line is 72 characters or fewer",
+        "Description uses imperative mood",
+        "Type is 'fix' (it's a bug fix for deprecated API usage)",
+        "A commit body is present explaining what was fixed",
+        "[with_skill only] Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com> is present in the commit"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "今日書いたコード全部コミットしたい。nvimとpowershellの設定を両方いじってた",
+      "expected_output": "Commit covers both nvim and powershell changes. Skill should flag mixed-area files before staging.",
+      "files": [],
+      "assertions": [
+        "Subject line follows Conventional Commits format: <type>[optional scope]: <description>",
+        "Subject line is 72 characters or fewer",
+        "Description uses imperative mood",
+        "Commit message references or covers both changed areas (nvim and powershell)",
+        "[with_skill only] Co-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com> is present in the commit"
+      ]
+    }
+  ]
+}
