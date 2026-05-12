@@ -17,8 +17,6 @@ return {
     config = function()
       require("mason-lspconfig").setup()
 
-      local lspconfig = require("lspconfig")
-
       -- Detect PEP 723 header and return the uv-cached venv Python path for ty LSP.
       -- Requires `uv run --script <file>` to have been run once to create the venv.
       -- See: https://github.com/astral-sh/ty/issues/691
@@ -43,13 +41,18 @@ return {
           local python_path = get_pep723_python(ev.buf)
           if not python_path then return end
 
-          lspconfig.ty.setup({
+          -- Use vim.lsp.start() directly so lspconfig server registration is not required
+          -- and each buffer gets its own client with the correct venv python path.
+          vim.lsp.start({
+            name = "ty",
+            cmd = { "ty", "server" },
             settings = {
               ty = {
                 environment = { python = python_path },
               },
             },
-          })
+            root_dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ":h"),
+          }, { bufnr = ev.buf })
         end,
       })
     end,
