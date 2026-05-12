@@ -1,9 +1,9 @@
 ---
 name: python-workflow
 description: >
-  Python script を作成・編集する際に適用するワークフロー。
-  uv + PEP 723 でスクリプトを自己完結させ、型ヒントと PEP 8 スタイルで
-  LSP 補完・静的型検査・コードの統一性を確保する。
+  Python を書く際に適用するワークフロー。
+  使い捨て単一スクリプトには uv + PEP 723、それ以外のプロジェクトには uv init + uv add で環境を構築し、
+  型ヒントと PEP 8 スタイルで LSP 補完・静的型検査・コードの統一性を確保する。
   Python ファイルの新規作成、既存スクリプトの修正、依存パッケージの追加など、
   Python に関わる作業が発生したら必ずこのスキルを参照すること。
 ---
@@ -11,13 +11,24 @@ description: >
 # Python Workflow
 
 このスキルの目的は「未来の自分や他者がそのスクリプトを読んだとき、迷わず理解・修正できる」コードを書くことにある。
-そのために uv + PEP 723 で再現性を、型ヒントで静的解析可能性を、PEP 8 で一貫したスタイルを担保する。
+そのために uv で再現性を、型ヒントで静的解析可能性を、PEP 8 で一貫したスタイルを担保する。
 
 ---
 
-## 1. PEP 723 インラインメタデータ（必須）
+## 1. 環境構築の選択
 
-すべての Python スクリプトの先頭に以下のブロックを記述する。
+| ユースケース | 手法 |
+|---|---|
+| 使い捨て・単一ファイルのスクリプト | PEP 723 インラインメタデータ + `uv run` |
+| 複数ファイル・継続開発・ライブラリ | `uv init` + `uv add` |
+
+**迷ったら `uv init` を選ぶ。** PEP 723 は「このファイル 1 つで完結する、使い捨てのスクリプト」にのみ使う。
+
+---
+
+## 2. PEP 723 インラインメタデータ（使い捨て単一スクリプト）
+
+スクリプトの先頭に以下のブロックを記述する。
 これにより `uv run` が依存関係を自動解決し、仮想環境の手動管理が不要になる。
 
 ```python
@@ -32,9 +43,39 @@ description: >
 
 依存パッケージがない場合でも `dependencies = []` として残す（スキャフォールドとして機能する）。
 
----
+### `if __name__ == "__main__":` ガード（必須）
 
-## 2. 実行方法
+**本体処理は必ず `if __name__ == "__main__":` で囲む。**
+
+ty LSP は `uv python find --script <file>` で PEP 723 スクリプト用の venv Python パスを取得する。
+このコマンドが機能するには、事前に `uv run --script <file>` で venv が作成されている必要がある。
+`if __name__ == "__main__":` がないと、この venv 作成目的の `uv run` でスクリプトの副作用が走ってしまう。
+
+```python
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#   "requests",
+# ]
+# ///
+
+import requests  # ← uv run 時はここまで実行（venv が作られる）
+
+if __name__ == "__main__":  # ← 本体処理はここに書く
+    resp = requests.get("https://example.com")
+    print(resp.status_code)
+```
+
+初回 venv 作成（スクリプトを書いたら 1 回だけ実行）:
+
+```bash
+uv run --script foo.py   # インポートのみ走り即終了、venv が ~/.cache/uv 以下に作られる
+```
+
+その後 Neovim でファイルを開けば ty LSP が補完・型チェックを提供する。
+
+### 実行方法
 
 ```bash
 uv run script.py
@@ -46,9 +87,50 @@ uv run script.py
 
 ---
 
-## 3. 型ヒント（必須）
+## 3. プロジェクト構築（uv init + uv add）
 
-型ヒントにより LSP（Pyright, pylsp など）の補完と静的型検査が有効になる。
+複数ファイル・継続開発・ライブラリなど、単一スクリプトに収まらない場合はプロジェクトとして管理する。
+
+### セットアップ
+
+```bash
+uv init myproject
+cd myproject
+uv add requests rich        # 依存パッケージを追加
+uv add --dev ruff ty        # 開発用ツールを追加
+```
+
+生成されるファイル:
+
+```
+myproject/
+├── pyproject.toml   # プロジェクト設定・依存関係
+├── .python-version  # Python バージョンのピン留め
+├── uv.lock          # ロックファイル（git 管理する）
+└── hello.py         # エントリポイント（任意に変更）
+```
+
+### 依存パッケージの管理
+
+```bash
+uv add httpx             # 依存パッケージを追加（pyproject.toml + uv.lock を更新）
+uv remove requests       # 依存パッケージを削除
+uv sync                  # uv.lock から venv を再現（git clone 後など）
+```
+
+### 実行方法
+
+```bash
+uv run python main.py       # スクリプトを実行
+uv run python -m mypackage  # モジュールとして実行
+uv run pytest               # テストを実行
+```
+
+---
+
+## 4. 型ヒント（必須）
+
+型ヒントにより LSP（ty など）の補完と静的型検査が有効になる。
 
 ### 基本ルール
 
@@ -113,7 +195,7 @@ Config = dict[str, Any]
 
 ---
 
-## 4. PEP 8 スタイル
+## 5. PEP 8 スタイル
 
 コードの見た目を統一することで、diff が意味のある変更だけを示すようになる。
 
@@ -172,7 +254,7 @@ def fetch_data(url: str, timeout: int = 30) -> dict[str, Any]:
 
 ---
 
-## 5. 完全なスクリプトテンプレート
+## 6. 完全なスクリプトテンプレート（PEP 723）
 
 ```python
 # /// script
@@ -212,7 +294,7 @@ if __name__ == "__main__":
 
 ---
 
-## 6. ruff による lint / format
+## 7. ruff による lint / format
 
 ruff は PEP 8 チェック・自動フォーマット・import 整理を一括して行う。
 プロジェクトに ruff をインストールせず `uvx` で都度実行できるため、スクリプト単体でも使いやすい。
@@ -253,7 +335,7 @@ select = [
 
 ---
 
-## 7. ty による型チェック
+## 8. ty による型チェック
 
 ty は Astral 製の Rust 実装型チェッカー。mypy / pyright より 10〜100x 高速で、`uvx` で都度実行できるためインストール不要。
 
@@ -282,7 +364,7 @@ uvx ty check --watch script.py
 
 ---
 
-## 8. assert の使いどころ
+## 9. assert の使いどころ
 
 **型で表現できるものは型で表現する。assert は型やコードだけでは読み取れない意味的な前提条件を補足するために使う。**
 
@@ -340,15 +422,25 @@ def paginate(offset: int, limit: int) -> list[str]:
 
 ## チェックリスト
 
-スクリプトを書いたら以下を確認する:
+### 使い捨て単一スクリプト（PEP 723）
 
 - [ ] PEP 723 ヘッダーが先頭にある
 - [ ] すべての依存パッケージが `dependencies` に列挙されている
+- [ ] 本体処理を `if __name__ == "__main__":` で囲んでいる
+- [ ] `uv run` で実行できることを確認した
+
+### プロジェクト（uv init + uv add）
+
+- [ ] `pyproject.toml` に依存パッケージが記載されている
+- [ ] `uv.lock` が最新の状態である（`uv sync` で再現できる）
+- [ ] `uv run` で実行できることを確認した
+
+### 共通
+
 - [ ] すべての関数に型ヒントがある（戻り値の `list[dict]` は `list[dict[str, Any]]` のように内部型まで明示）
 - [ ] モジュール定数に `Final` アノテーションがある
 - [ ] `Optional` / `List` / `Dict` など古い構文を使っていない
 - [ ] 命名規則が PEP 8 に沿っている
-- [ ] `uv run` で実行できることを確認した
 - [ ] `uvx ruff check --fix` + `uvx ruff format` を実行した
 - [ ] `uvx ty check` を実行してエラーがないことを確認した
 - [ ] 前提条件・不変条件を assert で記述した（型で表現できない制約のみ）
