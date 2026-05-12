@@ -46,10 +46,8 @@ return {
           vim.lsp.start({
             name = "ty",
             cmd = { "ty", "server" },
-            settings = {
-              ty = {
-                environment = { python = python_path },
-              },
+            init_options = {
+              environment = { python = python_path },
             },
             root_dir = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(ev.buf), ":h"),
           }, { bufnr = ev.buf })
