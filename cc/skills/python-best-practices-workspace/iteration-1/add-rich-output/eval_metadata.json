@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "add-rich-output",
+  "prompt": "このスクリプトに rich を使ったきれいな出力を追加して（既存の print を差し替え）",
+  "assertions": [
+    {"id": "rich_in_deps", "text": "dependencies に 'rich' が含まれている"},
+    {"id": "no_bare_print", "text": "print() 呼び出しが残っていない（rich に置換されている）"},
+    {"id": "type_hints_maintained", "text": "既存の型ヒントが維持されている"},
+    {"id": "pep723_header_maintained", "text": "PEP 723 ヘッダーが維持されている"},
+    {"id": "rich_imported", "text": "rich から何らかのクラス/関数がインポートされている"}
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "expectations": [
+    {"text": "スクリプトの先頭に '# /// script' ヘッダーブロックがある", "passed": true, "evidence": "Line 1: '# /// script'"},
+    {"text": "dependencies に 'httpx' が含まれている", "passed": true, "evidence": "Line 3: '#   \"httpx>=0.24.0\",'"},
+    {"text": "'requires-python' が指定されている", "passed": true, "evidence": "Line 5: '# requires-python = \">=3.10\"'"},
+    {"text": "全関数の引数と戻り値に型ヒントがある", "passed": true, "evidence": "fetch_top_repositories() -> list[dict[str, Any]], format_repository(repo: dict[str, Any]) -> str, main() -> None"},
+    {"text": "if __name__ == '__main__': ガードがある", "passed": true, "evidence": "Line 77: 'if __name__ == \"__main__\":'"},
+    {"text": "関数名・変数名が snake_case である", "passed": true, "evidence": "fetch_top_repositories, format_repository, main など全て snake_case"}
+  ]
+}

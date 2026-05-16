@@ -1,0 +1,11 @@
+{
+  "expectations": [
+    {"text": "getData が snake_case（get_data など）に修正されている", "passed": true, "evidence": "Line 15: 'def get_data('"},
+    {"text": "パラメータ URL が url に修正されている", "passed": true, "evidence": "Line 15: 'url: str'"},
+    {"text": "パラメータ t が timeout など意味のある名前に修正されている", "passed": true, "evidence": "Line 15: 'timeout: int = 30'"},
+    {"text": "未使用の 'json' インポートが削除されている", "passed": true, "evidence": "インポートは 'from typing import Any' と 'import requests' のみ"},
+    {"text": "関数に型ヒントが追加されている", "passed": true, "evidence": "def get_data(url: str, timeout: int = 30) -> dict[str, Any]:"},
+    {"text": "PEP 723 ヘッダーが追加されている", "passed": true, "evidence": "Lines 1-6: '# /// script' ブロックが追加されている"},
+    {"text": "if __name__ == '__main__': ガードが追加されている", "passed": true, "evidence": "Line 39: 'if __name__ == \"__main__\":'"}
+  ]
+}

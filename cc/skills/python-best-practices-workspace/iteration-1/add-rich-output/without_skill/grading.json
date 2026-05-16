@@ -1,0 +1,9 @@
+{
+  "expectations": [
+    {"text": "dependencies に 'rich' が含まれている", "passed": true, "evidence": "Line 4: '#   \"rich>=13.0\",'"},
+    {"text": "print() 呼び出しが残っていない（rich に置換されている）", "passed": true, "evidence": "bare print() なし。console.print(table) のみ"},
+    {"text": "既存の型ヒントが維持されている", "passed": true, "evidence": "fetch_repos(username: str) -> list[dict[str, Any]] に型が改善されて維持"},
+    {"text": "PEP 723 ヘッダーが維持されている", "passed": true, "evidence": "Lines 1-7: '# /// script' ブロックが維持"},
+    {"text": "rich から何らかのクラス/関数がインポートされている", "passed": true, "evidence": "from rich.console import Console / from rich.table import Table"}
+  ]
+}
