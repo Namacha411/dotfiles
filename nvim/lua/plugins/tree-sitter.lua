@@ -1,26 +1,18 @@
 return {
-	"nvim-treesitter/nvim-treesitter",
-	branch = "main",
+	"romus204/tree-sitter-manager.nvim",
 	lazy = false,
-	build = ":TSUpdate",
-	event = {
-		"BufReadPost",
-		"BufNewFile",
-	},
 	config = function()
-		local ts = require("nvim-treesitter")
-		ts.install({
-			"python",
-			"rust",
-			"lua",
-			"json",
-			"yaml",
-			"toml",
-			"csv",
-			"gitignore",
-			"html",
-			"markdown",
-			"markdown_inline",
+		-- python, lua, markdown, markdown_inline は Neovim 0.12 にバンドル済みのため除外
+		require("tree-sitter-manager").setup({
+			ensure_installed = {
+				"rust",
+				"json",
+				"yaml",
+				"toml",
+				"csv",
+				"gitignore",
+				"html",
+			},
 		})
 
 		vim.api.nvim_create_autocmd("FileType", {
@@ -29,12 +21,10 @@ return {
 				if not lang then
 					return
 				end
-				local parser = vim.treesitter.get_parser(args.buf, lang)
-				if not parser then
+				if not pcall(vim.treesitter.get_parser, args.buf, lang) then
 					return
 				end
-				vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-				vim.treesitter.start(args.buf, lang)
+				vim.bo.indentexpr = "v:lua.vim.treesitter.indentexpr()"
 			end,
 		})
 	end,
