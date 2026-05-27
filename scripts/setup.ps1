@@ -30,15 +30,15 @@ function New-Symlink($src, $dst) {
 }
 
 function Set-Symlinks {
-  New-Symlink powershell\profile.ps1      $PROFILE
-  New-Symlink wezterm\.wezterm.lua        "$HOME\.wezterm.lua"
-  New-Symlink nvim                        "$env:LOCALAPPDATA\nvim"
-  New-Symlink starship\starship.toml      "$HOME\.config\starship.toml"
-  New-Symlink cc\common-rules.md          "$HOME\.claude\CLAUDE.md"
-  New-Symlink cc\settings.json            "$HOME\.claude\settings.json"
-  New-Symlink cc\statusline-command.sh    "$HOME\.claude\statusline-command.sh"
-  New-Symlink cc\skills                   "$HOME\.claude\skills"
-  New-Symlink cc\ccstatusline             "$HOME\.config\ccstatusline"
+  New-Symlink windows\powershell\profile.ps1      $PROFILE
+  New-Symlink shared\wezterm.lua                  "$HOME\.wezterm.lua"
+  New-Symlink shared\nvim                         "$env:LOCALAPPDATA\nvim"
+  New-Symlink shared\starship.toml                "$HOME\.config\starship.toml"
+  New-Symlink shared\claude\common-rules.md       "$HOME\.claude\CLAUDE.md"
+  New-Symlink shared\claude\settings.json         "$HOME\.claude\settings.json"
+  New-Symlink shared\claude\statusline-command.sh "$HOME\.claude\statusline-command.sh"
+  New-Symlink shared\claude\skills                "$HOME\.claude\skills"
+  New-Symlink shared\claude\ccstatusline          "$HOME\.config\ccstatusline"
 }
 
 Set-Symlinks
