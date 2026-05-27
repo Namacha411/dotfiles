@@ -32,19 +32,19 @@ make_link() {
 create_symlinks() {
   info "Creating symlinks..."
 
-  make_link "$DOTFILES_DIR/nvim"                       "$HOME/.config/nvim"
-  make_link "$DOTFILES_DIR/starship/starship.toml"     "$HOME/.config/starship.toml"
-  make_link "$DOTFILES_DIR/wezterm/.wezterm.lua"       "$HOME/.wezterm.lua"
-  make_link "$DOTFILES_DIR/vim/.vimrc"                 "$HOME/.vimrc"
-  make_link "$DOTFILES_DIR/cc/common-rules.md"         "$HOME/.claude/CLAUDE.md"
-  make_link "$DOTFILES_DIR/cc/settings.json"           "$HOME/.claude/settings.json"
-  make_link "$DOTFILES_DIR/cc/statusline-command.sh"   "$HOME/.claude/statusline-command.sh"
-  make_link "$DOTFILES_DIR/cc/skills"                  "$HOME/.claude/skills"
-  make_link "$DOTFILES_DIR/cc/ccstatusline"            "$HOME/.config/ccstatusline"
+  make_link "$DOTFILES_DIR/shared/nvim"                         "$HOME/.config/nvim"
+  make_link "$DOTFILES_DIR/shared/starship.toml"                "$HOME/.config/starship.toml"
+  make_link "$DOTFILES_DIR/shared/wezterm.lua"                  "$HOME/.wezterm.lua"
+  make_link "$DOTFILES_DIR/linux/vim/.vimrc"                    "$HOME/.vimrc"
+  make_link "$DOTFILES_DIR/shared/claude/common-rules.md"       "$HOME/.claude/CLAUDE.md"
+  make_link "$DOTFILES_DIR/shared/claude/settings.json"         "$HOME/.claude/settings.json"
+  make_link "$DOTFILES_DIR/shared/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
+  make_link "$DOTFILES_DIR/shared/claude/skills"                "$HOME/.claude/skills"
+  make_link "$DOTFILES_DIR/shared/claude/ccstatusline"          "$HOME/.config/ccstatusline"
 }
 
 configure_shell() {
-  local source_line="source \"$DOTFILES_DIR/bash/.bashrc\""
+  local source_line="source \"$DOTFILES_DIR/linux/bash/.bashrc\""
   local shell_rc
 
   case "$SHELL" in
@@ -63,10 +63,22 @@ configure_shell() {
   fi
 }
 
+install_nix_packages() {
+  if ! command -v nix &>/dev/null; then
+    warn "nix not found, skipping package installation"
+    return
+  fi
+
+  info "Installing nix packages..."
+  nix profile add --file "$DOTFILES_DIR/linux/nix/packages.nix"
+  success "Nix packages installed"
+}
+
 info "Starting dotfiles setup..."
 info "Dotfiles directory: $DOTFILES_DIR"
 
 create_symlinks
 configure_shell
+install_nix_packages
 
 success "Setup complete! Restart your shell or run: source ~/.bashrc"
