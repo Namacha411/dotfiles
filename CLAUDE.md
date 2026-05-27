@@ -71,8 +71,8 @@ The `linux/bash/.bashrc` is not symlinked; instead `setup.sh` appends a `source`
 - On Ubuntu, `bat` is installed as `batcat` and `fd` as `fdfind`; aliases handle this
 
 ### Package Locks
-- `windows/scoop/scoopfile.json` — Scoop packages (Windows)
-- `windows/winget/packages.json` — Winget packages (Windows)
+- `windows/packages/scoop/scoopfile.json` — Scoop packages (Windows)
+- `windows/packages/winget/packages.json` — Winget packages (Windows)
 - `linux/nix/packages.nix` — Nix packages (Linux)
 - Regenerate Windows locks with `.\scripts\update-locks.ps1` after installing/removing packages
 

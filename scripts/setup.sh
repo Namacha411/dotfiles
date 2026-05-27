@@ -63,10 +63,22 @@ configure_shell() {
   fi
 }
 
+install_nix_packages() {
+  if ! command -v nix &>/dev/null; then
+    warn "nix not found, skipping package installation"
+    return
+  fi
+
+  info "Installing nix packages..."
+  nix profile add --file "$DOTFILES_DIR/linux/nix/packages.nix"
+  success "Nix packages installed"
+}
+
 info "Starting dotfiles setup..."
 info "Dotfiles directory: $DOTFILES_DIR"
 
 create_symlinks
 configure_shell
+install_nix_packages
 
 success "Setup complete! Restart your shell or run: source ~/.bashrc"
