@@ -1,27 +1,38 @@
+# Nix
+[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
 # PATH
 export GOPATH="$HOME/go"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 export PATH="$GOPATH/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# History
+HISTCONTROL=ignoredups:erasedups
+HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "
+HISTSIZE=10000
+HISTFILESIZE=20000
+shopt -s histappend
+
+# Completion
+bind 'set completion-ignore-case on'
+bind 'set show-all-if-ambiguous on'
+
+shopt -s autocd
+shopt -s globstar
+shopt -s cdspell
+
+export EDITOR=nvim
 
 # vi mode
 set -o vi
 
 # Aliases
-# Ubuntu uses 'eza' directly if installed from eza-community repo
-# alias ls='eza --icons'
-# alias ll='eza -a --icons --long'
-#
-# # Ubuntu: bat is installed as 'batcat', fd as 'fdfind'
-# if command -v batcat &>/dev/null && ! command -v bat &>/dev/null; then
-#   alias bat='batcat'
-# fi
-# if command -v fdfind &>/dev/null && ! command -v fd &>/dev/null; then
-#   alias fd='fdfind'
-# fi
-#
-# alias cat='bat'
-# alias find='fd'
+alias ls='eza --icons'
+alias ll='eza -a --icons --long'
+alias cat='bat'
+alias find='fd'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -34,19 +45,27 @@ mkcd() {
   mkdir -p "$1" && cd "$1"
 }
 
-# rmrf() {
-#   rm -rf "$@"
-# }
-
 cdg() {
   cd "$(ghq root)/$(ghq list | fzf)"
 }
 
-# Shell integrations
-# eval "$(starship init bash)"
-# eval "$(zoxide init bash)"
-#
-# # Override cd to use zoxide and show directory listing
-# cd() {
-#   z "$@" && eza --icons
-# }
+# Prompt
+__prompt() {
+  local path="${PWD/#$HOME/\~}"
+  local branch
+  branch="$(git branch --show-current 2>/dev/null)"
+  PS1="\[\e[36m\]${path}\[\e[0m\]"
+  if [ -n "$branch" ]; then
+    PS1+=" \[\e[33m\](${branch})\[\e[0m\]"
+  fi
+  PS1+="\n> "
+}
+
+PROMPT_COMMAND=__prompt
+
+# Shell integrations (must come after PROMPT_COMMAND so zoxide appends its hook)
+eval "$(zoxide init bash)"
+
+cd() {
+  z "$@" && eza --icons
+}
