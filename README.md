@@ -2,18 +2,13 @@
 
 ## Structure
 
-| Directory | Contents |
-|-----------|----------|
-| `nvim/` | Neovim config (lazy.nvim, blink.cmp, fzf-lua, oil.nvim, tokyonight) |
-| `powershell/` | PowerShell profile |
-| `wezterm/` | WezTerm config |
-| `starship/` | Starship prompt config |
-| `vim/` | Vim config |
-| `bash/` | Bash config (Linux) |
-| `cc/` | Claude Code settings |
-| `scoop/` | Scoop package lock (`scoopfile.json`) |
-| `winget/` | Winget package lock (`packages.json`) |
-| `scripts/` | Setup and maintenance scripts |
+```
+dotfiles/
+├── linux/       # Linux-only configs (bash, vim, nix)
+├── windows/     # Windows-only configs (powershell, packages)
+├── shared/      # Cross-platform configs (nvim, starship, wezterm, claude)
+└── scripts/     # Setup and maintenance scripts
+```
 
 ## Setup
 
@@ -32,7 +27,7 @@ Creates symlinks for: PowerShell profile, WezTerm, Neovim, Starship, Claude Code
 ./scripts/setup.sh
 ```
 
-Installs packages (apt, eza, gh, Neovim, Starship) and creates symlinks.
+Creates symlinks and installs Nix packages.
 
 ## Package Locks
 
@@ -41,13 +36,3 @@ Scoop and winget package lists are stored as lock files. To update them after in
 ```powershell
 .\scripts\update-locks.ps1
 ```
-
-## Screenshots
-
-### PowerShell
-
-![PS](assets/powershell.png)
-
-### NeoVim
-
-![nvim](assets/neovim.png)
