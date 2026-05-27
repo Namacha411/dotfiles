@@ -8,6 +8,8 @@
 
 ### External tools
 
+nix 部分はLLMによって作成、動作未確認
+
 | Tool | 用途 | Windows (winget) | Linux/Mac (nix) |
 |---|---|---|---|
 | **git** | lazy.nvim のプラグイン取得、gitsigns | `winget install Git.Git` | `nix profile install nixpkgs#git` |
@@ -15,7 +17,7 @@
 | **C compiler** | tree-sitter パーサーのビルド | `winget install zig.zig` (`zig cc` を使用) | `nix profile install nixpkgs#gcc` |
 | **fzf** | fzf-lua のファジーファインダー | `winget install junegunn.fzf` | `nix profile install nixpkgs#fzf` |
 | **ripgrep** | live grep (`grepprg = "rg --vimgrep"`) | `winget install BurntSushi.ripgrep.MSVC` | `nix profile install nixpkgs#ripgrep` |
-| **Cascadia Code NF** | アイコン表示 (nvim-web-devicons, blink.cmp) | `winget install Microsoft.CascadiaCode` | `nix profile install nixpkgs#nerd-fonts.cascadia-code` |
+| **Cascadia Code NF** | アイコン表示 (nvim-web-devicons, blink.cmp) | - | `nix profile install nixpkgs#nerd-fonts.cascadia-code` |
 | **PowerShell (pwsh)** | Windows でのターミナル統合 | `winget install Microsoft.PowerShell` | - |
 
 #### WSL のみ
