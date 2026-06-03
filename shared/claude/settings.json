@@ -17,5 +17,18 @@
     "lua-lsp@claude-plugins-official": true
   },
   "plansDirectory": ".claude/plans",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run C:/Users/thdyk/.claude/hooks/tts_hook.py"
+          }
+        ]
+      }
+    ]
+  }
 }
