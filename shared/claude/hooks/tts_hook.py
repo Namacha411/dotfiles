@@ -428,9 +428,16 @@ def extract_text(data: dict) -> str:
     return _content_to_text(data.get("last_assistant_message", ""))
 
 
+def _inline_code_to_text(m: re.Match) -> str:
+    inner = m.group()[1:-1]
+    inner = re.sub(r"[_.\-/\\:,;()\[\]{}]", " ", inner)
+    inner = re.sub(r"[^\w\s]", "", inner)
+    return re.sub(r"\s+", " ", inner).strip()
+
+
 def clean_text(text: str) -> str:
     text = re.sub(r"```[\s\S]*?```", "（コードは省略）", text)
-    text = re.sub(r"`[^`\n]+`", "", text)
+    text = re.sub(r"`[^`\n]+`", _inline_code_to_text, text)
     text = re.sub(r"!\[[^\]]*\]\([^)]+\)", "", text)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
     text = re.sub(r"\*{1,3}([^*\n]+)\*{1,3}", r"\1", text)
