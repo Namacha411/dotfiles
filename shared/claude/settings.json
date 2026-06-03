@@ -19,7 +19,7 @@
   "plansDirectory": ".claude/plans",
   "voiceEnabled": true,
   "hooks": {
-    "PreToolUse": [
+    "MessageDisplay": [
       {
         "matcher": "",
         "hooks": [

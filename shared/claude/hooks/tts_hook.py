@@ -567,9 +567,21 @@ def main() -> None:
     if data.get("stop_hook_active"):
         return
 
-    session_id = data.get("session_id", "")
-    is_stop = "stop_hook_active" in data  # key presence = Stop hook
+    # Stop hook: clear state
+    if "stop_hook_active" in data:
+        _save_state({})
+        return
 
+    # MessageDisplay hook: speak message content directly
+    msg = data.get("message")
+    if isinstance(msg, dict) and msg.get("role") == "assistant":
+        text = _content_to_text(msg.get("content", ""))
+        if text.strip():
+            _speak_texts([text], get_auth())
+        return
+
+    # Fallback for other hook types: read transcript for new assistant text
+    session_id = data.get("session_id", "")
     transcript_path = data.get("transcript_path") or _find_transcript(session_id)
 
     state = _load_state()
@@ -580,19 +592,14 @@ def main() -> None:
 
     if transcript_path:
         texts, new_last_idx = get_new_texts(transcript_path, after_idx)
-    else:
-        # Fallback: use last_assistant_message from Stop hook data
-        texts = [_content_to_text(data.get("last_assistant_message", ""))]
-        new_last_idx = after_idx
-
-    if is_stop:
-        _save_state({})
-    else:
         state["last_idx"] = new_last_idx
         _save_state(state)
-
-    if texts:
-        _speak_texts([t for t in texts if t.strip()], get_auth())
+        if texts:
+            _speak_texts([t for t in texts if t.strip()], get_auth())
+    else:
+        text = _content_to_text(data.get("last_assistant_message", ""))
+        if text.strip():
+            _speak_texts([text], get_auth())
 
 
 if __name__ == "__main__":
