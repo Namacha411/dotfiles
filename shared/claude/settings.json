@@ -19,6 +19,17 @@
   "plansDirectory": ".claude/plans",
   "voiceEnabled": true,
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run C:/Users/thdyk/.claude/hooks/tts_hook.py"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "matcher": "",

@@ -25,6 +25,8 @@ MAX_TEXT_LEN = 500
 POLL_INTERVAL = 0.5
 POLL_TIMEOUT = 60.0
 
+_STATE_FILE = Path(os.environ.get("TEMP", str(Path.home()))) / "tts_hook_state.json"
+
 # ── English → katakana ────────────────────────────────────────────────────────
 
 _EN_KANA: dict[str, str] = {
@@ -399,40 +401,69 @@ def _content_to_text(content: object) -> str:
     return ""
 
 
-def extract_text(data: dict) -> str:
-    transcript_path = data.get("transcript_path")
-    if transcript_path:
-        try:
-            raw = Path(transcript_path).read_bytes().decode("utf-8", errors="replace")
-            entries = [json.loads(line) for line in raw.splitlines() if line.strip()]
+def _load_state() -> dict:
+    try:
+        return json.loads(_STATE_FILE.read_text("utf-8"))
+    except Exception:
+        return {}
 
-            last_user_idx = -1
-            for i, entry in enumerate(entries):
-                if entry.get("type") == "user":
-                    content = entry.get("message", {}).get("content", "")
-                    # tool_result entries are stored as type "user" — skip them
-                    if isinstance(content, list) and content and all(
-                        isinstance(b, dict) and b.get("type") == "tool_result"
-                        for b in content
-                    ):
-                        continue
-                    last_user_idx = i
 
-            texts = []
-            for entry in entries[last_user_idx + 1 :]:
-                if entry.get("type") == "assistant":
-                    content = entry.get("message", {}).get("content", "")
-                    t = _content_to_text(content)
-                    if t.strip():
-                        texts.append(t)
+def _save_state(state: dict) -> None:
+    try:
+        _STATE_FILE.write_text(json.dumps(state), "utf-8")
+    except Exception:
+        pass
 
-            if texts:
-                return "\n".join(texts)
-        except Exception:
-            pass
 
-    # fallback
-    return _content_to_text(data.get("last_assistant_message", ""))
+def _find_transcript(session_id: str) -> str | None:
+    projects = Path.home() / ".claude" / "projects"
+    if projects.exists():
+        hits = list(projects.rglob(f"{session_id}.jsonl"))
+        if hits:
+            return str(hits[0])
+    return None
+
+
+def _is_tool_result(entry: dict) -> bool:
+    content = entry.get("message", {}).get("content", "")
+    if not isinstance(content, list) or not content:
+        return False
+    return all(isinstance(b, dict) and b.get("type") == "tool_result" for b in content)
+
+
+def get_new_texts(transcript_path: str, after_idx: int) -> tuple[list[str], int]:
+    """Return (texts, new_last_idx) for assistant text entries added after after_idx."""
+    try:
+        raw = Path(transcript_path).read_bytes().decode("utf-8", errors="replace")
+        entries: list[dict | None] = []
+        for line in raw.splitlines():
+            if not line.strip():
+                continue
+            try:
+                entries.append(json.loads(line))
+            except json.JSONDecodeError:
+                entries.append(None)
+
+        # Find last human user message as minimum start boundary
+        last_human_idx = -1
+        for i, entry in enumerate(entries):
+            if entry and entry.get("type") == "user" and not _is_tool_result(entry):
+                last_human_idx = i
+
+        start = max(last_human_idx, after_idx)
+        texts: list[str] = []
+        last_processed = start
+        for i in range(start + 1, len(entries)):
+            entry = entries[i]
+            last_processed = i
+            if entry and entry.get("type") == "assistant":
+                t = _content_to_text(entry.get("message", {}).get("content", ""))
+                if t.strip():
+                    texts.append(t)
+
+        return texts, last_processed
+    except Exception:
+        return [], after_idx
 
 
 def _inline_code_to_text(m: re.Match) -> str:
@@ -513,6 +544,15 @@ def speak(text: str, auth: tuple[str, str] | None) -> None:
         pass
 
 
+def _speak_texts(texts: list[str], auth: tuple[str, str] | None) -> None:
+    combined = clean_text("\n".join(texts))
+    if not combined:
+        return
+    combined = romanize_english(combined)
+    for chunk in split_chunks(combined):
+        speak(chunk, auth)
+
+
 def main() -> None:
     raw = sys.stdin.buffer.read()
     if not raw.strip():
@@ -523,22 +563,36 @@ def main() -> None:
     except json.JSONDecodeError:
         return
 
+    # Stop hook: stop_hook_active guard
     if data.get("stop_hook_active"):
         return
 
-    text = extract_text(data)
-    if not text:
-        return
+    session_id = data.get("session_id", "")
+    is_stop = "stop_hook_active" in data  # key presence = Stop hook
 
-    cleaned = clean_text(text)
-    if not cleaned:
-        return
+    transcript_path = data.get("transcript_path") or _find_transcript(session_id)
 
-    cleaned = romanize_english(cleaned)
+    state = _load_state()
+    if state.get("session_id") != session_id:
+        state = {"session_id": session_id, "last_idx": -1}
 
-    auth = get_auth()
-    for chunk in split_chunks(cleaned):
-        speak(chunk, auth)
+    after_idx: int = state.get("last_idx", -1)
+
+    if transcript_path:
+        texts, new_last_idx = get_new_texts(transcript_path, after_idx)
+    else:
+        # Fallback: use last_assistant_message from Stop hook data
+        texts = [_content_to_text(data.get("last_assistant_message", ""))]
+        new_last_idx = after_idx
+
+    if is_stop:
+        _save_state({})
+    else:
+        state["last_idx"] = new_last_idx
+        _save_state(state)
+
+    if texts:
+        _speak_texts([t for t in texts if t.strip()], get_auth())
 
 
 if __name__ == "__main__":
