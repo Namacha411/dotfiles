@@ -42,4 +42,18 @@ function Set-Symlinks {
   New-Symlink shared\claude\ccstatusline          "$HOME\.config\ccstatusline"
 }
 
+function Update-HookPaths {
+  $settingsFile = Join-Path $root "shared\claude\settings.json"
+  $hookPath = ($HOME -replace '\\', '/') + "/.claude/hooks/tts_hook.py"
+  $content = Get-Content $settingsFile -Raw -Encoding UTF8
+  $updated = $content -replace '[A-Za-z]:/[^"]+/\.claude/hooks/tts_hook\.py', $hookPath
+  if ($content -ne $updated) {
+    Set-Content $settingsFile $updated -Encoding UTF8 -NoNewline
+    Write-Host "[OK]    Updated hook path in settings.json -> $hookPath"
+  } else {
+    Write-Host "[INFO]  Hook path already correct in settings.json"
+  }
+}
+
 Set-Symlinks
+Update-HookPaths
