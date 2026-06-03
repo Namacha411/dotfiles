@@ -409,6 +409,13 @@ def extract_text(data: dict) -> str:
             last_user_idx = -1
             for i, entry in enumerate(entries):
                 if entry.get("type") == "user":
+                    content = entry.get("message", {}).get("content", "")
+                    # tool_result entries are stored as type "user" — skip them
+                    if isinstance(content, list) and content and all(
+                        isinstance(b, dict) and b.get("type") == "tool_result"
+                        for b in content
+                    ):
+                        continue
                     last_user_idx = i
 
             texts = []
