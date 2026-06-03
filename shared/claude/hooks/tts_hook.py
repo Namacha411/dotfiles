@@ -357,10 +357,19 @@ except Exception:
     _tagger = None
 
 
+def _split_camel_case(word: str) -> list[str]:
+    s = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", word)
+    s = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", s)
+    return s.split()
+
+
 def _word_to_kana(word: str) -> str:
     lower = word.lower()
     if lower in _EN_KANA:
         return _EN_KANA[lower]
+    parts = _split_camel_case(word)
+    if len(parts) > 1:
+        return "".join(_word_to_kana(p) for p in parts)
     if _tagger is not None:
         try:
             tokens = list(_tagger(word))
