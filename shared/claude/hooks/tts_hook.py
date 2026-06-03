@@ -1,7 +1,6 @@
 # /// script
 # dependencies = [
 #   "requests>=2.31",
-#   "python-dotenv>=1.0",
 #   "fugashi[unidic-lite]",
 # ]
 # requires-python = ">=3.9"
@@ -9,23 +8,54 @@
 
 from __future__ import annotations
 
+import argparse
+import dataclasses
 import json
 import os
 import re
 import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
 
 import requests
-from dotenv import load_dotenv
 
 BASE_URL = "http://localhost:32766/api/talk/v1"
-LANGUAGE = "ja_JP"
-MAX_TEXT_LEN = 500
-POLL_INTERVAL = 0.5
-POLL_TIMEOUT = 60.0
 
 _STATE_FILE = Path(os.environ.get("TEMP", str(Path.home()))) / "tts_hook_state.json"
+_CONFIG_FILE = Path.home() / ".claude" / "hooks" / "tts_config.json"
+
+
+# ── Config ────────────────────────────────────────────────────────────────────
+
+
+@dataclass
+class Config:
+    language: str = "ja_JP"
+    voice_name: str | None = None
+    voice_version: str | None = None
+    auth: str | None = None  # "user:password"
+    max_text_len: int = 500
+    poll_interval: float = 0.5
+    poll_timeout: float = 60.0
+
+
+def _load_config() -> Config:
+    try:
+        data = json.loads(_CONFIG_FILE.read_text("utf-8"))
+        known = {f.name for f in dataclasses.fields(Config)}
+        return Config(**{k: v for k, v in data.items() if k in known})
+    except Exception:
+        return Config()
+
+
+def _save_config(cfg: Config) -> None:
+    _CONFIG_FILE.parent.mkdir(parents=True, exist_ok=True)
+    _CONFIG_FILE.write_text(
+        json.dumps(dataclasses.asdict(cfg), indent=2, ensure_ascii=False) + "\n",
+        "utf-8",
+    )
+
 
 # ── English → katakana ────────────────────────────────────────────────────────
 
@@ -386,16 +416,18 @@ def romanize_english(text: str) -> str:
     return re.sub(r"[A-Za-z][A-Za-z0-9]*", lambda m: _word_to_kana(m.group()), text)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ── Auth ──────────────────────────────────────────────────────────────────────
 
 
-def get_auth() -> tuple[str, str] | None:
-    load_dotenv(Path.home() / ".claude" / ".env")
-    auth_str = os.environ.get("VOISONA_AUTH", "")
+def get_auth(cfg: Config) -> tuple[str, str] | None:
+    auth_str = cfg.auth or os.environ.get("VOISONA_AUTH", "")
     if ":" in auth_str:
         user, _, password = auth_str.partition(":")
         return (user, password)
     return None
+
+
+# ── Transcript helpers ────────────────────────────────────────────────────────
 
 
 def _content_to_text(content: object) -> str:
@@ -453,7 +485,6 @@ def get_new_texts(transcript_path: str, after_idx: int) -> tuple[list[str], int]
             except json.JSONDecodeError:
                 entries.append(None)
 
-        # Find last human user message as minimum start boundary
         last_human_idx = -1
         for i, entry in enumerate(entries):
             if entry and entry.get("type") == "user" and not _is_tool_result(entry):
@@ -473,6 +504,9 @@ def get_new_texts(transcript_path: str, after_idx: int) -> tuple[list[str], int]
         return texts, last_processed
     except Exception:
         return [], after_idx
+
+
+# ── Text processing ───────────────────────────────────────────────────────────
 
 
 def _inline_code_to_text(m: re.Match) -> str:
@@ -496,39 +530,67 @@ def clean_text(text: str) -> str:
     return text.strip()
 
 
-def split_chunks(text: str) -> list[str]:
-    sentences = re.split(r"(?<=[。！？!?])\s*", text)
-    chunks: list[str] = []
-    current = ""
-    for sent in sentences:
-        if not sent.strip():
-            continue
-        if len(current) + len(sent) <= MAX_TEXT_LEN:
-            current += sent
-        else:
-            if current:
-                chunks.append(current)
-            if len(sent) > MAX_TEXT_LEN:
-                for i in range(0, len(sent), MAX_TEXT_LEN):
-                    chunks.append(sent[i : i + MAX_TEXT_LEN])
-                current = ""
+# Boundary patterns ordered from coarsest to finest
+_SPLIT_BOUNDARIES = [
+    r"(?<=[。！？!?])\s*",  # sentence
+    r"(?<=[、,])\s*",        # clause
+    r"\s+",                  # word
+]
+
+
+def split_chunks(text: str, max_len: int) -> list[str]:
+    def _merge(parts: list[str], level: int) -> list[str]:
+        chunks: list[str] = []
+        current = ""
+        for part in parts:
+            if not part.strip():
+                continue
+            if len(current) + len(part) <= max_len:
+                current += part
             else:
-                current = sent
-    if current:
-        chunks.append(current)
-    return chunks
+                if current:
+                    chunks.append(current)
+                if len(part) > max_len:
+                    chunks.extend(_split(part, level + 1))
+                    current = ""
+                else:
+                    current = part
+        if current:
+            chunks.append(current)
+        return chunks
+
+    def _split(segment: str, level: int) -> list[str]:
+        if len(segment) <= max_len:
+            return [segment] if segment.strip() else []
+        if level < len(_SPLIT_BOUNDARIES):
+            parts = re.split(_SPLIT_BOUNDARIES[level], segment)
+            if len(parts) > 1:
+                return _merge(parts, level)
+        # hard split as last resort
+        return [segment[i : i + max_len] for i in range(0, len(segment), max_len)]
+
+    return _split(text, 0)
 
 
-def speak(text: str, auth: tuple[str, str] | None) -> None:
+# ── Speak ─────────────────────────────────────────────────────────────────────
+
+
+def speak(text: str, auth: tuple[str, str] | None, cfg: Config) -> None:
     try:
+        body: dict = {
+            "language": cfg.language,
+            "text": text,
+            "destination": "audio_device",
+            "force_enqueue": True,
+        }
+        if cfg.voice_name is not None:
+            body["voice_name"] = cfg.voice_name
+        if cfg.voice_version is not None:
+            body["voice_version"] = cfg.voice_version
+
         resp = requests.post(
             f"{BASE_URL}/speech-syntheses",
-            json={
-                "language": LANGUAGE,
-                "text": text,
-                "destination": "audio_device",
-                "force_enqueue": True,
-            },
+            json=body,
             auth=auth,
             timeout=10,
         )
@@ -537,9 +599,9 @@ def speak(text: str, auth: tuple[str, str] | None) -> None:
         if not uuid:
             return
 
-        deadline = time.monotonic() + POLL_TIMEOUT
+        deadline = time.monotonic() + cfg.poll_timeout
         while time.monotonic() < deadline:
-            time.sleep(POLL_INTERVAL)
+            time.sleep(cfg.poll_interval)
             poll = requests.get(
                 f"{BASE_URL}/speech-syntheses/{uuid}",
                 auth=auth,
@@ -553,16 +615,174 @@ def speak(text: str, auth: tuple[str, str] | None) -> None:
         pass
 
 
-def _speak_texts(texts: list[str], auth: tuple[str, str] | None) -> None:
+def _speak_texts(texts: list[str], auth: tuple[str, str] | None, cfg: Config) -> None:
     combined = clean_text("\n".join(texts))
     if not combined:
         return
-    combined = romanize_english(combined)
-    for chunk in split_chunks(combined):
-        speak(chunk, auth)
+    if cfg.language == "ja_JP":
+        combined = romanize_english(combined)
+    for chunk in split_chunks(combined, cfg.max_text_len):
+        speak(chunk, auth, cfg)
 
 
-def main() -> None:
+# ── CLI subcommands ───────────────────────────────────────────────────────────
+
+
+def _cmd_init(args: argparse.Namespace) -> None:
+    if _CONFIG_FILE.exists() and not args.force:
+        print(f"Config already exists: {_CONFIG_FILE}")
+        print("Use --force to overwrite.")
+        return
+    _save_config(Config())
+    print(f"Created: {_CONFIG_FILE}")
+    _cmd_show(args)
+
+
+def _cmd_show(_args: argparse.Namespace) -> None:
+    cfg = _load_config()
+    d = dataclasses.asdict(cfg)
+    if d.get("auth"):
+        user, _, _ = d["auth"].partition(":")
+        d["auth"] = f"{user}:****"
+    print(json.dumps(d, indent=2, ensure_ascii=False))
+
+
+def _cmd_set(args: argparse.Namespace) -> None:
+    valid = {f.name for f in dataclasses.fields(Config)}
+    if args.key not in valid:
+        print(f"Unknown key: {args.key!r}")
+        print(f"Valid keys: {', '.join(sorted(valid))}")
+        sys.exit(1)
+
+    cfg = _load_config()
+    raw = args.value
+
+    if raw.lower() == "null":
+        value: object = None
+    else:
+        # Determine target type from the default value
+        defaults = dataclasses.asdict(Config())
+        default = defaults[args.key]
+        if isinstance(default, bool):
+            value = raw.lower() in ("true", "1", "yes")
+        elif isinstance(default, int):
+            value = int(raw)
+        elif isinstance(default, float):
+            value = float(raw)
+        else:
+            value = raw
+
+    setattr(cfg, args.key, value)
+    _save_config(cfg)
+    print(f"Set {args.key} = {value!r}")
+
+
+def _fetch_voices(cfg: Config) -> list[dict]:
+    resp = requests.get(f"{BASE_URL}/voices", auth=get_auth(cfg), timeout=10)
+    resp.raise_for_status()
+    return resp.json().get("items", [])
+
+
+def _format_voice_line(v: dict, current_name: str | None, index: int) -> str:
+    name_ja = next((d["name"] for d in v["display_names"] if d["language"] == "ja_JP"), None)
+    name_en = next((d["name"] for d in v["display_names"] if d["language"] == "en_US"), None)
+    display = name_ja or name_en or v["voice_name"]
+    alt = f" ({name_en})" if name_ja and name_en else ""
+    langs = ", ".join(v.get("languages", []))
+    marker = " ← current" if v["voice_name"] == current_name else ""
+    return f"  {index}. {display}{alt}  [{langs}]  {v['voice_name']} v{v['voice_version']}{marker}"
+
+
+def _cmd_voices(_args: argparse.Namespace) -> None:
+    cfg = _load_config()
+    try:
+        voices = _fetch_voices(cfg)
+    except Exception as e:
+        print(f"Failed to fetch voices: {e}")
+        sys.exit(1)
+    if not voices:
+        print("No voices found.")
+        return
+    for i, v in enumerate(voices, 1):
+        print(_format_voice_line(v, cfg.voice_name, i))
+
+
+def _cmd_pick(_args: argparse.Namespace) -> None:
+    cfg = _load_config()
+    try:
+        voices = _fetch_voices(cfg)
+    except Exception as e:
+        print(f"Failed to fetch voices: {e}")
+        sys.exit(1)
+    if not voices:
+        print("No voices found.")
+        return
+
+    print("Available voices:\n")
+    for i, v in enumerate(voices, 1):
+        print(_format_voice_line(v, cfg.voice_name, i))
+    print()
+
+    current_info = cfg.voice_name or "none"
+    try:
+        raw = input(f"Select (1-{len(voices)}, Enter to keep [{current_info}]): ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print("\nCancelled.")
+        return
+
+    if not raw:
+        print("No change.")
+        return
+
+    try:
+        idx = int(raw) - 1
+        if not (0 <= idx < len(voices)):
+            raise ValueError
+    except ValueError:
+        print(f"Invalid selection: {raw!r}")
+        sys.exit(1)
+
+    voice = voices[idx]
+    cfg.voice_name = voice["voice_name"]
+    cfg.voice_version = voice["voice_version"]
+    _save_config(cfg)
+    print(f"Set voice_name    = {cfg.voice_name!r}")
+    print(f"Set voice_version = {cfg.voice_version!r}")
+
+
+def _run_cli() -> None:
+    parser = argparse.ArgumentParser(
+        prog="tts_hook",
+        description="TTS hook — config manager",
+    )
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    p_init = sub.add_parser("init", help="Create default config file")
+    p_init.add_argument("--force", action="store_true", help="Overwrite existing config")
+
+    sub.add_parser("show", help="Show current config (password masked)")
+
+    p_set = sub.add_parser("set", help="Set a config value")
+    p_set.add_argument("key", help="Config key")
+    p_set.add_argument("value", help="New value (use 'null' to clear optional fields)")
+
+    sub.add_parser("voices", help="List available voices from the API")
+    sub.add_parser("pick", help="Interactively select a voice and save to config")
+
+    args = parser.parse_args()
+    {
+        "init": _cmd_init,
+        "show": _cmd_show,
+        "set": _cmd_set,
+        "voices": _cmd_voices,
+        "pick": _cmd_pick,
+    }[args.cmd](args)
+
+
+# ── Hook entry point ──────────────────────────────────────────────────────────
+
+
+def _run_hook() -> None:
     raw = sys.stdin.buffer.read()
     if not raw.strip():
         return
@@ -572,24 +792,23 @@ def main() -> None:
     except json.JSONDecodeError:
         return
 
-    # Stop hook: stop_hook_active guard
     if data.get("stop_hook_active"):
         return
 
-    # Stop hook: clear state
     if "stop_hook_active" in data:
         _save_state({})
         return
 
-    # MessageDisplay hook: speak message content directly
+    cfg = _load_config()
+    auth = get_auth(cfg)
+
     msg = data.get("message")
     if isinstance(msg, dict) and msg.get("role") == "assistant":
         text = _content_to_text(msg.get("content", ""))
         if text.strip():
-            _speak_texts([text], get_auth())
+            _speak_texts([text], auth, cfg)
         return
 
-    # Fallback for other hook types: read transcript for new assistant text
     session_id = data.get("session_id", "")
     transcript_path = data.get("transcript_path") or _find_transcript(session_id)
 
@@ -604,11 +823,18 @@ def main() -> None:
         state["last_idx"] = new_last_idx
         _save_state(state)
         if texts:
-            _speak_texts([t for t in texts if t.strip()], get_auth())
+            _speak_texts([t for t in texts if t.strip()], auth, cfg)
     else:
         text = _content_to_text(data.get("last_assistant_message", ""))
         if text.strip():
-            _speak_texts([text], get_auth())
+            _speak_texts([text], auth, cfg)
+
+
+def main() -> None:
+    if len(sys.argv) > 1:
+        _run_cli()
+    else:
+        _run_hook()
 
 
 if __name__ == "__main__":

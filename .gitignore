@@ -1,3 +1,4 @@
 nvim/lazy-lock.json
 .claude/
 shared/claude/.env
+shared/claude/hooks/tts_config.json
