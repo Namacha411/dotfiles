@@ -1,11 +1,9 @@
-## Workflow
+# CLAUDE.md
 
-Investigate [issue/topic], create a brief plan, then implement it fully. Don't stop at the plan—proceed to code changes, run tests, and commit.
+## Git and Security
 
-## Git Workflow
-
-Before making any git operations, always:
-1) Run 'git status' and 'git branch' to confirm the current branch and all modified/untracked files.
-2) If not on the correct feature branch, switch or create it.
-3) Stage ALL modified and new files—list them explicitly and ask me to confirm if any look unrelated.
-4) After committing, run 'git diff HEAD~1 --stat' to verify the commit contains exactly what was intended.
+- Do not perform irreversible actions or operations that modify external state without explicit confirmation.
+  - Do not run destructive commands such as `rm -rf`, hard resets, force pushes, or branch deletions without explicit confirmation.
+  - Do not push to remote repositories unless explicitly requested.
+- Never disclose, print, or commit confidential information, tokens, private keys, or the contents of `.env` files.
+- Do not make changes directly on the main branch. Create a new branch before making any changes.

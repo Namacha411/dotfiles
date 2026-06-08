@@ -1,9 +1,0 @@
-{
-  "language": "ja_JP",
-  "voice_name": null,
-  "voice_version": null,
-  "auth": "username:password",
-  "max_text_len": 500,
-  "poll_interval": 0.5,
-  "poll_timeout": 60.0
-}

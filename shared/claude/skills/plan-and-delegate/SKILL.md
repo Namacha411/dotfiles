@@ -1,175 +1,253 @@
 ---
 name: plan-and-delegate
 description: >
-  コンテキストとコストを節約しながら多段階の実装を進めるためのオーケストレーション手法。
-  高性能モデル（オーケストレータ）は調査・計画・タスク分割・検証・統合・意思決定だけを担い、トークンを大量消費する実装は、タスクに応じて Haiku / Sonnet を使い分ける安価なワーカーのサブエージェントへ、自己完結した英語の仕様とともに委譲する。
-  3 ステップ以上の実装、複数ファイルにまたがる作業、「調べて実装して」系の重いタスク、リファクタやスキャフォールディング、あるいはコンテキスト圧迫やコスト/トークンの節約が気になる場面では、明示的に「委譲して」と言われていなくても必ずこのスキルを参照すること。
-  単発の小修正には使わない。
+  Use for complex implementation tasks that should be planned, split into independent shards,
+  and delegated to Claude Code subagents to preserve main-context budget and reduce cost.
+  Trigger for multi-step implementation, broad codebase exploration, refactors, scaffolding,
+  repeated mechanical changes, or tasks likely to produce large logs/diffs. Do not use for
+  small one-shot edits.
 ---
 
-# Plan and Delegate — オーケストレータ/ワーカー方式の実装
+# Plan and Delegate
 
-## この方式が有効な理由
+Use this workflow to keep the orchestrator's context small while delegating token-heavy implementation, exploration, and verification work to cheaper Claude Code subagents.
 
-大きな実装タスクを 1 つのモデルで最初から最後まで実行すると、調査・試行錯誤・編集のトークンがすべて同じコンテキストに積み上がり、(1) 高性能モデルのコンテキスト窓を圧迫し、(2) 高価なモデルで安価な作業まで担わせることになる。
+The orchestrator keeps ownership of intent, design, task decomposition, integration, verification strategy, and final decisions. Workers perform bounded, self-contained work from explicit specs.
 
-代わりに役割を分割する：
+## Activation gate
 
-- **オーケストレータ（高性能モデル, 例: opus）** = 「なぜ・何を」を握る。調査、設計、タスク分割、各タスクの**仕様確定**、結果の**検証と統合**、意思決定・ADR・コミット。
-- **ワーカー（安価モデル: Haiku / Sonnet を使い分け）** = 「どう」を担う。境界の明確な実装チャンクを、与えられた自己完結の仕様だけを頼りに完成させる。モデル選択は後述。
+Use this workflow only if at least one condition is true:
 
-有効な理由は 2 つある：
+- The task has 3+ independent implementation shards.
+- Exploration, logs, generated diffs, or repeated edits would materially pollute the main context.
+- The same implementation pattern repeats across files or modules.
+- The task benefits from parallelism or worktree isolation.
+- The user explicitly asks to delegate, parallelize, save context, or reduce cost.
 
-1. **コンテキスト分離** — ワーカーは毎回まっさらな状態で起動する。探索や大量編集のトークンはワーカー側に閉じ、オーケストレータのコンテキスト窓を汚さない。オーケストレータには結果の要点だけが返る。
-2. **コスト分離** — トークンの大半を消費する実装作業を安価モデルに寄せ、高価モデルはオーケストレーションにだけ使う。
+Do not use it for one-shot fixes, tiny edits, or tasks where writing a full worker spec costs about as much as doing the work directly.
 
-一言でいえば「**高価なコンテキストは薄く保ち、トークン重労働はコンテキストなしの安価エージェントに押し出す**」。これがこの方式で実現するコスト削減の本質である。
+## Core principle
 
-## 委譲の判断基準
+Expensive context should stay thin. Token-heavy work should be pushed into fresh, bounded worker contexts.
 
-ワーカーは**コンテキストが空の状態で起動する**。だから「正確で自己完結な仕様を書けるか」が分水嶺になる。
+- **Orchestrator**: investigate enough to decide, plan, split tasks, write specs, choose models, verify, integrate, document decisions.
+- **Workers**: perform bounded exploration, implementation, test execution, log summarization, or fresh diff review.
 
-**委譲する（仕様が書ける）:**
-- モジュール 1 つ + そのテスト、純関数群、明確な API の実装
-- 機械的なリファクタ／改名／定型のスキャフォールディング
-- 広く浅い探索（「この命名規則のファイルを全部探す」→ Explore エージェント）
+Delegation is profitable when it reduces expensive-model context and keeps noisy work out of the main conversation. It is counterproductive when the delegation packet and review overhead exceed the task itself.
 
-**自分で実行する（仕様を書くコストが高い／全体の文脈が必要）:**
-- 設計判断・トレードオフの選択
-- 全体文脈が要る微妙なバグ診断、アルゴリズム的な修正
-- 横断的な統合・配線、ADR・ドキュメント・コミット
+## Important constraint
 
-経験則：**仕様を書くコストが実装そのものと同等であれば、委譲せず自分で実装する。**
+Subagents cannot spawn other subagents. All delegation must be orchestrated from the main conversation.
 
-### 委譲の損益分岐（コストを増やさないために）
+A skill may describe chained delegation, but the main orchestrator must execute each delegation step explicitly.
 
-委譲には**固定オーバーヘッド**がある: 仕様を書くトークン + ワーカー起動 + 戻ってきた要約をオーケストレータのコンテキスト窓に取り込むトークン。小さなタスクではこの固定費が実装そのものよりコストが高くなり、**トータルでむしろ高コスト**になる。委譲が目的化すると本末転倒。
+## Fresh-context assumption
 
-**損益の見方（重要）:** 主目的は「高価モデルのコンテキスト窓を薄く保つ」こと。コンテキスト窓が膨らむと(1) 性能が劣化し、(2) auto-compaction が時間とコストを食う。委譲は、探索・大量編集のトークンを**コンテキストなしの安価ワーカーに閉じ込めて**オーケストレータのコンテキスト窓に載せないことで、これを防ぐ。
-総トークンが多少増えても、**高価トークンが減ればトータルコストは下がる**。逆に小タスクで委譲すると高価トークンも総トークンも増える ＝ 逆効果となる。
+Workers start in a fresh isolated context: they do not inherit the main conversation history, prior reasoning, or previously read files.
 
-**委譲が有利になるのは、次のいずれかに当てはまるときである：**
-- **独立チャンクが複数**（≈3 つ以上）ある — 横に並列化でき、オーケストレータのコンテキスト窓を増やさず実装を広げられる。
-- **1 チャンクが大きく**、関連コードを全文オーケストレータのコンテキスト窓に載せるとコンテキスト窓を圧迫する — 探索と編集をワーカーのコンテキスト窓に閉じ込めて温存する。
-- **同型の実装が反復**する — 仕様を使い回せて固定費が薄まる。
+However, custom subagents may receive normal project context such as `CLAUDE.md`, memory, git status, environment information, and preloaded skills. Therefore, every delegated task must still restate the target files, constraints, expected behavior, tests, and report format.
 
-**目安：** 単発で数十行・1〜2 ファイルであれば自分で実装する。独立モジュールが 3 つ以上、または探索が重い、または同型反復があるなら委譲を検討する。迷った場合は「この作業をすべて自分のコンテキスト窓で実行するとコンテキスト窓を圧迫するか？」を基準にする — 圧迫しないなら委譲の固定費は回収できない。
+## Worker types
 
-## ワーカーのモデル選択と通信言語
+Use these archetypes. Prefer project-local agents under `.claude/agents/` when available.
 
-### モデル選択（効率を上げる）
+| Worker | Model | Tools | Use |
+|---|---:|---|---|
+| cheap-researcher | haiku | Read, Grep, Glob, Bash | broad read-only exploration, dependency tracing, log summarization |
+| cheap-test-runner | haiku | Read, Grep, Glob, Bash | targeted tests, lint, typecheck, failure summary |
+| cheap-implementer | haiku or sonnet | Read, Grep, Glob, Edit, Write, Bash | bounded implementation shard |
+| cheap-diff-reviewer | haiku or sonnet | Read, Grep, Glob, Bash | fresh review of final diff against acceptance criteria |
 
-公式ガイド (choosing-a-model) の指針は **「まず一番安いモデルで試し、能力ギャップが出たときだけ上げる」**。Haiku 4.5 は near-frontier・最速・最安で、**sub-agent タスクに明示的に推奨**されている。
-sonnet をデフォルトで選ばず、タスクの性質に応じてワーカーモデルを選択する：
+Use read-only workers whenever possible. Implementation workers should use worktree isolation for risky or parallel edits.
 
-| ワーカータスクの性質 | 既定モデル |
-|---|---|
-| 機械的・定型: スキャフォールディング、boilerplate、**精密な RED テストどおりの実装**、同型反復、広く浅い探索/読み取り | **Haiku** |
-| 境界内に判断や非自明なロジックが残る、曖昧さの解消が要る実装 | **Sonnet** |
-| 調査・設計・検証・統合・意思決定（オーケストレータが保持） | Opus（最上位） |
+## Model selection
 
-選び方: そのチャンクを **まず Haiku で試す → 能力ギャップ（誤実装・往復増）が出たらSonnet へ上げる**。
-**仕様が精密なほど Haiku で足りる**ので、§仕様確定 に投資するほどワーカーを安いモデルに寄せられる ＝ コスト/レイテンシが下がる。Agent ツールの `model` で `haiku` / `sonnet` を指定する。
+Start with the cheapest model that can plausibly succeed.
 
-### エージェント間通信は英語で
+| Task type | Default model |
+|---|---:|
+| Mechanical scaffolding, boilerplate, precise RED-test-driven implementation, repeated changes, shallow exploration | haiku |
+| Bounded implementation with non-trivial logic or local ambiguity | sonnet |
+| Architecture, cross-cutting integration, security-sensitive decisions, final judgment | orchestrator model |
 
-ワーカーへの**仕様・委譲プロンプト**（および可能ならワーカーの報告）は、**ユーザーの使用言語にかかわらず英語で書く**。
-英語はトークン効率が高く（同義の日本語よりトークン数が少なくコストが下がる）、モデルの性能も安定する。
-境界はシンプル:
+Escalation rule:
 
-- **対エージェント（仕様・委譲プロンプト・ワーカー報告）= 英語**
-- **対ユーザー（最終応答・説明）= ユーザーの言語**
+1. If Haiku fails because the spec was incomplete, rewrite the spec and retry once.
+2. If Haiku fails because the task needs reasoning, integration judgment, or ambiguity resolution, escalate to Sonnet.
+3. Do not blindly retry the same weak spec.
 
-つまりオーケストレータはユーザーには日本語で答えつつ、ワーカーには英語で指示を書く。
+For predictable cost, prefer setting `model` in subagent frontmatter. Use per-invocation model overrides only when a shard clearly needs escalation.
 
-## フェーズ
+## Communication language
 
-### Phase 0（任意）— 実験先行 / Go-No-Go ゲート
-計画が未検証の前提に基づいているなら、重い実装に入る前に**低コストで事前検証**する。仮説が支持されたら進み、否なら計画を改訂する。
-CPU 重いビルドや測定の前に置くと、無駄な実装と測定の歪みを避けられる。
-研究系・性能系で特に有効。前提が自明なら飛ばす。
+Use English for worker-facing prompts and reports when possible, regardless of the user's language.
 
-### 1. 調査と計画（オーケストレータ）
-課題を理解し、方針を立て、**依存順に並んだタスク**へ分割する。各タスクは「1 モジュール +テスト」程度の粒度。
-大きなファイルの読み込みや広域探索自体も、必要ならワーカー/Explore に委譲してオーケストレータのコンテキスト窓を温存する。
+Use the user's language for final user-facing explanations.
 
-### 2. 各タスクの仕様確定（オーケストレータ）
-ここが品質の要。
-ワーカーがコンテキストなしで起動した状態でも成功できるよう、後述のテンプレートに沿って **インターフェース・テスト・進め方・報告形式**を固める。
+Boundary:
 
-### 3. 委譲（ワーカー, 安価モデル）
-依存順に**バッチ単位**で委譲する。
-独立な複数タスクは同一ターンで並列起動してよい。
-依存があるものは前バッチの検証後に委譲する。
-Agent ツールの `model` を**タスクの性質に応じて** Haiku / Sonnet から選ぶ（上記「モデル選択」）。
-**委譲プロンプトは英語で書く。**
+- User-facing explanation: user's language.
+- Worker-facing specification: English.
+- Worker report: preferably English, concise, structured.
 
-### 4. 検証（オーケストレータ）
-**ワーカーの自己申告を鵜呑みにしない。**
-各バッチ完了後、オーケストレータ自身がテスト/lint/ビルドを走らせて回帰確認してから次へ進む。
-微妙な不具合・統合の綻びはここで自分で直す（全体の文脈が必要なため）。
+## Workflow
 
-### 5. 統合と仕上げ（オーケストレータ）
-配線、ドキュメント/ADR、コミット。意思決定の記録もここで。
+### 0. Optional go/no-go experiment
 
-## ワーカー用プロンプトのテンプレート（最重要）
+If the plan depends on an uncertain premise, run a cheap spike before full implementation.
 
-ワーカーはコンテキストなしで起動する。
-曖昧な依頼（「コードを良くして」）は迷走を生む。
-**仕様を先に書く。**
-**プロンプトは英語で書く**（前述の通信言語ルール）。
-各委譲には次を含める（テンプレートもそのまま英語で）:
+Examples:
 
-```
-You are implementing <one-line task summary> in <repo / context>.
+- Verify whether an API exists.
+- Confirm a benchmark harness works.
+- Check whether a migration or codemod approach is feasible.
+- Run a minimal reproduction.
 
-- Target files: <absolute paths; new vs modify>
-- Do NOT touch: <e.g. reference/, generated artifacts>
-- Existing scaffolding to reuse: <signatures + locations of functions/types to reuse; "read neighbouring code first">
-- Signatures to implement:
-    <exact signatures + doc comments; pseudocode for the logic skeleton if any>
-- RED tests (write first, watch them fail -> implement -> green):
-    <test names + bodies/assertions, concretely>
-- Process: tests first (red) -> minimal impl (green) -> <lint/clippy> -> <typecheck/build>
-- Constraints: <match surrounding style; add no new deps; etc.>
-- Report: files changed, the new function bodies, and a summary of the final test/lint output.
-```
+Skip this phase when the premise is obvious.
 
-各項目が必要な理由：コンテキストなしで起動したワーカーは**所在と境界**（パス・触らない場所・既存足場）が無いと探索で迷い、**完了条件**（シグネチャ・RED テスト・進め方）が無いと正しさを自己判定できず、**報告形式**が無いとオーケストレータが検証しづらい。
-仕様の精度がそのまま成功率になる。
+### 1. Explore and plan
 
-## 良い委譲の例（この方式の実例）
+The orchestrator should understand enough to make design decisions, but should avoid loading large files, logs, or broad search results into main context.
 
-**例: 純関数の構成要素を 3 つ TDD で実装**
-Input（オーケストレータが英語で渡す）: machine.rs の `l2_cache_bytes()`/`num_threads()`、 `adaptive_block_bounds(n,nnz,l2,threads)->(usize,usize)` を、正確なシグネチャ + 各 3 本の RED テスト + 「red→green→clippy、最後に cargo test 全体が緑」付きで委譲。
-仕様が精密で機械的なので **Haiku ワーカーで足りる粒度**（判断が要るなら Sonnet）。
-Output（ワーカー）: 3 ファイル + テスト緑 + clippy クリーン + 変更要約。
-ワーカーが実行完了し次第、オーケストレータは自身で `cargo test` を実行して回帰確認し、次のバッチへ。
+Use cheap read-only workers for broad exploration:
 
-## アンチパターン
+- Identify relevant files and symbols.
+- Trace dependencies.
+- Summarize large logs.
+- Extract existing patterns.
 
-- **曖昧なまま委譲** → 仕様を先に書く。書けないなら、まだ分割が足りない。
-- **ワーカーの自己申告を鵜呑みにして進む** → 必ず自身でテスト/ビルドを再実行して検証する。
-- **設計判断を委譲** → 「なぜ」はオーケストレータが握る。
-- **依存を無視して一括起動** → 依存順にバッチ化し、間で検証する。
-- **大きなファイルを丸ごとオーケストレータに読み込む** → 読み込み自体を委譲してコンテキスト窓を温存。
-- **過剰委譲** → 5 行の修正やワンショットの判断は、その場で実行する方が速く安い。
+The orchestrator then produces a dependency-aware implementation plan.
 
-## 運用メモ
+### 2. Split into shards
 
-- **タスク管理**: TaskCreate/TaskUpdate（または TodoList）で依存順と進捗を可視化する。
-- **ワーカーの継続**: 文脈を保ったまま続けさせたいときは新規 Agent ではなく SendMessage で同じワーカーに追指示する（コンテキストをリセットした再起動を避ける）。
-- **隔離**: 破壊的になりうる実装は `isolation: "worktree"` で隔離コピーに作業させる。
-- **並列/バックグラウンド**: 独立タスクは同一ターンで並列起動。長い検証ビルドはバックグラウンド実行にして完了通知を待つ。
-- **報告の中継**: ワーカーの最終メッセージはユーザーには見えない。要点だけ中継する。
+Each shard should be independently specifiable and verifiable.
 
-## 付録: なぜ効くか（実測ケーススタディ）
+Good shard size:
 
-- **効果的だった例**：複数モジュール + テストの実装を 2 バッチに分けて安価ワーカーへ委譲したところ、実装・探索・編集の **約 105k トークンがワーカーのコンテキスト窓で消費され**、オーケストレータのコンテキストは **約 7%** に留まった。
-  同じ実装を自分のコンテキスト窓で実行していれば、その分がコンテキスト窓を圧迫し、性能低下と auto-compaction（時間・コスト増）を招いていた。
-  さらに 105k は高価モデルではなく安価モデルで消費＝コストも削減。
-- **非効率だった例（教訓）**：各数十行の小モジュール 3 つ程度の小タスクでは、委譲の固定費（仕様 + 起動 + 戻り要約の取り込み）が実装を上回り、トータルで +数千トークン・+数十秒の**高コスト**になった。
-  委譲は目的ではない。損益分岐を必ず見極めること。
-- **harness 注意**: サブエージェントの中ではさらに別エージェントを spawn できない環境がある。
-  委譲は**トップレベル（メイン会話）から**行うこと。
-  ネストした自動委譲は当てにしない。
+- One module plus tests.
+- One API surface plus tests.
+- One mechanical transformation across a bounded file set.
+- One vertical slice with explicit acceptance criteria.
+
+Avoid shards that require global design judgment or cross-cutting integration decisions.
+
+### 3. Write delegation packets
+
+Every worker must receive a self-contained English specification.
+
+Include:
+
+- Objective.
+- Model.
+- Isolation mode.
+- Allowed files.
+- Forbidden files.
+- Existing APIs or patterns to reuse.
+- Required changes.
+- Tests to add or update.
+- Verification commands.
+- Non-goals.
+- Report format.
+
+Use `worker-prompt-template.md` for the canonical packet format.
+
+### 4. Delegate in dependency batches
+
+Run independent shards in parallel when possible.
+
+Respect dependency order:
+
+1. Foundation changes.
+2. Dependent implementations.
+3. Tests and integration wiring.
+4. Final review and verification.
+
+Do not start dependent shards until prior batch outputs are verified or at least stable enough to build on.
+
+### 5. Verify deterministically
+
+Do not trust worker self-reports.
+
+Prefer deterministic gates:
+
+- Targeted tests.
+- Typecheck.
+- Lint.
+- Build.
+- Snapshot or golden-file diffs.
+- Migration dry-runs.
+- UI screenshot or visual checks when relevant.
+
+A worker or verification subagent may run targeted checks, but the orchestrator must confirm the important evidence before integration is considered complete.
+
+At minimum, review:
+
+- Commands run.
+- Exit status.
+- Relevant output excerpts.
+- Changed files.
+- Deviations from spec.
+- Skipped checks.
+
+### 6. Fresh diff review
+
+Before final completion, ask a fresh read-only reviewer to inspect the final diff against the plan and acceptance criteria.
+
+The reviewer should check only:
+
+- Missing requirements.
+- Missing tests.
+- Edge cases.
+- Security, data-loss, or concurrency risks.
+- Out-of-scope file changes.
+- Regressions likely from the diff.
+
+Ignore style nits unless they cause correctness or maintainability risk.
+
+### 7. Integrate and finish
+
+The orchestrator owns final integration.
+
+Responsibilities:
+
+- Resolve conflicts or overlapping edits.
+- Perform cross-shard wiring.
+- Update documentation or ADRs when necessary.
+- Run final verification.
+- Produce the final user-facing summary.
+
+Final response should include:
+
+- What changed.
+- Verification commands and results.
+- Remaining risks or skipped checks.
+- Any decisions made by the orchestrator.
+
+## Safety and permissions
+
+- Read-only workers must not have Edit or Write tools.
+- Implementation workers should use `isolation: worktree` when edits are risky or parallel.
+- Test runners may use Bash, but should use repo-defined test/lint/typecheck/build commands.
+- Avoid destructive commands.
+- Never use `bypassPermissions` for cheap workers unless the repository is disposable.
+- Do not delegate secrets handling, credential changes, production deploys, or destructive migrations to cheap workers.
+
+## Anti-patterns
+
+- Delegating vague requests such as "improve the code".
+- Delegating architecture or trade-off decisions.
+- Trusting worker success claims without deterministic evidence.
+- Launching dependent shards in parallel.
+- Reading huge files or logs into orchestrator context when a read-only worker could summarize them.
+- Delegating tiny edits where the overhead exceeds the work.
+- Asking workers to paste large diffs or full file contents back into main context.
+- Retrying failed cheap workers without improving the spec or escalating the model.
+
+## Operational notes
+
+- Use the todo list to track shards, dependencies, assigned worker, model, and verification state.
+- Continue the same worker only when its local context is useful; otherwise start a fresh worker with a better spec.
+- Keep worker reports concise.
+- Treat worker output as untrusted until verified.
+- Keep large templates, examples, and case studies outside this file to preserve skill loading efficiency.
+
