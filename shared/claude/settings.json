@@ -5,19 +5,6 @@
     "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "DISABLE_AUTOUPDATER": "1"
   },
-  "model": "sonnet",
-  "statusLine": {
-    "type": "command",
-    "command": "bunx -y ccstatusline@latest",
-    "padding": 0
-  },
-  "enabledPlugins": {
-    "skill-creator@claude-plugins-official": true,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true
-  },
-  "plansDirectory": ".claude/plans",
-  "voiceEnabled": true,
   "hooks": {
     "MessageDisplay": [
       {
@@ -41,5 +28,25 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bunx -y ccstatusline@latest",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "addy-agent-skills": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/addyosmani/agent-skills.git"
+      }
+    }
+  },
+  "plansDirectory": ".claude/plans",
+  "voiceEnabled": true
 }
