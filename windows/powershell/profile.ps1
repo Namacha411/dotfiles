@@ -89,7 +89,7 @@ function :q() {
   Exit
 }
 function ghq-fzf {
-    ghq list | fzf
+    cd "$(ghq root)\$(ghq list | fzf)"
 }
 function fgb {
     $branch = git branch -a | fzf | ForEach-Object { $_.Trim() -replace '^\* ', '' -replace '^remotes/[^/]+/', '' }
