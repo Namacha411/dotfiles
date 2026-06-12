@@ -45,7 +45,7 @@ mkcd() {
   mkdir -p "$1" && cd "$1"
 }
 
-cdg() {
+ghq-fzf() {
   cd "$(ghq root)/$(ghq list | fzf)"
 }
 
@@ -54,7 +54,16 @@ __prompt() {
   local path="${PWD/#$HOME/\~}"
   local branch
   branch="$(git branch --show-current 2>/dev/null)"
-  PS1="\[\e[36m\]${path}\[\e[0m\]"
+
+  if [ -n "$SSH_TTY" ]; then
+    PS1="\[\e[31m\][ssh:\h]\[\e[0m\] "
+  elif [ -n "$WSL_DISTRO_NAME" ]; then
+    PS1="\[\e[32m\][wsl]\[\e[0m\] "
+  else
+    PS1=""
+  fi
+
+  PS1+="\[\e[36m\]${path}\[\e[0m\]"
   if [ -n "$branch" ]; then
     PS1+=" \[\e[33m\](${branch})\[\e[0m\]"
   fi

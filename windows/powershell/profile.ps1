@@ -9,7 +9,8 @@ Remove-Variable _zoxideCache
 function prompt {
     $path = $PWD.Path -replace [regex]::Escape($HOME), '~'
     $branch = git branch --show-current 2>$null
-    Write-Host $path -NoNewline -ForegroundColor Cyan
+    Write-Host '[pwsh]' -NoNewline -ForegroundColor Magenta
+    Write-Host " $path" -NoNewline -ForegroundColor Cyan
     if ($branch) {
         Write-Host " ($branch)" -NoNewline -ForegroundColor Yellow
     }
@@ -87,7 +88,7 @@ function rmrf {
 function :q() {
   Exit
 }
-function fghq {
+function ghq-fzf {
     ghq list | fzf
 }
 function fgb {
