@@ -1,11 +1,10 @@
 ---
 name: plan-and-delegate
 description: >
-  Use for complex implementation tasks that should be planned, split into independent shards,
-  and delegated to Claude Code subagents to preserve main-context budget and reduce cost.
-  Trigger for multi-step implementation, broad codebase exploration, refactors, scaffolding,
-  repeated mechanical changes, or tasks likely to produce large logs/diffs. Do not use for
-  small one-shot edits.
+  Default to this skill for any non-trivial implementation. Splits work into shards and
+  delegates to haiku/sonnet/opus subagents, keeping expensive orchestrator context small.
+  Trigger for multi-step work, exploration, refactors, scaffolding, or repeated changes.
+  Skip only for true one-liners already in context.
 ---
 
 # Plan and Delegate
@@ -58,7 +57,6 @@ Use these archetypes. Prefer project-local agents under `.claude/agents/` when a
 | cheap-researcher | haiku | Read, Grep, Glob, Bash | broad read-only exploration, dependency tracing, log summarization |
 | cheap-test-runner | haiku | Read, Grep, Glob, Bash | targeted tests, lint, typecheck, failure summary |
 | cheap-implementer | haiku or sonnet | Read, Grep, Glob, Edit, Write, Bash | bounded implementation shard |
-| reasoning-implementer | fable | Read, Grep, Glob, Edit, Write, Bash | implementation requiring deep reasoning or cross-file judgment |
 | senior-implementer | opus | Read, Grep, Glob, Edit, Write, Bash | high-stakes implementation with architecture-level judgment or security sensitivity |
 | cheap-diff-reviewer | haiku or sonnet | Read, Grep, Glob, Bash | fresh review of final diff against acceptance criteria |
 
@@ -72,19 +70,17 @@ Start with the cheapest model that can plausibly succeed.
 |---|---:|
 | Mechanical scaffolding, boilerplate, precise RED-test-driven implementation, repeated changes, shallow exploration | haiku |
 | Bounded implementation with non-trivial logic or local ambiguity | sonnet |
-| Complex bounded work requiring deep reasoning, cross-file judgment, or subtle compatibility constraints | fable |
 | High-stakes work with architecture-level judgment, security sensitivity, or where errors are very costly | opus |
-| Architecture, cross-cutting integration, final judgment | orchestrator model |
+| Architecture, cross-cutting integration, final judgment | orchestrator model (fable or above) |
 
 Escalation rule:
 
 1. If Haiku fails because the spec was incomplete, rewrite the spec and retry once.
 2. If Haiku fails because the task needs reasoning, integration judgment, or ambiguity resolution, escalate to Sonnet.
-3. If Sonnet fails because the task requires deep cross-file reasoning or nuanced judgment, escalate to Fable.
-4. Reserve Opus for high-stakes shards where errors are expensive; do not use it as a default escalation path.
-5. Do not blindly retry the same weak spec.
+3. Reserve Opus for high-stakes shards where errors are expensive; do not use it as a default escalation path.
+4. Do not blindly retry the same weak spec.
 
-**Cost note:** Always prefer abstract model names (`haiku`, `sonnet`, `fable`, `opus`) over pinned model IDs such as `claude-haiku-4-5-20251001`. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves.
+**Cost note:** Always prefer abstract model names (`haiku`, `sonnet`, `opus`) over pinned model IDs such as `claude-haiku-4-5-20251001`. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves. Fable is reserved for the orchestrator role only. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves.
 
 For predictable cost, prefer setting `model` in subagent frontmatter. Use per-invocation model overrides only when a shard clearly needs escalation.
 

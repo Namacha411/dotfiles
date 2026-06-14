@@ -15,12 +15,12 @@ Objective:
 - <What must be true when this task is complete.>
 
 Model:
-- <haiku | sonnet | fable | opus>
+- <haiku | sonnet | opus>
 - Use Haiku for mechanical or precisely specified work.
 - Use Sonnet if local reasoning or ambiguity resolution is required.
-- Use Fable for complex reasoning, cross-file judgment, or subtle compatibility constraints.
 - Use Opus only for high-stakes work where errors are costly or architecture-level judgment is required.
-- Always use abstract names (haiku/sonnet/fable/opus) rather than pinned model IDs to enable automatic cost optimization.
+- Fable is the orchestrator model and must not be used for subagents.
+- Always use abstract names (haiku/sonnet/opus) rather than pinned model IDs to enable automatic cost optimization.
 
 Isolation:
 - <worktree | shared>
