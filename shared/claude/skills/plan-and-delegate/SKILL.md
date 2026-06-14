@@ -35,11 +35,13 @@ Expensive context should stay thin. Token-heavy work should be pushed into fresh
 
 Delegation is profitable when it reduces expensive-model context and keeps noisy work out of the main conversation. It is counterproductive when the delegation packet and review overhead exceed the task itself.
 
-## Important constraint
+## Recursive delegation
 
-Subagents cannot spawn other subagents. All delegation must be orchestrated from the main conversation.
+Subagents can now spawn sub-workers of their own. This enables multi-level delegation for tasks where a worker needs to parallelize bounded sub-tasks within its own context.
 
-A skill may describe chained delegation, but the main orchestrator must execute each delegation step explicitly.
+Use recursion only when a worker genuinely benefits from parallelizing its own sub-tasks. Avoid recursive delegation for simple or sequential work — each additional layer adds startup and summary overhead.
+
+Recursive workers must still write self-contained specs for their own sub-workers. The orchestrator owns the overall plan and final verification; recursive workers are responsible only for their own shard and its direct outputs.
 
 ## Fresh-context assumption
 
@@ -56,6 +58,8 @@ Use these archetypes. Prefer project-local agents under `.claude/agents/` when a
 | cheap-researcher | haiku | Read, Grep, Glob, Bash | broad read-only exploration, dependency tracing, log summarization |
 | cheap-test-runner | haiku | Read, Grep, Glob, Bash | targeted tests, lint, typecheck, failure summary |
 | cheap-implementer | haiku or sonnet | Read, Grep, Glob, Edit, Write, Bash | bounded implementation shard |
+| reasoning-implementer | fable | Read, Grep, Glob, Edit, Write, Bash | implementation requiring deep reasoning or cross-file judgment |
+| senior-implementer | opus | Read, Grep, Glob, Edit, Write, Bash | high-stakes implementation with architecture-level judgment or security sensitivity |
 | cheap-diff-reviewer | haiku or sonnet | Read, Grep, Glob, Bash | fresh review of final diff against acceptance criteria |
 
 Use read-only workers whenever possible. Implementation workers should use worktree isolation for risky or parallel edits.
@@ -68,13 +72,19 @@ Start with the cheapest model that can plausibly succeed.
 |---|---:|
 | Mechanical scaffolding, boilerplate, precise RED-test-driven implementation, repeated changes, shallow exploration | haiku |
 | Bounded implementation with non-trivial logic or local ambiguity | sonnet |
-| Architecture, cross-cutting integration, security-sensitive decisions, final judgment | orchestrator model |
+| Complex bounded work requiring deep reasoning, cross-file judgment, or subtle compatibility constraints | fable |
+| High-stakes work with architecture-level judgment, security sensitivity, or where errors are very costly | opus |
+| Architecture, cross-cutting integration, final judgment | orchestrator model |
 
 Escalation rule:
 
 1. If Haiku fails because the spec was incomplete, rewrite the spec and retry once.
 2. If Haiku fails because the task needs reasoning, integration judgment, or ambiguity resolution, escalate to Sonnet.
-3. Do not blindly retry the same weak spec.
+3. If Sonnet fails because the task requires deep cross-file reasoning or nuanced judgment, escalate to Fable.
+4. Reserve Opus for high-stakes shards where errors are expensive; do not use it as a default escalation path.
+5. Do not blindly retry the same weak spec.
+
+**Cost note:** Always prefer abstract model names (`haiku`, `sonnet`, `fable`, `opus`) over pinned model IDs such as `claude-haiku-4-5-20251001`. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves.
 
 For predictable cost, prefer setting `model` in subagent frontmatter. Use per-invocation model overrides only when a shard clearly needs escalation.
 
