@@ -13,19 +13,7 @@ return {
 				"gitignore",
 				"html",
 			},
-		})
-
-		vim.api.nvim_create_autocmd("FileType", {
-			callback = function(args)
-				local lang = vim.treesitter.language.get_lang(args.match)
-				if not lang then
-					return
-				end
-				if not pcall(vim.treesitter.get_parser, args.buf, lang) then
-					return
-				end
-				vim.bo.indentexpr = "v:lua.vim.treesitter.indentexpr()"
-			end,
-		})
+      auto_install = true, -- auto-install when a new filetype is encountered
+    })
 	end,
 }
