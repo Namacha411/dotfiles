@@ -13,7 +13,6 @@ return {
 				"gitignore",
 				"html",
 			},
-      auto_install = true, -- auto-install when a new filetype is encountered
     })
 	end,
 }
