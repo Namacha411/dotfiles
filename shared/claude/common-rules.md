@@ -1,5 +1,10 @@
 # CLAUDE.md
 
+- Prioritize correctness, precision, and information density.
+- Use concise responses by default, expanding only when complexity warrants detail.
+- Distinguish facts, assumptions, and uncertainty.
+- Use web searches to find out what you can and to look up things you're unsure about.
+
 ## Git and Security
 
 - Do not perform irreversible actions or operations that modify external state without explicit confirmation.
