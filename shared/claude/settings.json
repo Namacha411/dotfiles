@@ -37,6 +37,8 @@
       }
     }
   },
+  "language": "Japanese",
   "plansDirectory": ".claude/plans",
+  "tui": "fullscreen",
   "voiceEnabled": true
 }

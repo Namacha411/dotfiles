@@ -1,11 +1,3 @@
-# Prompt (zoxide init cached to avoid subprocess cost on every startup)
-$_zoxideCache = "$env:TEMP\zoxide_init.ps1"
-if (-not (Test-Path $_zoxideCache)) {
-    zoxide init powershell | Out-File -Encoding UTF8 $_zoxideCache
-}
-. $_zoxideCache
-Remove-Variable _zoxideCache
-
 function prompt {
     $path = $PWD.Path -replace [regex]::Escape($HOME), '~'
     $branch = git branch --show-current 2>$null
@@ -105,3 +97,5 @@ Set-Alias unzip Expand-Archive
 $Env:GOPATH = "$HOME\go"
 $Env:PATH = "$HOME\.local\bin;$Env:PATH"
 $Env:PATH = "$HOME\.bun\bin;$Env:PATH"
+
+Invoke-Expression (& { (zoxide init powershell | Out-String) })
