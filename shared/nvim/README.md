@@ -18,7 +18,7 @@ nix 部分はLLMによって作成、動作未確認
 | **fzf** | fzf-lua のファジーファインダー | `winget install junegunn.fzf` | `nix profile install nixpkgs#fzf` |
 | **ripgrep** | live grep (`grepprg = "rg --vimgrep"`) | `winget install BurntSushi.ripgrep.MSVC` | `nix profile install nixpkgs#ripgrep` |
 | **Cascadia Code NF** | アイコン表示 (nvim-web-devicons, blink.cmp) | - | `nix profile install nixpkgs#nerd-fonts.cascadia-code` |
-| **PowerShell (pwsh)** | Windows でのターミナル統合 | `winget install Microsoft.PowerShell` | - |
+| **Nushell (nu)** | Windows でのターミナル統合 | `winget install Nushell.Nushell` | - |
 
 #### WSL のみ
 
