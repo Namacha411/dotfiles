@@ -67,7 +67,7 @@ map('n', '<leader>o', ":Oil<CR>", { desc = "ファイルエクスプローラー
 
 local function shell_args()
   if vim.fn.has("win32") == 1 then
-    return { "pwsh", "-NoLogo" }
+    return { "nu" }
   else
     return { vim.env.SHELL or "sh" }
   end

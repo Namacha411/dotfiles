@@ -41,6 +41,8 @@ dotfiles/
 |---|---|
 | `shared/nvim/` | `%LOCALAPPDATA%\nvim` (Win) / `~/.config/nvim` (Linux) |
 | `windows/powershell/profile.ps1` | `$PROFILE` (Win only) |
+| `shared/nu/config.nu` | `%APPDATA%\nushell\config.nu` (Win only) |
+| `shared/nu/env.nu` | `%APPDATA%\nushell\env.nu` (Win only) |
 | `shared/wezterm.lua` | `~\.wezterm.lua` |
 | `shared/starship.toml` | `~/.config/starship.toml` |
 | `shared/claude/common-rules.md` | `~/.claude/CLAUDE.md` |

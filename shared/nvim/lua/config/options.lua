@@ -89,8 +89,12 @@ opt.smoothscroll = true
 vim.cmd.colorscheme("tokyonight")
 
 if vim.fn.has("win32") == 1 then
-  opt.shell = "pwsh"
-  opt.shellcmdflag = "-NoLogo -Command"
+  opt.shell = "nu"
+  opt.shellcmdflag = "-c"
+  opt.shellredir = "out+err> %s"
+  opt.shellpipe = "out+err> %s"
+  opt.shellquote = ""
+  opt.shellxquote = ""
 end
 
 if vim.fn.has("wsl") == 1 then

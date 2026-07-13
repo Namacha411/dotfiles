@@ -31,6 +31,8 @@ function New-Symlink($src, $dst) {
 
 function Set-Symlinks {
   New-Symlink windows\powershell\profile.ps1      $PROFILE
+  New-Symlink shared\nu\config.nu                 "$env:APPDATA\nushell\config.nu"
+  New-Symlink shared\nu\env.nu                    "$env:APPDATA\nushell\env.nu"
   New-Symlink shared\wezterm.lua                  "$HOME\.wezterm.lua"
   New-Symlink shared\nvim                         "$env:LOCALAPPDATA\nvim"
   New-Symlink shared\starship.toml                "$HOME\.config\starship.toml"
