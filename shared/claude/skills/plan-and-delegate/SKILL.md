@@ -71,7 +71,7 @@ Start with the cheapest model that can plausibly succeed.
 | Mechanical scaffolding, boilerplate, precise RED-test-driven implementation, repeated changes, shallow exploration | haiku |
 | Bounded implementation with non-trivial logic or local ambiguity | sonnet |
 | High-stakes work with architecture-level judgment, security sensitivity, or where errors are very costly | opus |
-| Architecture, cross-cutting integration, final judgment | orchestrator model (fable or above) |
+| Architecture, cross-cutting integration, final judgment | orchestrator's own model (not delegated) |
 
 Escalation rule:
 
@@ -80,7 +80,7 @@ Escalation rule:
 3. Reserve Opus for high-stakes shards where errors are expensive; do not use it as a default escalation path.
 4. Do not blindly retry the same weak spec.
 
-**Cost note:** Always prefer abstract model names (`haiku`, `sonnet`, `opus`) over pinned model IDs such as `claude-haiku-4-5-20251001`. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves. Fable is reserved for the orchestrator role only. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves.
+**Cost note:** Always prefer abstract model names (`haiku`, `sonnet`, `opus`, `fable`) over pinned model IDs such as `claude-haiku-4-5-20251001`. Abstract names automatically route to the current-generation model at each tier, preventing accidental use of stale or more expensive pinned versions and enabling automatic cost optimization as the model lineup evolves. `fable` is an assignable worker model like the others — it is not reserved for the orchestrator.
 
 For predictable cost, prefer setting `model` in subagent frontmatter. Use per-invocation model overrides only when a shard clearly needs escalation.
 
@@ -136,6 +136,8 @@ Good shard size:
 - One vertical slice with explicit acceptance criteria.
 
 Avoid shards that require global design judgment or cross-cutting integration decisions.
+
+If no task breakdown exists yet, produce one with `planning-and-task-breakdown` first, then turn its tasks into shards here.
 
 ### 3. Write delegation packets
 
@@ -209,6 +211,8 @@ The reviewer should check only:
 - Regressions likely from the diff.
 
 Ignore style nits unless they cause correctness or maintainability risk.
+
+This overlaps with `doubt-driven-development`'s adversarial-review posture. When that skill is loaded, use its review discipline for this step instead of duplicating it here; treat this step as its integration point for delegated work.
 
 ### 7. Integrate and finish
 
