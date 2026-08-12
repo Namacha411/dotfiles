@@ -1,10 +1,10 @@
 {
   "env": {
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "60",
     "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
-    "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
     "DISABLE_AUTOUPDATER": "1"
   },
+  "autoMemoryEnabled": false,
+  "model": "sonnet",
   "hooks": {
     "MessageDisplay": [
       {
@@ -25,9 +25,10 @@
   },
   "enabledPlugins": {
     "skill-creator@claude-plugins-official": true,
+    "astral@astral-sh": true,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "lua-lsp@claude-plugins-official": true,
-    "astral@astral-sh": true
+    "gopls-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "astral-sh": {
@@ -38,6 +39,7 @@
     }
   },
   "language": "Japanese",
+  "advisorModel": "opus",
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
   "voiceEnabled": true
