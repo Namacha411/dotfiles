@@ -1,0 +1,13 @@
+{
+  "Debug Trace": {
+    "prefix": "here",
+    "body": "fprintf(stderr, \"${1:HERE} %s:%d\\n\", __func__, __LINE__);",
+    "description": "Trace print to stderr (function:line)"
+  },
+
+  "Debug Variable": {
+    "prefix": "dbg",
+    "body": "fprintf(stderr, \"%s:%d: ${1:var} = ${2:%d}\\n\", __func__, __LINE__, ${1:var});",
+    "description": "Debug print a variable to stderr"
+  }
+}

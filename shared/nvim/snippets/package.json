@@ -4,6 +4,8 @@
     "snippets": [
       { "language": "rust", "path": "./rust.json" },
       { "language": "python", "path": "./python.json" },
+      { "language": "c", "path": "./c.json" },
+      { "language": "cpp", "path": "./cpp.json" },
       { "language": "all", "path": "./all.json" }
     ]
   }
