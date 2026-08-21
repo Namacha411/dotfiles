@@ -3,7 +3,6 @@
     "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
     "DISABLE_AUTOUPDATER": "1"
   },
-  "autoMemoryEnabled": false,
   "model": "sonnet",
   "hooks": {
     "MessageDisplay": [
@@ -42,5 +41,10 @@
   "advisorModel": "opus",
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
-  "voiceEnabled": true
+  "autoMemoryEnabled": false,
+  "voiceEnabled": true,
+  "autoUpdatesChannel": "latest",
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
+  "outputStyle": "Concise"
 }
