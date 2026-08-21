@@ -69,12 +69,25 @@ def ":q" [] {
     exit
 }
 def --env ghq-fzf [] {
-    let root = (ghq root | str trim)
-    let repo = (ghq list | fzf | str trim)
-    if ($repo | is-empty) {
+    let root = (timeit -o { ghq root | str trim })
+    print $"ghq root: ($root.time)"
+    let repo = (timeit -o { ghq list | fzf | str trim })
+    print $"ghq list | fzf \(includes selection time\): ($repo.time)"
+    if ($repo.output | is-empty) {
         return
     }
-    cd ($root | path join $repo)
+    cd ($root.output | path join $repo.output)
+}
+def --env scratch [
+    name?: string # file to create and open in nvim, e.g. main.py
+] {
+    let dir = (mktemp -d)
+    cd $dir
+    if $name != null {
+        touch $name
+        nvim $name
+    }
+    print $"scratch: ($dir)"
 }
 def gb-fzf [] {
     let branch = (
