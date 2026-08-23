@@ -19,10 +19,8 @@
 $env.config.show_banner = false
 
 $env.config.hooks.display_output = {|| table --icons }
-$env.config.hooks = {
-    env_change: {
-        PWD: [{|before, after| ls | table --icons | print }]
-    }
+$env.config.hooks.env_change = {
+    PWD: [{|before, after| ls | table --icons | print }]
 }
 
 $env.config.buffer_editor = "nvim"
@@ -32,6 +30,19 @@ $env.config.table.trim = {
     wrapping_try_keep_words: true
 }
 $env.config.footer_mode = "never"
+
+$env.config.history = {
+    file_format: sqlite
+    max_size: 100_000
+    sync_on_enter: true
+    isolation: false
+}
+
+$env.config.edit_mode = "vi"
+$env.config.cursor_shape = {
+    vi_insert: line
+    vi_normal: block
+}
 
 $env.config.completions = {
     case_sensitive: false
@@ -64,20 +75,22 @@ $env.PROMPT_COMMAND = {||
     $"($shell_part) ($dir_part)($git_part)\n($time_part) "
 }
 $env.PROMPT_INDICATOR = $"(ansi green_bold)>(ansi reset) "
+$env.PROMPT_INDICATOR_VI_INSERT = $"(ansi green_bold)>(ansi reset) "
+$env.PROMPT_INDICATOR_VI_NORMAL = $"(ansi green_bold):(ansi reset) "
 
 def ":q" [] {
     exit
 }
+
 def --env ghq-fzf [] {
     let root = (timeit -o { ghq root | str trim })
-    print $"ghq root: ($root.time)"
     let repo = (timeit -o { ghq list | fzf | str trim })
-    print $"ghq list | fzf \(includes selection time\): ($repo.time)"
     if ($repo.output | is-empty) {
         return
     }
     cd ($root.output | path join $repo.output)
 }
+
 def --env scratch [
     name?: string # file to create and open in nvim, e.g. main.py
 ] {
@@ -89,6 +102,7 @@ def --env scratch [
     }
     print $"scratch: ($dir)"
 }
+
 def gb-fzf [] {
     let branch = (
         git branch -a
