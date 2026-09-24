@@ -1,0 +1,596 @@
+<!--
+  論文解説記事のテンプレート(1ファイル完結)。使い方:
+  1. このファイルを出力先にコピーする(例: out/<論文の短い名前>.html)。CSS/JSはすべてインラインなので単体で配布できる。
+  2. [PLACEHOLDER: ...] を記事の内容に差し替える。不要なセクションは丸ごと削除してよい。
+     見出しの並びは references/article.md の「推奨する記事構成テンプレート」と対応している。
+  3. <style> と <script> は変更しない。デザインを全記事で統一するため、配色・フォントサイズ・余白は触らない。
+     部品が足りない場合のみ <style> の「Components」節に汎用的な名前で追記する。
+  4. 本文で使う部品(対立軸ボックス・比較表・図版・コールアウト・3段階ボックス・利点/欠点・補足)は
+     ファイル末尾のコメント「部品カタログ」からコピーして使う。ゼロから新しいHTML構造やCSSを書かない。
+  5. 数式は $...$ (インライン) / $$...$$ (ディスプレイ) で書けば KaTeX が自動でレンダリングする。
+     コードは <pre><code class="language-python"> のように言語クラスを付ければ highlight.js が色付けする。
+  6. 目次は <h2>/<h3> から自動生成される。手で書かない。
+  7. インラインSVGの線・文字色は stroke="currentColor" / fill="currentColor" か、
+     style="fill: var(--color-*)" のようにトークンを使う(ダークモードで消えないようにするため)。
+     var() は fill="..." などの属性値では効かないので必ず style 属性に書く。#000 などの固定色を直書きしない。
+  8. 本文中で数式以外の目的で $ を使う箇所(金額など)は <span class="no-math">...</span> で囲む。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[PLACEHOLDER: 記事タイトル]</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.18.6/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.18.6/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.18.6/contrib/auto-render.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/highlight.min.js"></script>
+<style>
+/* ===== Tokens (paper-explanation-video のスライドと同じ配色) ===== */
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f7f8fa;
+  --color-fg: #16213e;
+  --color-muted: #5b6472;
+  --color-accent: #0d9488;
+  --color-accent-soft: #ccfbf1;
+  --color-border: #e2e5ea;
+  --color-a: #334155;       /* 既存手法 / A側 */
+  --color-a-soft: #eef1f5;
+  --color-b: #0f766e;       /* 提案手法 / B側 */
+  --color-b-soft: #e6f7f5;
+  --color-good: #15803d;
+  --color-good-soft: #ecfdf3;
+  --color-bad: #b91c1c;
+  --color-bad-soft: #fef2f2;
+  --color-warn: #b45309;
+  --color-warn-soft: #fffbeb;
+
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Noto Sans Mono CJK JP", monospace;
+
+  --measure: 760px;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 40px;
+  --space-5: 64px;
+  --radius: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f1522;
+    --color-surface: #161e2e;
+    --color-fg: #e6e9ef;
+    --color-muted: #9aa3b2;
+    --color-accent: #2dd4bf;
+    --color-accent-soft: #123a37;
+    --color-border: #2a3447;
+    --color-a: #b6c2d4;
+    --color-a-soft: #1c2536;
+    --color-b: #5eead4;
+    --color-b-soft: #10302d;
+    --color-good: #4ade80;
+    --color-good-soft: #12291c;
+    --color-bad: #f87171;
+    --color-bad-soft: #2e1616;
+    --color-warn: #fbbf24;
+    --color-warn-soft: #2d2410;
+  }
+}
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.85;
+  -webkit-text-size-adjust: 100%;
+}
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-2) var(--space-5);
+}
+
+/* 広い画面では目次を左のサイドバーに固定する */
+@media (min-width: 1200px) {
+  .page {
+    max-width: calc(var(--measure) + 280px + var(--space-5));
+    display: grid;
+    grid-template-columns: 280px minmax(0, var(--measure));
+    column-gap: var(--space-5);
+  }
+  .page > .article-header { grid-column: 2; }
+  .page > .toc {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: var(--space-4);
+    align-self: start;
+    max-height: calc(100vh - 2 * var(--space-4));
+    overflow-y: auto;
+    margin: 0;
+  }
+  .page > .article-body { grid-column: 2; }
+}
+
+h1, h2, h3, h4 { line-height: 1.4; font-weight: 700; }
+h1 { font-size: 2rem; margin: 0 0 var(--space-3); }
+h2 {
+  font-size: 1.5rem;
+  margin: var(--space-5) 0 var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 2px solid var(--color-border);
+  scroll-margin-top: var(--space-3);
+}
+h3 {
+  font-size: 1.2rem;
+  margin: var(--space-4) 0 var(--space-2);
+  padding-left: var(--space-2);
+  border-left: 4px solid var(--color-accent);
+  scroll-margin-top: var(--space-3);
+}
+h4 { font-size: 1.05rem; margin: var(--space-3) 0 var(--space-1); }
+
+p { margin: 0 0 var(--space-3); }
+ul, ol { margin: 0 0 var(--space-3); padding-left: 1.5em; }
+li + li { margin-top: 4px; }
+strong { color: var(--color-fg); background: linear-gradient(transparent 62%, var(--color-accent-soft) 62%); }
+a { color: var(--color-accent); text-underline-offset: 3px; }
+hr, .break {
+  border: 0;
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-5) 0;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+pre {
+  margin: 0 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+pre code, pre code.hljs {
+  display: block;
+  border: 0;
+  border-radius: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+img, svg { max-width: 100%; height: auto; }
+
+.article-body > h2:first-child { margin-top: 0; }
+
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: var(--space-1) 0; }
+
+table { border-collapse: collapse; }
+
+/* ===== Header ===== */
+.article-header { margin-bottom: var(--space-4); }
+.article-header__eyebrow {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-1);
+}
+.article-header__meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+.article-header__meta a { color: inherit; }
+
+/* ===== TOC (末尾の script が中身を生成する) ===== */
+.toc {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+.toc__title { font-weight: 700; margin-bottom: var(--space-1); }
+.toc ol { margin: 0; padding-left: 1.2em; }
+.toc ol ol { padding-left: 1em; margin-top: 2px; font-size: 0.95em; }
+.toc li + li { margin-top: 2px; }
+.toc a { color: var(--color-fg); text-decoration: none; }
+.toc a:hover { color: var(--color-accent); }
+.toc a.is-active { color: var(--color-accent); font-weight: 700; }
+.toc:empty, .toc[hidden] { display: none; }
+
+/* ===== Components ===== */
+
+/* 概要(Introductionより前の一言サマリー) */
+.summary {
+  background: var(--color-accent-soft);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin: 0 0 var(--space-3);
+}
+.summary > :last-child { margin-bottom: 0; }
+
+/* この記事で学べること / こんな人におすすめ */
+.learn {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+.learn__box {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+.learn__title { font-weight: 700; margin-bottom: var(--space-1); }
+.learn__box ul { margin: 0; }
+
+/* コアアイデアを一文で強調する */
+.callout {
+  background: var(--color-accent-soft);
+  border-left: 6px solid var(--color-accent);
+  border-radius: 6px;
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-weight: 700;
+}
+.callout > :last-child { margin-bottom: 0; }
+
+/* 補足・注意(本筋から外れる話) */
+.note {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-size: 0.95rem;
+}
+.note--warn { background: var(--color-warn-soft); border-color: var(--color-warn); }
+.note__title { font-weight: 700; margin-bottom: 4px; }
+.note > :last-child { margin-bottom: 0; }
+
+/* 3段階の説明(SKILL.md: たとえ話 → 省略していること → より正確に) */
+.stages { display: flex; flex-direction: column; gap: var(--space-2); margin: 0 0 var(--space-3); }
+.stage {
+  border: 1px solid var(--color-border);
+  border-left-width: 6px;
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+.stage > :last-child { margin-bottom: 0; }
+.stage__label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.stage--analogy { border-left-color: var(--color-accent); background: var(--color-b-soft); }
+.stage--analogy .stage__label { color: var(--color-b); }
+.stage--omitted { border-left-color: var(--color-warn); background: var(--color-warn-soft); }
+.stage--omitted .stage__label { color: var(--color-warn); }
+.stage--precise { border-left-color: var(--color-a); background: var(--color-a-soft); }
+.stage--precise .stage__label { color: var(--color-a); }
+
+/* 対立軸(二項対立)ボックス */
+.contrast {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+.contrast__side {
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  border: 2px solid;
+}
+.contrast__side > :last-child { margin-bottom: 0; }
+.contrast__side--a { background: var(--color-a-soft); border-color: var(--color-a); }
+.contrast__side--b { background: var(--color-b-soft); border-color: var(--color-b); }
+.contrast__label { font-weight: 700; margin-bottom: var(--space-1); }
+.contrast__side--a .contrast__label { color: var(--color-a); }
+.contrast__side--b .contrast__label { color: var(--color-b); }
+
+/* 比較表(横に長い場合は .table-wrap がスクロールさせる) */
+.table-wrap { overflow-x: auto; margin: 0 0 var(--space-3); }
+.compare-table { width: 100%; font-size: 0.95rem; }
+.compare-table th,
+.compare-table td {
+  border: 1px solid var(--color-border);
+  padding: var(--space-1) var(--space-2);
+  text-align: left;
+  vertical-align: top;
+}
+.compare-table thead th { background: var(--color-a-soft); }
+.compare-table tbody th { background: var(--color-surface); white-space: nowrap; }
+.compare-table .is-proposed { background: var(--color-b-soft); }
+
+/* 利点/欠点 */
+.pros-cons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+.pros-cons__col {
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+.pros-cons__col ul { margin: 0; }
+.pros-cons__col--pros { background: var(--color-good-soft); }
+.pros-cons__col--cons { background: var(--color-bad-soft); }
+.pros-cons__title { font-weight: 700; margin-bottom: var(--space-1); }
+.pros-cons__col--pros .pros-cons__title { color: var(--color-good); }
+.pros-cons__col--cons .pros-cons__title { color: var(--color-bad); }
+
+/* 図版 */
+.figure {
+  margin: var(--space-4) 0;
+  text-align: center;
+}
+.figure svg, .figure img { display: block; margin: 0 auto; }
+.figure figcaption {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin-top: var(--space-1);
+  line-height: 1.6;
+}
+.figure__source { display: block; font-size: 0.8rem; margin-top: 2px; }
+
+/* 参考文献 */
+.references { font-size: 0.92rem; padding-left: 1.5em; }
+.references li { word-break: break-word; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="article-header">
+    <div class="article-header__eyebrow">論文解説</div>
+    <h1>[PLACEHOLDER: タイトル。何の技術か・何がすごいのかが一目で分かるように]</h1>
+    <p class="article-header__meta">
+      対象論文: <a href="[PLACEHOLDER: 論文URL]">[PLACEHOLDER: 論文タイトル]</a>
+      ([PLACEHOLDER: 著者], [PLACEHOLDER: 会議/年])
+    </p>
+  </header>
+
+  <nav class="toc" aria-label="目次" hidden></nav>
+
+  <main class="article-body">
+
+    <h2>概要</h2>
+    <div class="summary">
+      <p>[PLACEHOLDER: 具体的に何をする技術で、どこに応用できるかを2〜3文で。ここだけ読んでも何の記事か分かるように]</p>
+    </div>
+
+    <div class="learn">
+      <div class="learn__box">
+        <div class="learn__title">この記事で学べること</div>
+        <ul>
+          <li>[PLACEHOLDER]</li>
+          <li>[PLACEHOLDER]</li>
+        </ul>
+      </div>
+      <div class="learn__box">
+        <div class="learn__title">こんな人におすすめ</div>
+        <ul>
+          <li>[PLACEHOLDER]</li>
+          <li>[PLACEHOLDER]</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>はじめに</h2>
+    <p>[PLACEHOLDER: 読者が抱えていそうな疑問・課題を提示する(「〜と思ったことはないだろうか」)]</p>
+    <p>[PLACEHOLDER: この論文が何を解決しようとしているか。記事全体を貫く対立軸もここで示す(部品カタログの .contrast を使うとよい)]</p>
+
+    <h2>事前知識</h2>
+    <!-- 必要な場合のみ。不要なら見出しごと削除する -->
+    <p>[PLACEHOLDER: 読者が詰まりそうな前提知識]</p>
+
+    <h2>モチベーション・既存手法の課題</h2>
+    <p>[PLACEHOLDER: A という課題 → B が提案された → B の限界 → 本論文の C、という一本のストーリーとして書く]</p>
+
+    <h2>提案手法のコアアイデア</h2>
+    <div class="callout">[PLACEHOLDER: コアアイデアを一文で]</div>
+    <p>[PLACEHOLDER: 詳細。図解を入れる(部品カタログの .figure)]</p>
+
+    <h2>手法の詳細</h2>
+    <h3>[PLACEHOLDER: サブセクション名]</h3>
+    <p>[PLACEHOLDER: 冒頭の1〜2文でこのセクションの要点を先に言う → 詳細]</p>
+
+    <h2>利点と欠点 / 難しさ</h2>
+    <div class="pros-cons">
+      <div class="pros-cons__col pros-cons__col--pros">
+        <div class="pros-cons__title">利点</div>
+        <ul><li>[PLACEHOLDER]</li></ul>
+      </div>
+      <div class="pros-cons__col pros-cons__col--cons">
+        <div class="pros-cons__title">欠点・限界</div>
+        <ul><li>[PLACEHOLDER]</li></ul>
+      </div>
+    </div>
+
+    <h2>簡易実装で試してみる</h2>
+    <!-- あれば。不要なら見出しごと削除する -->
+    <p>[PLACEHOLDER: 何を確かめるコードか]</p>
+<pre><code class="language-python">[PLACEHOLDER: 最小限のコード]</code></pre>
+
+    <h2>まとめ</h2>
+    <ul>
+      <li>[PLACEHOLDER: 要点の再掲]</li>
+    </ul>
+    <p>[PLACEHOLDER: 感想・今後の展望・関連研究へのポインタ]</p>
+
+    <h2>参考文献</h2>
+    <ol class="references">
+      <li>[PLACEHOLDER: 著者. タイトル. 会議/ジャーナル, 年. <a href="URL">URL</a>]</li>
+    </ol>
+
+  </main>
+</div>
+
+<!--
+  ===== 部品カタログ(必要な箇所にコピーして使う) =====
+
+  ■ 3段階の説明(SKILL.md の たとえ話 → 省略していること → より正確に)。難しい概念の説明に使う。
+  <div class="stages">
+    <div class="stage stage--analogy">
+      <div class="stage__label">まずはたとえ話で</div>
+      <p>[PLACEHOLDER]</p>
+    </div>
+    <div class="stage stage--omitted">
+      <div class="stage__label">このたとえ話で省略していること</div>
+      <ul><li>[PLACEHOLDER]</li></ul>
+    </div>
+    <div class="stage stage--precise">
+      <div class="stage__label">より正確に言うと</div>
+      <p>[PLACEHOLDER: $x$ のような数式も可]</p>
+    </div>
+  </div>
+
+  ■ 対立軸(二項対立)ボックス。既存手法 vs 提案手法、想定される反論 vs 回答 など。
+  <div class="contrast">
+    <div class="contrast__side contrast__side--a">
+      <div class="contrast__label">[PLACEHOLDER: 既存手法]</div>
+      <p>[PLACEHOLDER]</p>
+    </div>
+    <div class="contrast__side contrast__side--b">
+      <div class="contrast__label">[PLACEHOLDER: 提案手法]</div>
+      <p>[PLACEHOLDER]</p>
+    </div>
+  </div>
+
+  ■ 比較表。提案手法の列/セルには class="is-proposed" を付けると色が付く。
+  <div class="table-wrap">
+    <table class="compare-table">
+      <thead>
+        <tr><th>観点</th><th>[PLACEHOLDER: 既存手法]</th><th class="is-proposed">[PLACEHOLDER: 提案手法]</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>[PLACEHOLDER]</th><td>[PLACEHOLDER]</td><td class="is-proposed">[PLACEHOLDER]</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  ■ 図版。概念図は SVG をインラインで書く(色は currentColor か style="fill: var(--color-*)" を使う)。
+    数値グラフは matplotlib 等で SVG 出力してインライン埋め込みするか、PNG を data:image/png;base64,... で埋め込む
+    (別ファイル参照は1ファイル完結が崩れるので禁止)。matplotlib の文字色は黒固定なので transparent=True にせず白背景のまま出力する。
+  <figure class="figure">
+    <svg viewBox="0 0 600 200" role="img" aria-label="[PLACEHOLDER: 図の説明]">
+      <rect x="20" y="60" width="160" height="80" rx="8" style="fill: var(--color-a-soft); stroke: var(--color-a)"/>
+      <text x="100" y="105" text-anchor="middle" fill="currentColor">[PLACEHOLDER]</text>
+    </svg>
+    <figcaption>
+      図1: [PLACEHOLDER: 図の説明]
+      <span class="figure__source">出典: [PLACEHOLDER: 論文タイトル・著者・リンク。自作なら「著者作成」]</span>
+    </figcaption>
+  </figure>
+
+  ■ コールアウト(核となる一文を強調)
+  <div class="callout">[PLACEHOLDER]</div>
+
+  ■ 補足 / 注意(本筋から外れる話)。注意喚起なら class="note note--warn"。
+  <div class="note">
+    <div class="note__title">補足</div>
+    <p>[PLACEHOLDER]</p>
+  </div>
+
+  ■ 数式: インライン $E = mc^2$ / ディスプレイ
+    $$\mathcal{L}(\theta) = -\sum_i \log p_\theta(y_i \mid x_i)$$
+
+  ■ コード: <pre><code class="language-python">...</code></pre>(HTMLの < > & はエスケープする)
+
+  ■ 区切り(同じトーンの文章が3〜4段落以上続くとき)
+  <hr class="break">
+-->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // 見出しにidを振り、h2/h3から目次を生成する
+  var headings = document.querySelectorAll(".article-body h2, .article-body h3");
+  var toc = document.querySelector(".toc");
+  if (toc && headings.length > 1) {
+    var root = document.createElement("ol");
+    var currentSub = null;
+    headings.forEach(function (h, i) {
+      if (!h.id) h.id = "sec-" + (i + 1);
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      if (h.tagName === "H2" || !root.lastElementChild) {
+        root.appendChild(li);
+        currentSub = null;
+      } else {
+        if (!currentSub) {
+          currentSub = document.createElement("ol");
+          root.lastElementChild.appendChild(currentSub);
+        }
+        currentSub.appendChild(li);
+      }
+    });
+    var title = document.createElement("div");
+    title.className = "toc__title";
+    title.textContent = "目次";
+    toc.appendChild(title);
+    toc.appendChild(root);
+    toc.hidden = false;
+
+    // 表示中のセクションを目次でハイライトする
+    if ("IntersectionObserver" in window) {
+      var links = {};
+      toc.querySelectorAll("a").forEach(function (a) { links[a.hash.slice(1)] = a; });
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          toc.querySelectorAll("a.is-active").forEach(function (a) { a.classList.remove("is-active"); });
+          var link = links[e.target.id];
+          if (link) link.classList.add("is-active");
+        });
+      }, { rootMargin: "0px 0px -70% 0px" });
+      headings.forEach(function (h) { observer.observe(h); });
+    }
+  }
+
+  // 数式(KaTeX)
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false }
+      ],
+      ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+      ignoredClasses: ["no-math"],
+      throwOnError: false
+    });
+  }
+
+  // シンタックスハイライト(highlight.js)
+  if (window.hljs) hljs.highlightAll();
+});
+</script>
+</body>
+</html>

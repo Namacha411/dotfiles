@@ -2,3 +2,6 @@ nvim/lazy-lock.json
 .claude/
 shared/claude/.env
 shared/claude/hooks/tts_config.json
+
+# claude.ai-synced skills written through the ~/.claude/skills symlink
+shared/claude/skills/synced/

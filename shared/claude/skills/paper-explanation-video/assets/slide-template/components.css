@@ -1,0 +1,95 @@
+/*
+  Reusable layout parts for recurring explain-clearly patterns:
+  figures with a source credit, comparison tables, the "対立軸"
+  (existing-method vs proposed-method) two-column box, and callouts.
+  Depends on the tokens defined in style.css — load both.
+*/
+
+/* --- Figure with caption + source credit --- */
+.figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.figure img,
+.figure svg {
+  max-height: 520px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.figure__caption {
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.figure__source {
+  font-size: 20px;
+  color: var(--color-muted);
+}
+
+/* --- Comparison table --- */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-body);
+}
+
+.compare-table th,
+.compare-table td {
+  border: 1px solid var(--color-border);
+  padding: var(--space-2);
+  text-align: left;
+  vertical-align: top;
+}
+
+.compare-table th {
+  background: var(--color-a-soft);
+  font-weight: 700;
+}
+
+/* --- 対立軸(二項対立)ボックス: 既存手法 vs 提案手法 など --- */
+.contrast {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.contrast__side {
+  border-radius: 16px;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.contrast__side--a {
+  background: var(--color-a-soft);
+  border: 2px solid var(--color-a);
+}
+
+.contrast__side--b {
+  background: var(--color-b-soft);
+  border: 2px solid var(--color-b);
+}
+
+.contrast__label {
+  font-weight: 700;
+  font-size: var(--fs-eyebrow);
+}
+
+.contrast__side--a .contrast__label { color: var(--color-a); }
+.contrast__side--b .contrast__label { color: var(--color-b); }
+
+/* --- Callout / highlight box (for the core idea in one sentence) --- */
+.callout {
+  background: var(--color-accent-soft);
+  border-left: 8px solid var(--color-accent);
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  font-weight: 700;
+}

@@ -28,7 +28,7 @@ Python はあくまで高機能なスクリプト言語であり、その場し�
 | 使い捨て・単一ファイルのスクリプト | PEP 723 インラインメタデータ + `uv run` |
 | 複数ファイル・継続開発・ライブラリ | `uv init` + `uv add` |
 
-**迷ったら `uv init` を選ぶ。** PEP 723 は「このファイル 1 つで完結する、使い捨てのスクリプト」にのみ使う。
+1 ファイルで完結するなら PEP 723、複数ファイルに分かれる・継続的に開発するなら `uv init` を選ぶ。
 
 ### PEP 723 インラインメタデータ（使い捨て単一スクリプト）
 
@@ -80,8 +80,15 @@ def setup() -> None:
 ### typing モジュールのインポート
 
 ```python
-from typing import Any, Callable, TypeVar, Protocol
-from collections.abc import Iterator, Sequence, Generator
+from typing import Any, Protocol
+from collections.abc import Callable, Iterator, Sequence, Generator
+```
+
+ジェネリクスは `TypeVar` ではなく PEP 695 の構文で書く（Python 3.12+）。
+
+```python
+def first[T](items: Sequence[T]) -> T:
+    ...
 ```
 
 ### 型の具体性
@@ -108,41 +115,16 @@ MAX_RETRIES: Final = 3
 ### 型エイリアス（複雑な型には名前をつける）
 
 ```python
-UserId = int
-Config = dict[str, Any]
+type UserId = int
+type Config = dict[str, Any]
 ```
 
 ---
 
 ## 3. PEP 8 スタイル
 
-コードスタイルの自動修正・フォーマットは `astral:ruff` スキルを参照すること。
-以下は命名規則など、コードを書く際に従うべきルール。
-
-### 命名規則
-
-| 対象           | スタイル       | 例                     |
-|---------------|---------------|------------------------|
-| 変数・関数     | `snake_case`  | `user_name`, `get_data` |
-| クラス         | `PascalCase`  | `DataProcessor`         |
-| 定数           | `UPPER_SNAKE` | `MAX_RETRIES`           |
-| モジュール     | `snake_case`  | `data_utils.py`         |
-| プライベート   | `_leading`    | `_internal_state`       |
-
-### インポート順序
-
-標準ライブラリ → サードパーティ → ローカル の順に、グループ間は空行で区切る。
-
-```python
-import os
-import sys
-from pathlib import Path
-
-import requests
-from rich.console import Console
-
-from my_module import helper
-```
+命名規則は PEP 8 に従う。インポート順やフォーマットは ruff（`I` ルールなど）に任せ、手で揃えない。
+実行方法は `astral:ruff` スキルを参照すること。
 
 ### ドキュメント文字列
 
@@ -283,6 +265,16 @@ rest = items[1:]
 first, *rest = items
 ```
 
+アンパックも空リストでは `ValueError` になる。要素数が保証されない場合は `match` か長さチェックで分岐する。
+
+```python
+match items:
+    case [first, *rest]:
+        ...
+    case []:
+        ...
+```
+
 #### パターンマッチによる分割
 
 ```python
@@ -307,17 +299,6 @@ def contains(tree, value):
 ```
 
 詳細な活用事例: https://peps.python.org/pep-0636/
-
-#### スライスではなく catch-all unpack を使う
-
-```python
-# 避ける（IndexError の可能性）
-head = items[0]
-tail = items[1:]
-
-# 使う（空リストでも安全）
-head, *tail = items
-```
 
 ### 6.4 関数引数のイミュータビリティ
 
@@ -377,7 +358,6 @@ def _(node: AddNode) -> int:
 
 ### 6.7 例外処理の注意点
 
-- 例外処理は大きなオーバーヘッドがかかることを意識する
 - `try` ブロックを可能な限り短く保つ（詰め込みすぎると意図しない例外を補足してしまう）
 - `except` ブロックも最小限に保つ（詰め込みすぎると意図しない問題を握りつぶす恐れがある）
 - 「実際に何が起きた」を補足できるようにする（例外の表示やログへの記録）
@@ -403,15 +383,12 @@ save(result, output)
 
 ### 6.8 デバッグ（pdb）
 
-コマンドラインで `pdb` をモジュールとして起動したり、プログラム内部で `pdb.pm()` を呼び出すと
-ポストモーテムデバッグができる。
+`pdb` をモジュールとして起動すると、未捕捉の例外で止まってポストモーテムデバッグができる。
+コード中の任意の位置で止めたい場合は `breakpoint()` を書く。
 
 ```bash
-# スクリプトをデバッガで実行
-python -m pdb script.py
-
-# 例外発生後にポストモーテム
-python -c "import pdb, script; pdb.pm()"
+# 最後まで実行し、未捕捉の例外が起きたらその場でデバッガに入る
+uv run python -m pdb -c continue script.py
 ```
 
 ### 6.9 避けるべき記法

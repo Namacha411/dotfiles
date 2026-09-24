@@ -1,0 +1,86 @@
+<!--
+  1スライド分のテンプレート。使い方:
+  1. このファイルをスライド枚数分コピーする(例: 01-title.html, 02-motivation.html, ...)。
+  2. [PLACEHOLDER] となっている箇所をナレーション台本の該当セグメントの内容に差し込む。
+  3. style.css/components.css はこのままコピー元のパスを維持するか、
+     スライドをまとめるディレクトリに一緒にコピーして相対パスを合わせる。
+  4. 内容に応じて下のコメントアウトされた代替レイアウト(対立軸ボックス/比較表/図版/コールアウト)
+     を .slide__body の中に差し替えて使う。ゼロから新しいCSSを書き足さない。
+  5. body は必ず 1920x1080 のまま(deck.config.jsonと一致させる)。文字が大きすぎる/収まらない場合は
+     文言を削るか複数スライドに分割する。文字サイズやpaddingをスライドごとに変えない。
+-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>[PLACEHOLDER: スライドタイトル(社内用、動画には出なくてよい)]</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="components.css">
+</head>
+<body>
+<div class="slide">
+  <div class="slide__eyebrow">[PLACEHOLDER: セクション名。例: モチベーション / 提案手法 / 実験結果]</div>
+  <h1 class="slide__title">[PLACEHOLDER: このスライドの一言結論(トップダウンで先出しする)]</h1>
+
+  <div class="slide__body">
+    <!-- 基本パターン: 箇条書き -->
+    <ul>
+      <li>[PLACEHOLDER: 要点1]</li>
+      <li>[PLACEHOLDER: 要点2]</li>
+      <li>[PLACEHOLDER: 要点3]</li>
+    </ul>
+
+    <!--
+      代替パターン1: 対立軸(二項対立)ボックス。既存手法 vs 提案手法などを見せたいとき、
+      上の <ul> の代わりにこのブロックを使う。
+
+    <div class="contrast">
+      <div class="contrast__side contrast__side--a">
+        <div class="contrast__label">[PLACEHOLDER: 既存手法 / 想定される反論 など]</div>
+        <p>[PLACEHOLDER: 説明]</p>
+      </div>
+      <div class="contrast__side contrast__side--b">
+        <div class="contrast__label">[PLACEHOLDER: 提案手法 / それへの回答 など]</div>
+        <p>[PLACEHOLDER: 説明]</p>
+      </div>
+    </div>
+    -->
+
+    <!--
+      代替パターン2: 比較表。
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>[PLACEHOLDER: 観点]</th><th>[PLACEHOLDER: 既存手法]</th><th>[PLACEHOLDER: 提案手法]</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>[PLACEHOLDER]</td><td>[PLACEHOLDER]</td><td>[PLACEHOLDER]</td></tr>
+      </tbody>
+    </table>
+    -->
+
+    <!--
+      代替パターン3: 図版(SVGを直接埋め込む、または screenshot_slides.mjs 実行前に
+      別途生成したPNGをimgで参照する)。
+
+    <div class="figure">
+      <img src="[PLACEHOLDER: 画像パス]" alt="[PLACEHOLDER: 代替テキスト]">
+      <div class="figure__caption">[PLACEHOLDER: 図の説明]</div>
+      <div class="figure__source">[PLACEHOLDER: 出典(論文タイトル・著者・リンク) または省略]</div>
+    </div>
+    -->
+
+    <!--
+      代替パターン4: コールアウト(核となる一文を強調したいとき)。
+
+    <div class="callout">[PLACEHOLDER: 一言でまとめたコアアイデア]</div>
+    -->
+  </div>
+
+  <div class="slide__footer">
+    <span>[PLACEHOLDER: 動画/シリーズ名。不要なら空でよい]</span>
+    <span>[PLACEHOLDER: スライド番号 例 3 / 12]</span>
+  </div>
+</div>
+</body>
+</html>

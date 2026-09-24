@@ -354,10 +354,10 @@ Report format:
 
 A multi-module implementation was split into two dependency-aware batches and delegated to cheaper workers.
 
-Observed effect:
+Effect:
 
-- Roughly 105k tokens of exploration, implementation, and editing stayed inside worker contexts.
-- The orchestrator context remained small, around 7% of the available window.
+- Most exploration, implementation, and editing tokens stayed inside worker contexts.
+- The orchestrator context stayed a small fraction of the window.
 - The orchestrator retained design and integration decisions.
 - Cheap workers handled the token-heavy implementation loops.
 
@@ -373,7 +373,7 @@ Why it worked:
 
 A task with only three tiny modules of a few dozen lines each was delegated.
 
-Observed effect:
+Effect:
 
 - Delegation packet overhead exceeded implementation savings.
 - Worker startup and summary tokens added cost.
