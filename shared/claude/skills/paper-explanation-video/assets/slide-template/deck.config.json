@@ -1,0 +1,6 @@
+{
+  "viewport": { "width": 1920, "height": 1080 },
+  "deviceScaleFactor": 1,
+  "safeMarginPx": 96,
+  "notes": "screenshot_slides.mjs reads viewport/deviceScaleFactor from this file by default. Keep every slide.html at exactly this size so the final video has no letterboxing."
+}

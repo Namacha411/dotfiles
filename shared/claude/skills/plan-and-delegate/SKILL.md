@@ -1,10 +1,10 @@
 ---
 name: plan-and-delegate
 description: >
-  Default to this skill for any non-trivial implementation. Splits work into shards and
-  delegates to haiku/sonnet/opus subagents, keeping expensive orchestrator context small.
-  Trigger for multi-step work, exploration, refactors, scaffolding, or repeated changes.
-  Skip only for true one-liners already in context.
+  Splits work into shards and delegates them to haiku/sonnet/opus subagents, keeping the
+  orchestrator's context small. Use when work has 3+ independent shards, exploration or logs
+  that would flood the main context, the same change repeated across files, or when the user
+  asks to delegate, parallelize, or save context. Skip for small edits already in context.
 ---
 
 # Plan and Delegate
@@ -36,7 +36,7 @@ Delegation is profitable when it reduces expensive-model context and keeps noisy
 
 ## Recursive delegation
 
-Subagents can now spawn sub-workers of their own. This enables multi-level delegation for tasks where a worker needs to parallelize bounded sub-tasks within its own context.
+Subagents can spawn sub-workers of their own, up to three layers below the main conversation (`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH`; at the limit the `Agent` tool is withheld). A worker only delegates if its tool list includes `Agent` — the built-in Explore and Plan agents do not. To keep a worker such as a read-only reviewer from spawning, omit `Agent` from its `tools` or add it to `disallowedTools`.
 
 Use recursion only when a worker genuinely benefits from parallelizing its own sub-tasks. Avoid recursive delegation for simple or sequential work — each additional layer adds startup and summary overhead.
 
@@ -50,7 +50,7 @@ However, custom subagents may receive normal project context such as `CLAUDE.md`
 
 ## Worker types
 
-Use these archetypes. Prefer project-local agents under `.claude/agents/` when available.
+Use these archetypes. Prefer project-local agents under `.claude/agents/` when available; otherwise map read-only archetypes to the built-in `Explore` agent and the rest to `general-purpose` with a per-invocation `model`.
 
 | Worker | Model | Tools | Use |
 |---|---:|---|---|
@@ -244,14 +244,10 @@ Final response should include:
 
 ## Anti-patterns
 
+The failures that the sections above don't already cover:
+
 - Delegating vague requests such as "improve the code".
 - Delegating architecture or trade-off decisions.
-- Trusting worker success claims without deterministic evidence.
-- Launching dependent shards in parallel.
-- Reading huge files or logs into orchestrator context when a read-only worker could summarize them.
-- Delegating tiny edits where the overhead exceeds the work.
-- Asking workers to paste large diffs or full file contents back into main context.
-- Retrying failed cheap workers without improving the spec or escalating the model.
 
 ## Operational notes
 

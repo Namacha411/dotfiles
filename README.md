@@ -33,7 +33,7 @@ Creates symlinks and installs Nix packages.
 
 `shared/claude/skills/` contains skills copied from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT License).
 
-Copied from commit [`be42637`](https://github.com/addyosmani/agent-skills/commit/be42637c5af93fdc8526b68ec2f2651b930f316c). Not auto-updated — update manually by re-copying from the upstream repo after reviewing changes.
+Copied from commit [`bcab6a1`](https://github.com/addyosmani/agent-skills/commit/bcab6a1b8503100e8618c3b4e32cc78de43de769). Not auto-updated — update manually by re-copying from the upstream repo after reviewing changes.
 
 `shared/claude/skills/references/` holds shared checklist files that some skills link to. Upstream places these two directories up from each skill (`../../references/`), but here `shared/claude/skills/` is symlinked to `~/.claude/skills` as a single unit, so links were rewritten to `../references/` (one level up) to resolve correctly.
 
