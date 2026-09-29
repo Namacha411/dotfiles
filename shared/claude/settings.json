@@ -1,9 +1,9 @@
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
     "DISABLE_AUTOUPDATER": "1"
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "MessageDisplay": [
       {
@@ -37,14 +37,12 @@
       }
     }
   },
+  "outputStyle": "Concise",
   "language": "Japanese",
-  "advisorModel": "opus",
+  "promptSuggestionEnabled": false,
+  "awaySummaryEnabled": false,
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
   "autoMemoryEnabled": false,
-  "voiceEnabled": true,
-  "autoUpdatesChannel": "latest",
-  "promptSuggestionEnabled": false,
-  "awaySummaryEnabled": false,
-  "outputStyle": "Concise"
+  "voiceEnabled": true
 }
