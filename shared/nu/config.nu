@@ -49,6 +49,7 @@ $env.config.completions = {
     quick: true
     partial: true
     algorithm: "fuzzy"
+    persistent_menus: true
 }
 
 $env.PROMPT_COMMAND_RIGHT = ""
@@ -82,15 +83,6 @@ def ":q" [] {
     exit
 }
 
-def --env ghq-fzf [] {
-    let root = (timeit -o { ghq root | str trim })
-    let repo = (timeit -o { ghq list | fzf | str trim })
-    if ($repo.output | is-empty) {
-        return
-    }
-    cd ($root.output | path join $repo.output)
-}
-
 def --env scratch [
     name?: string # file to create and open in nvim, e.g. main.py
 ] {
@@ -103,16 +95,30 @@ def --env scratch [
     print $"scratch: ($dir)"
 }
 
-def gb-fzf [] {
+def --env ghq-pick [] {
+    let root = (ghq root | str trim)
+    let repo = (ghq list | lines | input list --fuzzy "repository")
+    if ($repo | is-empty) {
+        return
+    }
+    cd ($root | path join $repo)
+}
+
+def gb-pick [] {
     let branch = (
-        git branch -a
-        | fzf
-        | str trim
-        | str replace -r '^\* ' ''
-        | str replace -r '^remotes/[^/]+/' ''
+        git for-each-ref --format "%(refname)" refs/heads refs/remotes
+        | lines
+        | where not ($it ends-with "/HEAD")
+        | each {|ref|
+            {
+                label: ($ref | str replace -r '^refs/(heads|remotes)/' '')
+                branch: ($ref | str replace -r '^refs/(heads/|remotes/[^/]+/)' '')
+            }
+        }
+        | input list --fuzzy --display label "branch"
     )
-    if not ($branch | is-empty) {
-        git checkout $branch
+    if ($branch | is-not-empty) {
+        git checkout $branch.branch
     }
 }
 
