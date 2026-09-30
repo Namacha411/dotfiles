@@ -42,6 +42,16 @@ function Set-Symlinks {
   New-Symlink shared\claude\skills                "$HOME\.claude\skills"
   New-Symlink shared\claude\hooks                 "$HOME\.claude\hooks"
   New-Symlink shared\claude\ccstatusline          "$HOME\.config\ccstatusline"
+  New-Symlink windows\corvusskk\config.xml        "$env:APPDATA\CorvusSKK\config.xml"
+}
+
+# CorvusSKK runs inside store apps (AppContainer), which need read access to config.xml.
+# Grant it on the directory so files recreated by git checkout inherit it.
+function Grant-CorvusSKKAccess {
+  $dir = Join-Path $root "windows\corvusskk"
+  # S-1-15-2-1: ALL APPLICATION PACKAGES, S-1-5-12: RESTRICTED
+  icacls $dir /grant "*S-1-15-2-1:(OI)(CI)(RX)" "*S-1-5-12:(OI)(CI)(RX)" | Out-Null
+  Write-Host "[OK]    Granted app package read access: $dir"
 }
 
 function Update-HookPaths {
@@ -58,4 +68,5 @@ function Update-HookPaths {
 }
 
 Set-Symlinks
+Grant-CorvusSKKAccess
 Update-HookPaths
