@@ -50,6 +50,7 @@ dotfiles/
 | `shared/claude/statusline-command.sh` | `~/.claude/statusline-command.sh` |
 | `shared/claude/skills` | `~/.claude/skills` |
 | `shared/claude/ccstatusline` | `~/.config/ccstatusline` |
+| `windows/corvusskk/config.xml` | `%APPDATA%\CorvusSKK\config.xml` (Win only) |
 | `linux/vim/.vimrc` | `~/.vimrc` (Linux only) |
 
 The `linux/bash/.bashrc` is not symlinked; instead `setup.sh` appends a `source` line to the user's shell rc file.
@@ -71,6 +72,10 @@ The `linux/bash/.bashrc` is not symlinked; instead `setup.sh` appends a `source`
 ### `linux/bash/.bashrc` — Linux Shell
 - `zoxide init` must run **before** the `cd()` override (which calls `z`)
 - On Ubuntu, `bat` is installed as `batcat` and `fd` as `fdfind`; aliases handle this
+
+### `windows/corvusskk/` — CorvusSKK (SKK IME)
+- The settings dialog writes through the symlink into the repo file, so GUI changes show up as git diffs
+- Store apps (AppContainer) must be able to read `config.xml`; `setup.ps1` grants read access on the directory because git does not track ACLs
 
 ### Package Locks
 - `windows/packages/scoop/scoopfile.json` — Scoop packages (Windows)
