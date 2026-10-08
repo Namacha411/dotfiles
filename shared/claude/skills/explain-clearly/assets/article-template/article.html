@@ -5,7 +5,7 @@
      見出しの並びは references/article.md の「推奨する記事構成テンプレート」と対応している。
   3. <style> と <script> は変更しない。デザインを全記事で統一するため、配色・フォントサイズ・余白は触らない。
      部品が足りない場合のみ <style> の「Components」節に汎用的な名前で追記する。
-  4. 本文で使う部品(対立軸ボックス・比較表・図版・コールアウト・3段階ボックス・利点/欠点・補足)は
+  4. 本文で使う部品(対立軸ボックス・比較表・図版・コールアウト・たとえ話/具体例ボックス・利点/欠点・補足)は
      ファイル末尾のコメント「部品カタログ」からコピーして使う。ゼロから新しいHTML構造やCSSを書かない。
   5. 数式は $...$ (インライン) / $$...$$ (ディスプレイ) で書けば KaTeX が自動でレンダリングする。
      コードは <pre><code class="language-python"> のように言語クラスを付ければ highlight.js が色付けする。
@@ -28,7 +28,7 @@
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.18.6/contrib/auto-render.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/highlight.min.js"></script>
 <style>
-/* ===== Tokens (paper-explanation-video のスライドと同じ配色) ===== */
+/* ===== Tokens ===== */
 :root {
   --color-bg: #ffffff;
   --color-surface: #f7f8fa;
@@ -271,27 +271,22 @@ table { border-collapse: collapse; }
 .note__title { font-weight: 700; margin-bottom: 4px; }
 .note > :last-child { margin-bottom: 0; }
 
-/* 3段階の説明(SKILL.md: たとえ話 → 省略していること → より正確に) */
-.stages { display: flex; flex-direction: column; gap: var(--space-2); margin: 0 0 var(--space-3); }
-.stage {
-  border: 1px solid var(--color-border);
-  border-left-width: 6px;
+/* たとえ話・具体例(SKILL.md 設計思想9) */
+.example {
+  border-left: 4px solid var(--color-accent);
   border-radius: var(--radius);
+  background: var(--color-b-soft);
   padding: var(--space-2) var(--space-3);
+  margin: 0 0 var(--space-3);
 }
-.stage > :last-child { margin-bottom: 0; }
-.stage__label {
+.example > :last-child { margin-bottom: 0; }
+.example__label {
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.04em;
+  color: var(--color-b);
   margin-bottom: 4px;
 }
-.stage--analogy { border-left-color: var(--color-accent); background: var(--color-b-soft); }
-.stage--analogy .stage__label { color: var(--color-b); }
-.stage--omitted { border-left-color: var(--color-warn); background: var(--color-warn-soft); }
-.stage--omitted .stage__label { color: var(--color-warn); }
-.stage--precise { border-left-color: var(--color-a); background: var(--color-a-soft); }
-.stage--precise .stage__label { color: var(--color-a); }
 
 /* 対立軸(二項対立)ボックス */
 .contrast {
@@ -454,20 +449,12 @@ table { border-collapse: collapse; }
 <!--
   ===== 部品カタログ(必要な箇所にコピーして使う) =====
 
-  ■ 3段階の説明(SKILL.md の たとえ話 → 省略していること → より正確に)。難しい概念の説明に使う。
-  <div class="stages">
-    <div class="stage stage--analogy">
-      <div class="stage__label">まずはたとえ話で</div>
-      <p>[PLACEHOLDER]</p>
-    </div>
-    <div class="stage stage--omitted">
-      <div class="stage__label">このたとえ話で省略していること</div>
-      <ul><li>[PLACEHOLDER]</li></ul>
-    </div>
-    <div class="stage stage--precise">
-      <div class="stage__label">より正確に言うと</div>
-      <p>[PLACEHOLDER: $x$ のような数式も可]</p>
-    </div>
+  ■ たとえ話・具体例(SKILL.md 設計思想9)。読者がつまずきそうな抽象的な説明の直後に置く。
+    ラベルは「たとえるなら」「具体例」「身近な例で言うと」など自由。目立つので要になるたとえに使い、短いものは本文に溶かす。
+    正確な説明はこの後の本文で続ける。
+  <div class="example">
+    <div class="example__label">たとえるなら</div>
+    <p>[PLACEHOLDER: $x$ のような数式も可]</p>
   </div>
 
   ■ 対立軸(二項対立)ボックス。既存手法 vs 提案手法、想定される反論 vs 回答 など。
