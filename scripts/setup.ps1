@@ -40,6 +40,7 @@ function Set-Symlinks {
   New-Symlink shared\claude\settings.json         "$HOME\.claude\settings.json"
   New-Symlink shared\claude\statusline-command.sh "$HOME\.claude\statusline-command.sh"
   New-Symlink shared\claude\skills                "$HOME\.claude\skills"
+  New-Symlink shared\claude\agents                "$HOME\.claude\agents"
   New-Symlink shared\claude\hooks                 "$HOME\.claude\hooks"
   New-Symlink shared\claude\ccstatusline          "$HOME\.config\ccstatusline"
   New-Symlink windows\corvusskk\config.xml        "$env:APPDATA\CorvusSKK\config.xml"
