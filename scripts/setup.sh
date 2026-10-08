@@ -40,6 +40,7 @@ create_symlinks() {
   make_link "$DOTFILES_DIR/shared/claude/settings.json"         "$HOME/.claude/settings.json"
   make_link "$DOTFILES_DIR/shared/claude/statusline-command.sh" "$HOME/.claude/statusline-command.sh"
   make_link "$DOTFILES_DIR/shared/claude/skills"                "$HOME/.claude/skills"
+  make_link "$DOTFILES_DIR/shared/claude/agents"                "$HOME/.claude/agents"
   make_link "$DOTFILES_DIR/shared/claude/ccstatusline"          "$HOME/.config/ccstatusline"
 }
 

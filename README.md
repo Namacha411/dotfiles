@@ -33,7 +33,9 @@ Creates symlinks and installs Nix packages.
 
 `shared/claude/skills/` contains skills copied from [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) (MIT License).
 
-Copied from commit [`bcab6a1`](https://github.com/addyosmani/agent-skills/commit/bcab6a1b8503100e8618c3b4e32cc78de43de769). Not auto-updated — update manually by re-copying from the upstream repo after reviewing changes.
+Synced with commit [`1401c8b`](https://github.com/addyosmani/agent-skills/commit/1401c8b8030e023baeebb31781a6653fe8e93026). Not auto-updated — update manually by re-copying from the upstream repo after reviewing changes.
+
+Not copied from upstream: `references/orchestration-patterns.md` (it describes upstream's persona and slash-command layout, which this repo does not have) and the `doubt-driven-development` skill.
 
 `shared/claude/skills/references/` holds shared checklist files that some skills link to. Upstream places these two directories up from each skill (`../../references/`), but here `shared/claude/skills/` is symlinked to `~/.claude/skills` as a single unit, so links were rewritten to `../references/` (one level up) to resolve correctly.
 

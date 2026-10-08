@@ -49,6 +49,7 @@ dotfiles/
 | `shared/claude/settings.json` | `~/.claude/settings.json` |
 | `shared/claude/statusline-command.sh` | `~/.claude/statusline-command.sh` |
 | `shared/claude/skills` | `~/.claude/skills` |
+| `shared/claude/agents` | `~/.claude/agents` |
 | `shared/claude/ccstatusline` | `~/.config/ccstatusline` |
 | `windows/corvusskk/config.xml` | `%APPDATA%\CorvusSKK\config.xml` (Win only) |
 | `linux/vim/.vimrc` | `~/.vimrc` (Linux only) |
@@ -61,6 +62,7 @@ The `linux/bash/.bashrc` is not symlinked; instead `setup.sh` appends a `source`
 - `common-rules.md` becomes the global `~/.claude/CLAUDE.md`
 - `settings.json` becomes `~/.claude/settings.json`
 - `skills/` contains custom slash-command skills (e.g., `skills/pr/SKILL.md`)
+- `agents/` contains user-level subagents; `agents/Explore.md` overrides the built-in Explore agent to run on Haiku
 - Changes here affect Claude Code behavior globally once symlinked
 
 ### `shared/nvim/` — Neovim Config

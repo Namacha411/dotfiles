@@ -5,3 +5,6 @@ shared/claude/hooks/tts_config.json
 
 # claude.ai-synced skills written through the ~/.claude/skills symlink
 shared/claude/skills/synced/
+
+# Skills removed by the claude.ai sync, moved here through the ~/.claude/skills symlink
+shared/claude/skills/.trash/

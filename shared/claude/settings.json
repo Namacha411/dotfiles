@@ -1,6 +1,5 @@
 {
   "env": {
-    "CLAUDE_CODE_SUBAGENT_MODEL": "sonnet",
     "DISABLE_AUTOUPDATER": "1"
   },
   "model": "opus",
