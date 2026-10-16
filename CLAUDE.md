@@ -8,7 +8,7 @@ Personal dotfiles for Windows and Linux (Ubuntu). Configuration is managed via s
 
 ## Setup Commands
 
-**Windows** (requires Administrator):
+**Windows** (requires Developer Mode or Administrator):
 ```powershell
 .\scripts\setup.ps1
 ```

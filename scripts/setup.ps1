@@ -1,6 +1,13 @@
-#Requires -RunAsAdministrator
-
 $root = Split-Path -Parent $PSScriptRoot
+
+# Creating symlinks requires either Developer Mode or Administrator
+function Test-SymlinkPrivilege {
+  $key = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock'
+  $devMode = (Get-ItemProperty $key -ErrorAction SilentlyContinue).AllowDevelopmentWithoutDevLicense -eq 1
+  $principal = [Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()
+  $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+  return $devMode -or $isAdmin
+}
 
 function New-Symlink($src, $dst) {
   $target = Join-Path -Path $root -ChildPath $src
@@ -66,6 +73,11 @@ function Update-HookPaths {
   } else {
     Write-Host "[INFO]  Hook path already correct in settings.json"
   }
+}
+
+if (-not (Test-SymlinkPrivilege)) {
+  Write-Error 'Enable Developer Mode (Settings > System > For developers) or run as Administrator'
+  exit 1
 }
 
 Set-Symlinks
