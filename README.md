@@ -15,7 +15,7 @@ dotfiles/
 ### Windows
 
 ```powershell
-# Run as Administrator
+# Requires Developer Mode or Administrator
 .\scripts\setup.ps1
 ```
 

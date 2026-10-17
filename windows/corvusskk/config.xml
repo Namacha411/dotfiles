@@ -39,11 +39,11 @@
     <key name="setbydirect" value="0" />
     <key name="compmultinum" value="3" />
     <key name="stacompmulti" value="0" />
-    <key name="dynamiccomp" value="0" />
-    <key name="dyncompmulti" value="0" />
-    <key name="compuserdic" value="0" />
+    <key name="dynamiccomp" value="1" />
+    <key name="dyncompmulti" value="1" />
+    <key name="compuserdic" value="1" />
     <key name="compincback" value="0" />
-    <key name="compwithall" value="0" />
+    <key name="compwithall" value="1" />
   </section>
   <section name="font">
     <key name="name" value="メイリオ" />
@@ -69,11 +69,11 @@
     <key name="verticalcand" value="1" />
     <key name="annotation" value="1" />
     <key name="annotatlst" value="1" />
-    <key name="showmodemark" value="0" />
+    <key name="showmodemark" value="1" />
     <key name="showroman" value="1" />
     <key name="showromanjlat" value="1" />
     <key name="showmodeinl" value="1" />
-    <key name="showmodeinltm" value="3000" />
+    <key name="showmodeinltm" value="200" />
     <key name="colormc" value="0xFFFFFF" />
     <key name="colormf" value="0x000000" />
     <key name="colorhr" value="0x0000C0" />
@@ -110,6 +110,7 @@
       <row vkey="0xF3" mkey="0" />
       <row vkey="0xF4" mkey="0" />
       <row vkey="0x16" mkey="0" />
+      <row vkey="0x1C" mkey="0" />
     </list>
   </section>
   <section name="preservedkeyoff">
@@ -119,6 +120,7 @@
       <row vkey="0xF3" mkey="0" />
       <row vkey="0xF4" mkey="0" />
       <row vkey="0x1A" mkey="0" />
+      <row vkey="0x1D" mkey="0" />
     </list>
   </section>
   <section name="keymap">
