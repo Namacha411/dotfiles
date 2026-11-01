@@ -51,6 +51,9 @@ function Set-Symlinks {
   New-Symlink shared\claude\hooks                 "$HOME\.claude\hooks"
   New-Symlink shared\claude\ccstatusline          "$HOME\.config\ccstatusline"
   New-Symlink windows\corvusskk\config.xml        "$env:APPDATA\CorvusSKK\config.xml"
+  New-Symlink shared\herdr-app\settings.json      "$HOME\.config\herdr-app\settings.json"
+  New-Symlink shared\herdr-app\themes\tokyo-night.json "$HOME\.config\herdr-app\themes\tokyo-night.json"
+  New-Symlink shared\herdr-core\config.toml       "$env:APPDATA\herdr-core\config.toml"
 }
 
 # CorvusSKK runs inside store apps (AppContainer), which need read access to config.xml.

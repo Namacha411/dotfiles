@@ -1,0 +1,2 @@
+# herdr-core: shell started for terminals without an explicit program
+shell = ["nu"]

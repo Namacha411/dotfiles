@@ -110,4 +110,21 @@ if vim.fn.has("wsl") == 1 then
     },
     cache_enabled = 0,
   }
+elseif vim.fn.has("win32") == 0 and vim.env.DISPLAY == nil and vim.env.WAYLAND_DISPLAY == nil then
+  -- Headless Linux (e.g. ssh): write via OSC 52; herdr-app never allows clipboard reads
+  local osc52 = require("vim.ui.clipboard.osc52")
+  local function paste()
+    return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+  end
+  vim.g.clipboard = {
+    name = "OSC 52 (write only)",
+    copy = {
+      ["+"] = osc52.copy("+"),
+      ["*"] = osc52.copy("*"),
+    },
+    paste = {
+      ["+"] = paste,
+      ["*"] = paste,
+    },
+  }
 end
