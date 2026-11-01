@@ -1,8 +1,9 @@
 {
-  "zoom": 1.0,
+  "zoom": 1,
   "sounds": {
     "enabled": true
   },
-  "minimum_contrast": 1.0,
-  "theme": "tokyo-night"
+  "minimum_contrast": 1,
+  "theme": "tokyo-night",
+  "font": "Cascadia Code NF"
 }
