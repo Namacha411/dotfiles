@@ -3,19 +3,6 @@
     "DISABLE_AUTOUPDATER": "1"
   },
   "model": "opus",
-  "hooks": {
-    "MessageDisplay": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "uvx claude-tts-hook"
-          }
-        ]
-      }
-    ]
-  },
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest",

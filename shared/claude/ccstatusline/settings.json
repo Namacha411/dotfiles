@@ -3,16 +3,17 @@
   "lines": [
     [
       {
-        "id": "8e186071-f75e-4b05-840f-0276a174e3b0",
-        "type": "reset-timer"
+        "id": "002faba6-827f-48a8-ac23-bab6dc574bce",
+        "type": "session-usage"
       },
       {
         "id": "b46e6568-543a-4cd1-b691-ddeaa2b70382",
         "type": "separator"
       },
       {
-        "id": "002faba6-827f-48a8-ac23-bab6dc574bce",
-        "type": "session-usage"
+        "id": "8e186071-f75e-4b05-840f-0276a174e3b0",
+        "type": "reset-timer",
+        "rawValue": true
       },
       {
         "id": "2",
@@ -21,7 +22,8 @@
       },
       {
         "id": "0b740c70-c4da-40c4-9b16-e27401a91ca8",
-        "type": "model"
+        "type": "model",
+        "rawValue": true
       },
       {
         "id": "e0d7c2ef-ea6b-40ac-ac49-5af7b382187c",
@@ -62,11 +64,13 @@
     ],
     []
   ],
-  "flexMode": "full-minus-40",
-  "compactThreshold": 60,
   "colorLevel": 2,
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
+  "gitCacheTtlSeconds": 5,
+  "terminalWidthCacheTtlSeconds": 5,
+  "customCommandCacheTtlSeconds": 0,
   "minimalistMode": false,
   "powerline": {
     "enabled": false,
