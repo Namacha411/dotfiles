@@ -30,5 +30,6 @@
   "plansDirectory": ".claude/plans",
   "tui": "fullscreen",
   "autoMemoryEnabled": false,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "autoUpdatesChannel": "latest"
 }

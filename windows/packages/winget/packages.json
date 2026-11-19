@@ -1,62 +1,91 @@
 {
 	"$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
-	"CreationDate" : "2026-03-16T19:00:00.138-00:00",
+	"CreationDate" : "2026-11-17T01:30:38.398-00:00",
 	"Sources" : 
 	[
 		{
 			"Packages" : 
 			[
 				{
-					"PackageIdentifier" : "Microsoft.Office",
-					"Version" : "16.0.19725.20172"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.OneDrive",
-					"Version" : "26.026.0209.0004"
+					"PackageIdentifier" : "Mozilla.Firefox",
+					"Version" : "160.0"
 				},
 				{
 					"PackageIdentifier" : "DigitalScholar.Zotero",
-					"Version" : "8.0.4"
+					"Version" : "10.0.8"
+				},
+				{
+					"PackageIdentifier" : "VideoLAN.VLC",
+					"Version" : "3.0.24.0"
+				},
+				{
+					"PackageIdentifier" : "Zoom.Zoom",
+					"Version" : "7.2.51704"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Edge",
-					"Version" : "146.0.3856.59"
+					"Version" : "157.0.4341.60"
+				},
+				{
+					"InitialOverrideArguments" : "--wait --passive --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended",
+					"PackageIdentifier" : "Microsoft.VisualStudio.BuildTools",
+					"Version" : "18.11.3"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x86",
-					"Version" : "14.50.35719.0"
-				},
-				{
-					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
-					"Version" : "14.50.35719.0"
+					"Version" : "14.51.36247.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCRedist.2010.x86",
 					"Version" : "10.0.40219"
 				},
 				{
+					"PackageIdentifier" : "nathancorvussolis.corvusskk",
+					"Version" : "3.3.4"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.VCRedist.2015+.x64",
+					"Version" : "14.52.37029.0"
+				},
+				{
 					"PackageIdentifier" : "Notion.Notion",
-					"Version" : "7.7.1"
+					"Version" : "7.43.2"
 				},
 				{
 					"PackageIdentifier" : "Notion.NotionCalendar",
-					"Version" : "1.132.0"
+					"Version" : "1.133.0"
 				},
 				{
-					"PackageIdentifier" : "Anthropic.ClaudeCode",
-					"Version" : "2.1.74"
+					"PackageIdentifier" : "Microsoft.OneDrive",
+					"Version" : "26.204.1019.0007"
 				},
 				{
 					"PackageIdentifier" : "Spotify.Spotify",
-					"Version" : "1.2.84.477.gcfdf84e8"
+					"Version" : "1.3.9.2055.g806b5b278de8"
+				},
+				{
+					"PackageIdentifier" : "SlackTechnologies.Slack",
+					"Version" : "4.53.287"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.PowerToys",
+					"Version" : "0.102.3101.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.Teams",
-					"Version" : "26032.208.4399.5"
+					"Version" : "26288.2004.5269.3420"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.AppInstaller",
-					"Version" : "1.28.190.0"
+					"Version" : "1.29.380.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.DotNet.Native.Runtime",
+					"Version" : "2.2.28604.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Outlook",
+					"Version" : "1.2026.812.100"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.7",
@@ -64,19 +93,43 @@
 				},
 				{
 					"PackageIdentifier" : "Microsoft.UI.Xaml.2.8",
-					"Version" : "8.2501.31001.0"
+					"Version" : "8.2511.26001.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.VCLibs.Desktop.14",
 					"Version" : "14.0.33728.0"
 				},
 				{
+					"PackageIdentifier" : "Microsoft.VCLibs.14",
+					"Version" : "14.0.33519.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.5",
+					"Version" : "1.5.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.7",
+					"Version" : "1.7.9"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.1.8",
+					"Version" : "> 1.8.10"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.WindowsAppRuntime.2",
+					"Version" : "2.6.5.0"
+				},
+				{
 					"PackageIdentifier" : "Microsoft.WindowsTerminal",
-					"Version" : "1.24.10621.0"
+					"Version" : "1.25.2733.0"
 				},
 				{
 					"PackageIdentifier" : "Microsoft.WSL",
-					"Version" : "2.6.3.0"
+					"Version" : "2.7.11.0"
+				},
+				{
+					"PackageIdentifier" : "Microsoft.Teams.Free",
+					"Version" : "24295.401.3195.9406"
 				}
 			],
 			"SourceDetails" : 
@@ -88,5 +141,5 @@
 			}
 		}
 	],
-	"WinGetVersion" : "1.28.190"
+	"WinGetVersion" : "1.29.380"
 }
