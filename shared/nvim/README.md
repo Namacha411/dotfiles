@@ -10,15 +10,17 @@
 
 nix 部分はLLMによって作成、動作未確認
 
-| Tool | 用途 | Windows (winget) | Linux/Mac (nix) |
+Windows では `windows/packages/scoop/scoopfile.json` に登録済み（`scoop import` で一括導入可）。
+
+| Tool | 用途 | Windows (scoop) | Linux/Mac (nix) |
 |---|---|---|---|
-| **git** | lazy.nvim のプラグイン取得、gitsigns | `winget install Git.Git` | `nix profile install nixpkgs#git` |
-| **tree-sitter CLI** | tree-sitter-manager によるパーサーコンパイル | `winget install tree-sitter.tree-sitter` | `nix profile install nixpkgs#tree-sitter` |
-| **C compiler** | tree-sitter パーサーのビルド | `winget install zig.zig` (`zig cc` を使用) | `nix profile install nixpkgs#gcc` |
-| **fzf** | fzf-lua のファジーファインダー | `winget install junegunn.fzf` | `nix profile install nixpkgs#fzf` |
-| **ripgrep** | live grep (`grepprg = "rg --vimgrep"`) | `winget install BurntSushi.ripgrep.MSVC` | `nix profile install nixpkgs#ripgrep` |
-| **Cascadia Code NF** | アイコン表示 (nvim-web-devicons, blink.cmp) | - | `nix profile install nixpkgs#nerd-fonts.cascadia-code` |
-| **Nushell (nu)** | Windows でのターミナル統合 | `winget install Nushell.Nushell` | - |
+| **git** | lazy.nvim のプラグイン取得、gitsigns | `scoop install git` | `nix profile install nixpkgs#git` |
+| **tree-sitter CLI** | tree-sitter-manager によるパーサーコンパイル | `scoop install tree-sitter` | `nix profile install nixpkgs#tree-sitter` |
+| **C compiler** | tree-sitter パーサーのビルド | `scoop install zig` (`zig cc` を使用) | `nix profile install nixpkgs#gcc` |
+| **fzf** | fzf-lua のファジーファインダー | `scoop install fzf` | `nix profile install nixpkgs#fzf` |
+| **ripgrep** | live grep (`grepprg = "rg --vimgrep"`) | `scoop install ripgrep` | `nix profile install nixpkgs#ripgrep` |
+| **Cascadia Code NF** | アイコン表示 (nvim-web-devicons, blink.cmp) | `scoop install nerd-fonts/Cascadia-Code` | `nix profile install nixpkgs#nerd-fonts.cascadia-code` |
+| **Nushell (nu)** | Windows でのターミナル統合 | `scoop install nu` | - |
 
 #### WSL のみ
 
