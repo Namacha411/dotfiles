@@ -3,19 +3,19 @@
         {
             "Name": "main",
             "Source": "https://github.com/ScoopInstaller/Main",
-            "Updated": "2026-11-16T22:23:13+09:00",
-            "Manifests": 1715
+            "Updated": "2026-11-27T17:27:19+09:00",
+            "Manifests": 1727
         },
         {
             "Name": "extras",
             "Source": "https://github.com/ScoopInstaller/Extras",
-            "Updated": "2026-11-16T21:38:27+09:00",
-            "Manifests": 2469
+            "Updated": "2026-11-27T17:30:17+09:00",
+            "Manifests": 2479
         },
         {
             "Name": "nerd-fonts",
             "Source": "https://github.com/matthewjberger/scoop-nerd-fonts",
-            "Updated": "2026-11-11T05:21:53+09:00",
+            "Updated": "2026-11-27T08:37:52+09:00",
             "Manifests": 367
         }
     ],
@@ -45,7 +45,7 @@
             "Name": "Cascadia-Code",
             "Version": "2407.24",
             "Source": "nerd-fonts",
-            "Updated": "2026-03-04T01:30:18.1022503+09:00",
+            "Updated": "2026-11-17T01:31:24.1839134+09:00",
             "Info": ""
         },
         {
@@ -85,9 +85,9 @@
         },
         {
             "Name": "gh",
-            "Version": "2.104.0",
+            "Version": "2.105.0",
             "Source": "main",
-            "Updated": "2026-11-17T01:01:34.9451312+09:00",
+            "Updated": "2026-11-19T13:38:22.2489116+09:00",
             "Info": ""
         },
         {
@@ -172,6 +172,13 @@
             "Version": "12.1.2",
             "Source": "main",
             "Updated": "2026-03-05T15:05:44.4519034+09:00",
+            "Info": ""
+        },
+        {
+            "Name": "tree-sitter",
+            "Version": "0.27.2",
+            "Source": "main",
+            "Updated": "2026-11-27T21:21:57.7502338+09:00",
             "Info": ""
         },
         {
